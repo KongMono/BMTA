@@ -1,0 +1,114 @@
+﻿<phone:PhoneApplicationPage  
+    x:Class="BMTA.BMTA_bus_line_details"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:maps="clr-namespace:Microsoft.Phone.Maps.Controls;assembly=Microsoft.Phone.Maps"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Maps.Toolkit;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    d:DesignWidth="480" d:DesignHeight="728"
+    Loaded="PhoneApplicationPage_Loaded"
+    shell:SystemTray.IsVisible="false"
+    Style="{StaticResource TransitionPageStyle}">
+
+    <phone:PhoneApplicationPage.Resources>
+
+        <DataTemplate x:Key="CustomListTemplate">
+            <Grid Width="480" Background="{Binding bg}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" VerticalAlignment="Center"  Foreground="Black" Text="{Binding stop_name}"  TextTrimming="WordEllipsis" TextWrapping="Wrap" TextAlignment="Left" Style="{StaticResource FontStyleListItemTitle}" Height="48"  Margin="7,0,10,0" HorizontalAlignment="Stretch" />
+            </Grid>
+        </DataTemplate>
+
+    </phone:PhoneApplicationPage.Resources>
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="78"/>
+            <RowDefinition Height="0.8*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="Header" Grid.Row="0" Width="auto" Background="#FF01A54E">
+            <Button x:Name="btBack" BorderBrush="Transparent" Width="75" Height="75" VerticalAlignment="Center" HorizontalAlignment="Left" Click="btback_Click" Style="{StaticResource ImageButton}">
+                <Button.Background>
+                    <ImageBrush Stretch="Uniform" ImageSource="/Assets/arrowleft.png"/>
+                </Button.Background>
+            </Button>
+
+            <TextBlock  x:Name="titleName" Text="" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Button x:Name="btTopMenu" BorderBrush="Transparent" Width="75" Height="75" VerticalAlignment="Center" HorizontalAlignment="Right" Click="btTopMenu_Click" Style="{StaticResource ImageButton}">
+                <Button.Background>
+                    <ImageBrush Stretch="Uniform" ImageSource="/Assets/720x1280/BMTA_top_menu.png"/>
+                </Button.Background>
+            </Button>
+        </Grid>
+
+        <Grid x:Name="MainUp" Grid.Row="1" Width="auto" Background="#FF18359B">
+
+            <Button x:Name="btin" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Top" Height="65" Width="175" Margin="0,5,150,0" BorderBrush="{x:Null}" Style="{StaticResource ImageButton}" Click="btin_Click">
+                <Button.Background>
+                    <ImageBrush Stretch="Fill" ImageSource="/Assets/btn_in_atvth.png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="btout" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Top" Height="65" Width="175" Margin="150,5,0,0" BorderBrush="{x:Null}" Style="{StaticResource ImageButton}" Click="btout_Click">
+                <Button.Background>
+                    <ImageBrush Stretch="Fill" ImageSource="/Assets/btn_out_th.png"/>
+                </Button.Background>
+            </Button>
+            <Button  x:Name="btnLeft" HorizontalAlignment="Left"  Grid.Row="1" VerticalAlignment="Center" Height="75" Width="93"  Margin="-30,0,0,0" BorderBrush="{x:Null}" Style="{StaticResource ButtonStyle}" Click="btnLeft_Click">
+                <Button.Background>
+                    <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/arrowleft.png"/>
+                </Button.Background>
+            </Button>
+            <Button  x:Name="btnRight" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Center" Height="75" Width="93" Margin="0,0,-30,0" BorderBrush="{x:Null}" Style="{StaticResource ButtonStyle}" Click="btnRight_Click">
+                <Button.Background>
+                    <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/arrowright.png"/>
+                </Button.Background>
+            </Button>
+
+            <TextBlock x:Name="FixStart" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="ต้นทาง" VerticalAlignment="Center" Width="auto" TextAlignment="Center" Margin="80,0,0,90" Foreground="White" FontSize="23" />
+            <TextBlock x:Name="FixStop" HorizontalAlignment="Right" Grid.Row="1" TextWrapping="Wrap" Text="ปลายทาง" VerticalAlignment="Center" Width="auto" TextAlignment="Center" Margin="0,0,80,90" Foreground="White" FontSize="23"/>
+            <TextBlock x:Name="lblStart" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="120" TextAlignment="Center" Margin="50,0,0,0" Foreground="#FFD6CD0E" FontSize="23" />
+            <TextBlock x:Name="lblStop" HorizontalAlignment="Right" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="120" TextAlignment="Center" Margin="0,0,50,0" Foreground="#FFD6CD0E" FontSize="23"/>
+            <Button BorderBrush="Transparent" Width="300" Height="60" VerticalAlignment="Bottom" Margin="0,0,0,35" HorizontalAlignment="Center">
+                <Button.Background>
+                    <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/bartitle.png"/>
+                </Button.Background>
+            </Button>
+            <TextBlock x:Name="lblbusName" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="250" TextAlignment="Center"  Margin="0,0,0,50" Foreground="White" FontSize="23"/>
+            <Button BorderBrush="Transparent" Width="140" Height="140" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Button.Background>
+                    <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/circle.png"/>
+                </Button.Background>
+            </Button>
+            <TextBlock x:Name="lblbusid" HorizontalAlignment="Center"  VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding}" TextAlignment="Center" FontSize="45"/>
+            <Grid Width="480" Height="40" VerticalAlignment="Bottom" Background="#FF01A54E">
+                <TextBlock x:Name="lbltime" HorizontalAlignment="Left" Padding="5,5,5,5" FontSize="23" TextWrapping="Wrap" Text="time" TextAlignment="Center"/>
+                <Button x:Name="imgPin" Width="60" Height="60" HorizontalAlignment="Right"   BorderThickness="0" VerticalAlignment="Center" Click="btmapback_Click">
+                    <Button.Background>
+                        <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/bt_pin.png"/>
+                    </Button.Background>
+                </Button>
+            </Grid>
+        </Grid>
+
+        <Grid x:Name="MainDown" Grid.Row="2" Width="auto" Background="#FF2C2C2C">
+            <ListBox x:Name="TaskListBox" ItemTemplate="{StaticResource CustomListTemplate}" Foreground="#FF2C2C2C" FontSize="26"></ListBox>
+            <Grid x:Name="Layoutmap">
+                <maps:Map x:Name="map" Visibility="Collapsed" />
+            </Grid>
+            
+            
+        </Grid>
+    </Grid>
+</phone:PhoneApplicationPage>

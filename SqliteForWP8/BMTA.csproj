@@ -1,0 +1,913 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\sqlite-net-wp8.3.8.5\build\windowsphone8\sqlite-net-wp8.props" Condition="Exists('..\packages\sqlite-net-wp8.3.8.5\build\windowsphone8\sqlite-net-wp8.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8A40681D-98FC-4069-BC13-91837A6343CA}</ProjectGuid>
+    <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BMTA</RootNamespace>
+    <AssemblyName>BMTA</AssemblyName>
+    <TargetFrameworkIdentifier>WindowsPhone</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v8.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>true</SilverlightApplication>
+    <SupportedCultures>th-TH</SupportedCultures>
+    <XapOutputs>true</XapOutputs>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <XapFilename>BMTA_Debug_ARM.xap</XapFilename>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>BMTA.App</SilverlightAppEntry>
+    <ValidateXaml>true</ValidateXaml>
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\x86\Debug</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;USE_WP8_NATIVE_SQLITE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\x86\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|ARM' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\ARM\Debug</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;USE_WP8_NATIVE_SQLITE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|ARM' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\ARM\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;USE_WP8_NATIVE_SQLITE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Abouts.xaml.cs">
+      <DependentUpon>BMTA_Abouts.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Abouts_details_en.xaml.cs">
+      <DependentUpon>BMTA_Abouts_details_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Abouts_en.xaml.cs">
+      <DependentUpon>BMTA_Abouts_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Abouts_details.xaml.cs">
+      <DependentUpon>BMTA_Abouts_details.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_MainPage.xaml.cs">
+      <DependentUpon>BMTA_MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_AppTh.xaml.cs">
+      <DependentUpon>BMTA_AppTh.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_BusCoordinates.xaml.cs">
+      <DependentUpon>BMTA_BusCoordinates.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_BusCoordinates_en.xaml.cs">
+      <DependentUpon>BMTA_BusCoordinates_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_BusStartStop.xaml.cs">
+      <DependentUpon>BMTA_BusStartStop.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_BusStartStop_en.xaml.cs">
+      <DependentUpon>BMTA_BusStartStop_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_BusStop_not.xaml.cs">
+      <DependentUpon>BMTA_BusStop_not.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_BusStop.xaml.cs">
+      <DependentUpon>BMTA_BusStop.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_BusStop_pin.xaml.cs">
+      <DependentUpon>BMTA_BusStop_pin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_BusStop_pin_en.xaml.cs">
+      <DependentUpon>BMTA_BusStop_pin_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_BusStop_SearchAdvance.xaml.cs">
+      <DependentUpon>BMTA_BusStop_SearchAdvance.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_BusStop_SearchAdvance_en.xaml.cs">
+      <DependentUpon>BMTA_BusStop_SearchAdvance_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_bus_line.xaml.cs">
+      <DependentUpon>BMTA_bus_line.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_bus_line_details.xaml.cs">
+      <DependentUpon>BMTA_bus_line_details.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_bus_line_details_en.xaml.cs">
+      <DependentUpon>BMTA_bus_line_details_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_bus_line_en.xaml.cs">
+      <DependentUpon>BMTA_bus_line_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_EventNew.xaml.cs">
+      <DependentUpon>BMTA_EventNew.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_EventNew_en.xaml.cs">
+      <DependentUpon>BMTA_EventNew_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_News.xaml.cs">
+      <DependentUpon>BMTA_News.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_News_details.xaml.cs">
+      <DependentUpon>BMTA_News_details.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_News_details_en.xaml.cs">
+      <DependentUpon>BMTA_News_details_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_News_en.xaml.cs">
+      <DependentUpon>BMTA_News_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_SearchAdvance.xaml.cs">
+      <DependentUpon>BMTA_SearchAdvance.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_SearchAdvance_en.xaml.cs">
+      <DependentUpon>BMTA_SearchAdvance_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Search_Advance_busstop.xaml.cs">
+      <DependentUpon>BMTA_Search_Advance_busstop.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Search_Advance_busstop_en.xaml.cs">
+      <DependentUpon>BMTA_Search_Advance_busstop_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Search_Advance_landmark.xaml.cs">
+      <DependentUpon>BMTA_Search_Advance_landmark.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Search_Advance_landmark_en.xaml.cs">
+      <DependentUpon>BMTA_Search_Advance_landmark_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Search_Advance_start.xaml.cs">
+      <DependentUpon>BMTA_Search_Advance_start.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Search_Advance_start_en.xaml.cs">
+      <DependentUpon>BMTA_Search_Advance_start_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Slot.xaml.cs">
+      <DependentUpon>BMTA_Slot.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Slot_en.xaml.cs">
+      <DependentUpon>BMTA_Slot_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Slot_Result.xaml.cs">
+      <DependentUpon>BMTA_Slot_Result.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Slot_Result_en.xaml.cs">
+      <DependentUpon>BMTA_Slot_Result_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Speed_Check.xaml.cs">
+      <DependentUpon>BMTA_Speed_Check.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Speed_Check_en.xaml.cs">
+      <DependentUpon>BMTA_Speed_Check_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Speed_history.xaml.cs">
+      <DependentUpon>BMTA_Speed_history.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Speed_history_en.xaml.cs">
+      <DependentUpon>BMTA_Speed_history_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Speed_Result.xaml.cs">
+      <DependentUpon>BMTA_Speed_Result.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Speed_Result_en.xaml.cs">
+      <DependentUpon>BMTA_Speed_Result_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Vision_details.xaml.cs">
+      <DependentUpon>BMTA_Vision_details.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Vision_details_en.xaml.cs">
+      <DependentUpon>BMTA_Vision_details_en.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Splashscreen.xaml.cs">
+      <DependentUpon>BMTA_Splashscreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Item\Article.cs" />
+    <Compile Include="Item\busline.cs" />
+    <Compile Include="Item\listBuslineDetailItem.cs" />
+    <Compile Include="Item\LanguageItem.cs" />
+    <Compile Include="Item\dataNearBusStopItem.cs" />
+    <Compile Include="Item\NearBusStopItem.cs" />
+    <Compile Include="SQLite.cs" />
+    <Compile Include="SQLiteAsync.cs" />
+    <Compile Include="Utillity\clGetResolution.cs" />
+    <Compile Include="Utillity\CoordinateConverter.cs" />
+    <Compile Include="Geo\AngleConverter.cs" />
+    <Compile Include="Geo\DistanceConverter.cs" />
+    <Compile Include="Geo\DistanceUnit.cs" />
+    <Compile Include="Geo\GeoConstants.cs" />
+    <Compile Include="Geo\IAngleConverter.cs" />
+    <Compile Include="Geo\IBearingCalculator.cs" />
+    <Compile Include="Geo\IDistanceCalculator.cs" />
+    <Compile Include="Geo\IDistanceConverter.cs" />
+    <Compile Include="Geo\IRhumbBearingCalculator.cs" />
+    <Compile Include="Geo\IRhumbDistanceCalculator.cs" />
+    <Compile Include="Geo\Position.cs" />
+    <Compile Include="Geo\PositionHandler.cs" />
+    <Compile Include="Helper\DelegateCommand.cs" />
+    <Compile Include="LocalizedStrings.cs" />
+    <Compile Include="BMTA_LanguagePage.xaml.cs">
+      <DependentUpon>BMTA_LanguagePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utillity\ProgressRing.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\AppResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SampleAutoComplete.xaml.cs">
+      <DependentUpon>SampleAutoComplete.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SampleWords.cs" />
+    <Compile Include="Usercontrols\UCCostomPushpin.xaml.cs">
+      <DependentUpon>UCCostomPushpin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Usercontrols\UCCustomToolTip.xaml.cs">
+      <DependentUpon>UCCustomToolTip.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Usercontrols\UCToolTip.xaml.cs">
+      <DependentUpon>UCToolTip.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+    <Page Include="BMTA_Abouts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Abouts_details_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Abouts_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Abouts_details.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BMTA_AppTh.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BMTA_BusCoordinates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_BusCoordinates_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_BusStartStop.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_BusStartStop_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_BusStop_not.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_BusStop.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_BusStop_pin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_BusStop_pin_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_BusStop_SearchAdvance.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_BusStop_SearchAdvance_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_bus_line.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BMTA_bus_line_details.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_bus_line_details_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_bus_line_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_EventNew.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BMTA_EventNew_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_News.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_News_details.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_News_details_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_News_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_SearchAdvance.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_SearchAdvance_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Search_Advance_busstop.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Search_Advance_busstop_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Search_Advance_landmark.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Search_Advance_landmark_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Search_Advance_start.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Search_Advance_start_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Slot.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BMTA_Slot_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Slot_Result.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BMTA_Slot_Result_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Speed_Check.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BMTA_Speed_Check_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Speed_history.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BMTA_Speed_history_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Speed_Result.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Speed_Result_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Vision_details.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Vision_details_en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_LanguagePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SampleAutoComplete.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BMTA_Splashscreen.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Style\CustomStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Usercontrols\UCCostomPushpin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Usercontrols\UCCustomToolTip.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Usercontrols\UCToolTip.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <Content Include="Assets\bg_advance_search.png" />
+    <Content Include="Assets\bg_numberbus.png" />
+    <Content Include="Assets\btn_bus.png" />
+    <Content Include="Assets\btsubmit.png" />
+    <Content Include="Assets\icon_stat.png" />
+    <Content Include="Assets\languagepage.jpg" />
+    <Content Include="Assets\left_infobox.png" />
+    <Content Include="bmtadatabase.sqlite" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\AppManifest.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\WMAppManifest.xml">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\720x1280\bgLang.png" />
+    <Content Include="Assets\720x1280\BMTA_11Nov14_720x1280.png" />
+    <Content Include="Assets\720x1280\BMTA_abouts.png" />
+    <Content Include="Assets\720x1280\BMTA_abouts_en.png" />
+    <Content Include="Assets\720x1280\BMTA_about_bt.png" />
+    <Content Include="Assets\720x1280\BMTA_buslinedetails_bg.png" />
+    <Content Include="Assets\720x1280\BMTA_buslinedetails_bg_deails.png" />
+    <Content Include="Assets\720x1280\BMTA_buslinedetails_bg_en.png" />
+    <Content Include="Assets\720x1280\BMTA_buslinedetails_map.png" />
+    <Content Include="Assets\720x1280\BMTA_buslinedetails_map_en.png" />
+    <Content Include="Assets\720x1280\BMTA_busline_bg.png" />
+    <Content Include="Assets\720x1280\BMTA_busline_bg_en.png" />
+    <Content Include="Assets\720x1280\BMTA_busline_search_bg.png" />
+    <Content Include="Assets\720x1280\BMTA_busno_bg.png" />
+    <Content Include="Assets\720x1280\BMTA_BusStart_Stop_bg.png" />
+    <Content Include="Assets\720x1280\BMTA_BusStart_Stop_bg_en.png" />
+    <Content Include="Assets\720x1280\BMTA_BusStart_Stop_map.png" />
+    <Content Include="Assets\720x1280\BMTA_BusStart_Stop_map_en.png" />
+    <Content Include="Assets\720x1280\BMTA_busstop.png" />
+    <Content Include="Assets\720x1280\BMTA_busstop_en.png" />
+    <Content Include="Assets\720x1280\BMTA_busstop_line.png" />
+    <Content Include="Assets\720x1280\BMTA_busstop_line_en.png" />
+    <Content Include="Assets\720x1280\BMTA_busstop_sortby.png" />
+    <Content Include="Assets\720x1280\BMTA_busstop_sortby_en.png" />
+    <Content Include="Assets\720x1280\BMTA_Coordinates_bg.png" />
+    <Content Include="Assets\720x1280\BMTA_Coordinates_bg_en.png" />
+    <Content Include="Assets\720x1280\BMTA_Coordinates_map.png" />
+    <Content Include="Assets\720x1280\BMTA_Coordinates_map_en.png" />
+    <Content Include="Assets\720x1280\BMTA_Coordinates_sortby.png" />
+    <Content Include="Assets\720x1280\BMTA_Coordinates_sortby_en.png" />
+    <Content Include="Assets\720x1280\BMTA_event_bt.png" />
+    <Content Include="Assets\720x1280\BMTA_event_new.png" />
+    <Content Include="Assets\720x1280\BMTA_event_new_en.png" />
+    <Content Include="Assets\720x1280\BMTA_intro.png" />
+    <Content Include="Assets\720x1280\BMTA_menu_bg.png" />
+    <Content Include="Assets\720x1280\BMTA_new.png" />
+    <Content Include="Assets\720x1280\BMTA_new_bt.png" />
+    <Content Include="Assets\720x1280\BMTA_new_en.png" />
+    <Content Include="Assets\720x1280\BMTA_Search_Advance_busline.png" />
+    <Content Include="Assets\720x1280\BMTA_Search_Advance_busline_en.png" />
+    <Content Include="Assets\720x1280\BMTA_Search_Advance_busstop.png" />
+    <Content Include="Assets\720x1280\BMTA_Search_Advance_busstop_en.png" />
+    <Content Include="Assets\720x1280\BMTA_Search_Advance_landmark.png" />
+    <Content Include="Assets\720x1280\BMTA_Search_Advance_landmark_en.png" />
+    <Content Include="Assets\720x1280\BMTA_Search_Advance_start.png" />
+    <Content Include="Assets\720x1280\BMTA_Search_Advance_start_en.png" />
+    <Content Include="Assets\720x1280\BMTA_search_icon.png" />
+    <Content Include="Assets\720x1280\BMTA_slotresult_bg.png" />
+    <Content Include="Assets\720x1280\BMTA_slotresult_bg_en.png" />
+    <Content Include="Assets\720x1280\BMTA_slotresult_reset.png" />
+    <Content Include="Assets\720x1280\BMTA_slotresult_share.png" />
+    <Content Include="Assets\720x1280\BMTA_slot_bg.png" />
+    <Content Include="Assets\720x1280\BMTA_slot_bg_en.png" />
+    <Content Include="Assets\720x1280\BMTA_speed_add_bt.png" />
+    <Content Include="Assets\720x1280\BMTA_speed_bg.png" />
+    <Content Include="Assets\720x1280\BMTA_speed_bg_en.png" />
+    <Content Include="Assets\720x1280\BMTA_speed_history.png" />
+    <Content Include="Assets\720x1280\BMTA_speed_history_en.png" />
+    <Content Include="Assets\720x1280\BMTA_speed_timer.png" />
+    <Content Include="Assets\720x1280\BMTA_speed_timer_en.png" />
+    <Content Include="Assets\720x1280\BMTA_top_menu.png" />
+    <Content Include="Assets\720x1280\btEng.png" />
+    <Content Include="Assets\720x1280\btThai.png" />
+    <Content Include="Assets\720x1280\busline\arrow.png" />
+    <Content Include="Assets\720x1280\busline\arrowleft.png" />
+    <Content Include="Assets\720x1280\busline\arrowright.png" />
+    <Content Include="Assets\720x1280\busline\bg_nomal.png" />
+    <Content Include="Assets\720x1280\busline\bg_nomal1.png" />
+    <Content Include="Assets\720x1280\busline\bg_nomal2.png" />
+    <Content Include="Assets\720x1280\busline\bg_nomal3.png" />
+    <Content Include="Assets\720x1280\busline\bg_nomal4.png" />
+    <Content Include="Assets\720x1280\busline\bg_numberbus.png" />
+    <Content Include="Assets\720x1280\busline\BMTA_buslinedetails_bg_deails.png" />
+    <Content Include="Assets\720x1280\busline\btbus.png" />
+    <Content Include="Assets\720x1280\busline\btbus_active.png" />
+    <Content Include="Assets\720x1280\busline\btlandmark.png" />
+    <Content Include="Assets\720x1280\busline\btlandmark_active.png" />
+    <Content Include="Assets\720x1280\busline\btn_bus.png" />
+    <Content Include="Assets\720x1280\busline\btn_ccw_atvth.png" />
+    <Content Include="Assets\720x1280\busline\btn_ccw_th.png" />
+    <Content Include="Assets\720x1280\busline\btn_cw_atvth.png" />
+    <Content Include="Assets\720x1280\busline\btn_cw_th.png" />
+    <Content Include="Assets\720x1280\busline\btn_in_atvth.png" />
+    <Content Include="Assets\720x1280\busline\btn_in_th.png" />
+    <Content Include="Assets\720x1280\busline\btn_out_atvth.png" />
+    <Content Include="Assets\720x1280\busline\btn_out_th.png" />
+    <Content Include="Assets\720x1280\busline\bt_pin.png" />
+    <Content Include="Assets\720x1280\busstop\arrow_line_left.png" />
+    <Content Include="Assets\720x1280\busstop\arrow_line_right.png" />
+    <Content Include="Assets\720x1280\busstop\BMTA_busno_bg.png" />
+    <Content Include="Assets\720x1280\busstop\BMTA_infobox.png" />
+    <Content Include="Assets\720x1280\busstop\pin_blue.png" />
+    <Content Include="Assets\720x1280\dropdrow.png" />
+    <Content Include="Assets\arrow.png" />
+    <Content Include="Assets\arrowleft.png" />
+    <Content Include="Assets\arrowright.png" />
+    <Content Include="Assets\bartitle.PNG" />
+    <Content Include="Assets\bg_nomal.png" />
+    <Content Include="Assets\bg_nomal1.png" />
+    <Content Include="Assets\bg_nomal2.png" />
+    <Content Include="Assets\bg_nomal3.png" />
+    <Content Include="Assets\bg_nomal4.png" />
+    <Content Include="Assets\BMTA_bg_footer.png" />
+    <Content Include="Assets\btn_busline_en.png" />
+    <Content Include="Assets\btn_busline_th.png" />
+    <Content Include="Assets\btn_busstop_en.png" />
+    <Content Include="Assets\btn_busstop_th.png" />
+    <Content Include="Assets\btn_in_atvth.png" />
+    <Content Include="Assets\btn_in_th.png" />
+    <Content Include="Assets\btn_news_en.png" />
+    <Content Include="Assets\btn_news_th.png" />
+    <Content Include="Assets\btn_out_atvth.png" />
+    <Content Include="Assets\btn_out_th.png" />
+    <Content Include="Assets\btn_speed_en.png" />
+    <Content Include="Assets\btn_speed_th.png" />
+    <Content Include="Assets\btn_startend_en.png" />
+    <Content Include="Assets\btn_startend_th.png" />
+    <Content Include="Assets\btn_streets_en.png" />
+    <Content Include="Assets\btn_streets_th.png" />
+    <Content Include="Assets\bt_main_th\btf_bus.png" />
+    <Content Include="Assets\bt_main_th\btf_busstop.png" />
+    <Content Include="Assets\bt_main_th\btf_place.png" />
+    <Content Include="Assets\bt_main_th\btf_startstop.png" />
+    <Content Include="Assets\bt_main_th\btn_start.png" />
+    <Content Include="Assets\bt_main_th\bt_1en.png" />
+    <Content Include="Assets\bt_main_th\bt_1th.png" />
+    <Content Include="Assets\bt_main_th\bt_2en.png" />
+    <Content Include="Assets\bt_main_th\bt_2th.png" />
+    <Content Include="Assets\bt_main_th\bt_3en.png" />
+    <Content Include="Assets\bt_main_th\bt_3thx.png" />
+    <Content Include="Assets\bt_main_th\bt_4en.png" />
+    <Content Include="Assets\bt_main_th\bt_4th.png" />
+    <Content Include="Assets\bt_main_th\bt_5en.png" />
+    <Content Include="Assets\bt_main_th\bt_5th.png" />
+    <Content Include="Assets\bt_main_th\bt_6en.png" />
+    <Content Include="Assets\bt_main_th\bt_6th.png" />
+    <Content Include="Assets\bt_main_th\bt_pin.png" />
+    <Content Include="Assets\bt_pin.png" />
+    <Content Include="Assets\cancel.png" />
+    <Content Include="Assets\circle.PNG" />
+    <Content Include="Assets\close.png" />
+    <Content Include="Assets\main\arrow_list.png" />
+    <Content Include="Assets\main\bg\BMTA_abouts.png" />
+    <Content Include="Assets\main\bg\BMTA_abouts_bg.png" />
+    <Content Include="Assets\main\bg\BMTA_abouts_bg_en.png" />
+    <Content Include="Assets\main\bg\BMTA_abouts_en.png" />
+    <Content Include="Assets\main\bg\BMTA_buslinedetails_bg.png" />
+    <Content Include="Assets\main\bg\BMTA_buslinedetails_bg_en.png" />
+    <Content Include="Assets\main\bg\BMTA_buslinedetails_map.png" />
+    <Content Include="Assets\main\bg\BMTA_buslinedetails_map_en.png" />
+    <Content Include="Assets\main\bg\BMTA_busline_bg.png" />
+    <Content Include="Assets\main\bg\BMTA_busline_bg_en.png" />
+    <Content Include="Assets\main\bg\BMTA_BusStart_Stop_bg.png" />
+    <Content Include="Assets\main\bg\BMTA_BusStart_Stop_bg_en.png" />
+    <Content Include="Assets\main\bg\BMTA_BusStart_Stop_map.png" />
+    <Content Include="Assets\main\bg\BMTA_BusStart_Stop_map_en.png" />
+    <Content Include="Assets\main\bg\BMTA_busstop.png" />
+    <Content Include="Assets\main\bg\BMTA_busstop_en.png" />
+    <Content Include="Assets\main\bg\BMTA_busstop_line.png" />
+    <Content Include="Assets\main\bg\BMTA_busstop_line_en.png" />
+    <Content Include="Assets\main\bg\BMTA_busstop_sortby.png" />
+    <Content Include="Assets\main\bg\BMTA_busstop_sortby_en.png" />
+    <Content Include="Assets\main\bg\BMTA_Coordinates_bg.png" />
+    <Content Include="Assets\main\bg\BMTA_Coordinates_bg_en.png" />
+    <Content Include="Assets\main\bg\BMTA_Coordinates_map.png" />
+    <Content Include="Assets\main\bg\BMTA_Coordinates_map_en.png" />
+    <Content Include="Assets\main\bg\BMTA_Coordinates_sortby.png" />
+    <Content Include="Assets\main\bg\BMTA_Coordinates_sortby_en.png" />
+    <Content Include="Assets\main\bg\BMTA_event_new1.png" />
+    <Content Include="Assets\main\bg\BMTA_event_new1_en.png" />
+    <Content Include="Assets\main\bg\BMTA_intro.png" />
+    <Content Include="Assets\main\bg\BMTA_menu_bg.png" />
+    <Content Include="Assets\main\bg\BMTA_new.png" />
+    <Content Include="Assets\main\bg\BMTA_new_en.png" />
+    <Content Include="Assets\main\bg\BMTA_Search_Advance_busline.png" />
+    <Content Include="Assets\main\bg\BMTA_Search_Advance_busline_en.png" />
+    <Content Include="Assets\main\bg\BMTA_Search_Advance_busstop.png" />
+    <Content Include="Assets\main\bg\BMTA_Search_Advance_busstop_en.png" />
+    <Content Include="Assets\main\bg\BMTA_Search_Advance_landmark.png" />
+    <Content Include="Assets\main\bg\BMTA_Search_Advance_landmark_en.png" />
+    <Content Include="Assets\main\bg\BMTA_Search_Advance_start.png" />
+    <Content Include="Assets\main\bg\BMTA_Search_Advance_start_en.png" />
+    <Content Include="Assets\main\bg\BMTA_slotresult_bg.png" />
+    <Content Include="Assets\main\bg\BMTA_slotresult_bg_en.png" />
+    <Content Include="Assets\main\bg\BMTA_slot_bg.png" />
+    <Content Include="Assets\main\bg\BMTA_slot_bg_en.png" />
+    <Content Include="Assets\main\bg\BMTA_speed_bg.png" />
+    <Content Include="Assets\main\bg\BMTA_speed_bg_en.png" />
+    <Content Include="Assets\main\bg\BMTA_speed_history.png" />
+    <Content Include="Assets\main\bg\BMTA_speed_history_en.png" />
+    <Content Include="Assets\main\bg\BMTA_speed_timer.png" />
+    <Content Include="Assets\main\bg\BMTA_speed_timer_en.png" />
+    <Content Include="Assets\main\btn_submit.png" />
+    <Content Include="Assets\main\busline\arrow.png" />
+    <Content Include="Assets\main\busline\arrowleft.png" />
+    <Content Include="Assets\main\busline\arrowright.png" />
+    <Content Include="Assets\main\busline\bg_nomal.png" />
+    <Content Include="Assets\main\busline\bg_nomal1.png" />
+    <Content Include="Assets\main\busline\bg_nomal2.png" />
+    <Content Include="Assets\main\busline\bg_nomal3.png" />
+    <Content Include="Assets\main\busline\bg_nomal4.png" />
+    <Content Include="Assets\main\busline\bg_numberbus.png" />
+    <Content Include="Assets\main\busline\BMTA_buslinedetails_bg_deails.png" />
+    <Content Include="Assets\main\busline\btbus.png" />
+    <Content Include="Assets\main\busline\btbus_active.png" />
+    <Content Include="Assets\main\busline\btlandmark.png" />
+    <Content Include="Assets\main\busline\btlandmark_active.png" />
+    <Content Include="Assets\main\busline\btn_bus.png" />
+    <Content Include="Assets\main\busline\btn_ccw_atvth.png" />
+    <Content Include="Assets\main\busline\btn_ccw_th.png" />
+    <Content Include="Assets\main\busline\btn_cw_atvth.png" />
+    <Content Include="Assets\main\busline\btn_cw_th.png" />
+    <Content Include="Assets\main\busline\btn_in_atvth.png" />
+    <Content Include="Assets\main\busline\btn_in_th.png" />
+    <Content Include="Assets\main\busline\btn_out_atvth.png" />
+    <Content Include="Assets\main\busline\btn_out_th.png" />
+    <Content Include="Assets\main\busline\bt_pin.png" />
+    <Content Include="Assets\main\busstop\arrow_line_left.png" />
+    <Content Include="Assets\main\busstop\arrow_line_right.png" />
+    <Content Include="Assets\main\busstop\BMTA_busno_bg.png" />
+    <Content Include="Assets\main\busstop\BMTA_infobox.png" />
+    <Content Include="Assets\main\busstop\pin_blue.png" />
+    <Content Include="Assets\main\icon_arrow_close.png" />
+    <Content Include="Assets\main\icon_brt.png" />
+    <Content Include="Assets\main\icon_bts.png" />
+    <Content Include="Assets\main\icon_bus.png" />
+    <Content Include="Assets\main\icon_down.png" />
+    <Content Include="Assets\main\icon_down_en.png" />
+    <Content Include="Assets\main\icon_human.png" />
+    <Content Include="Assets\main\icon_mrt.png" />
+    <Content Include="Assets\main\icon_navicationbar\BMTA_search_icon.png" />
+    <Content Include="Assets\main\icon_navicationbar\BMTA_speed_add_bt.png" />
+    <Content Include="Assets\main\icon_navicationbar\BMTA_top_menu.png" />
+    <Content Include="Assets\main\icon_plus.png" />
+    <Content Include="Assets\main\icon_plus_en.png" />
+    <Content Include="Assets\main\icon_port.png" />
+    <Content Include="Assets\main\icon_train.png" />
+    <Content Include="Assets\main\icon_up.png" />
+    <Content Include="Assets\main\icon_up_en.png" />
+    <Content Include="Assets\main\intro\bgLang.png" />
+    <Content Include="Assets\main\intro\btEng.png" />
+    <Content Include="Assets\main\intro\btThai.png" />
+    <Content Include="Assets\main\landmark\btLatest_en.png" />
+    <Content Include="Assets\main\landmark\btLatest_th.png" />
+    <Content Include="Assets\main\landmark\btResults_en.png" />
+    <Content Include="Assets\main\landmark\btResults_th.png" />
+    <Content Include="Assets\main\line_bus.png" />
+    <Content Include="Assets\main\list.png" />
+    <Content Include="Assets\main\menu\btn_1en.png" />
+    <Content Include="Assets\main\menu\btn_1en_atv.png" />
+    <Content Include="Assets\main\menu\btn_1th.png" />
+    <Content Include="Assets\main\menu\btn_1th_atv.png" />
+    <Content Include="Assets\main\menu\btn_2en.png" />
+    <Content Include="Assets\main\menu\btn_2en_atv.png" />
+    <Content Include="Assets\main\menu\btn_2th.png" />
+    <Content Include="Assets\main\menu\btn_2th_atv.png" />
+    <Content Include="Assets\main\menu\btn_3en.png" />
+    <Content Include="Assets\main\menu\btn_3en_atv.png" />
+    <Content Include="Assets\main\menu\btn_3th.png" />
+    <Content Include="Assets\main\menu\btn_3th_atv.png" />
+    <Content Include="Assets\main\menu\btn_4en.png" />
+    <Content Include="Assets\main\menu\btn_4en_atv.png" />
+    <Content Include="Assets\main\menu\btn_4th.png" />
+    <Content Include="Assets\main\menu\btn_4th_atv.png" />
+    <Content Include="Assets\main\menu\btn_5en.png" />
+    <Content Include="Assets\main\menu\btn_5en_atv.png" />
+    <Content Include="Assets\main\menu\btn_5th.png" />
+    <Content Include="Assets\main\menu\btn_5th_atv.png" />
+    <Content Include="Assets\main\menu\btn_6en.png" />
+    <Content Include="Assets\main\menu\btn_6en_atv.png" />
+    <Content Include="Assets\main\menu\btn_6th.png" />
+    <Content Include="Assets\main\menu\btn_6th_atv.png" />
+    <Content Include="Assets\main\menu_slide\btn_busline_en.png" />
+    <Content Include="Assets\main\menu_slide\btn_busline_th.png" />
+    <Content Include="Assets\main\menu_slide\btn_busstop_en.png" />
+    <Content Include="Assets\main\menu_slide\btn_busstop_th.png" />
+    <Content Include="Assets\main\menu_slide\btn_news_en.png" />
+    <Content Include="Assets\main\menu_slide\btn_news_th.png" />
+    <Content Include="Assets\main\menu_slide\btn_speed_en.png" />
+    <Content Include="Assets\main\menu_slide\btn_speed_th.png" />
+    <Content Include="Assets\main\menu_slide\btn_startend_en.png" />
+    <Content Include="Assets\main\menu_slide\btn_startend_th.png" />
+    <Content Include="Assets\main\menu_slide\btn_streets_en.png" />
+    <Content Include="Assets\main\menu_slide\btn_streets_th.png" />
+    <Content Include="Assets\main\speed\alert.png" />
+    <Content Include="Assets\main\speed\btn_pause.png" />
+    <Content Include="Assets\main\speed\btn_resume.png" />
+    <Content Include="Assets\main\speed\btn_save.png" />
+    <Content Include="Assets\mylocation.png" />
+    <Content Include="Assets\rightmenu_home.png" />
+    <Content Include="ReadMe.Coding4Fun.Toolkit.txt" />
+    <Content Include="README_FIRST.txt" />
+    <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
+    <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />
+    <Content Include="Toolkit.Content\ApplicationBar.Check.png" />
+    <Content Include="Toolkit.Content\ApplicationBar.Delete.png" />
+    <Content Include="Toolkit.Content\ApplicationBar.Email.png" />
+    <Content Include="Toolkit.Content\ApplicationBar.Play.png" />
+    <Content Include="Toolkit.Content\ApplicationBar.Save.png" />
+    <Content Include="Toolkit.Content\ApplicationBar.Select.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\AppResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Coding4Fun.Toolkit.Audio, Version=2.0.8.0, Culture=neutral, PublicKeyToken=c5fd7b72b1a17ce4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Coding4Fun.Toolkit.Audio.2.0.8\lib\windowsphone8\Coding4Fun.Toolkit.Audio.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Coding4Fun.Toolkit.Controls">
+      <HintPath>..\..\..\BMTA NEW\BMTA NEW\lib\code4fun\Coding4Fun.Toolkit.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Coding4Fun.Toolkit.Net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=c5fd7b72b1a17ce4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Coding4Fun.Toolkit.Net.2.0.8\lib\windowsphone8\Coding4Fun.Toolkit.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Phone.Controls.Toolkit">
+      <HintPath>..\packages\WPtoolkit.4.2013.08.16\lib\wp8\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Phone">
+      <HintPath>..\packages\WPToolkitTestFx.4.2012.11.14\lib\wp8\Microsoft.VisualStudio.QualityTools.UnitTesting.Phone.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ShakeGestures">
+      <HintPath>Bin\x86\Debug\ShakeGestures.dll</HintPath>
+    </Reference>
+    <Reference Include="Sqlite, Version=255.255.255.255, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\sqlite-net-wp8.3.8.5\lib\windowsphone8\Sqlite.winmd</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\sl4-windowsphone71\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\sl4-windowsphone71\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\sl4-windowsphone71\System.Net.Http.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WriteableBitmapExWinPhone">
+      <HintPath>Bin\x86\Debug\WriteableBitmapExWinPhone.dll</HintPath>
+    </Reference>
+    <Reference Include="WriteableBitmapExWinPhoneXnaDependant">
+      <HintPath>Bin\x86\Debug\WriteableBitmapExWinPhoneXnaDependant.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\720x1280\Final BMTA_WindowPhone\Final BMTA_WindowPhone\" />
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="SQLite.WP80, Version=3.8.10.2">
+      <Name>SQLite for Windows Phone</Name>
+    </SDKReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+    <Error Condition="!Exists('..\packages\sqlite-net-wp8.3.8.5\build\windowsphone8\sqlite-net-wp8.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sqlite-net-wp8.3.8.5\build\windowsphone8\sqlite-net-wp8.props'))" />
+    <Error Condition="!Exists('..\packages\sqlite-net-wp8.3.8.5\build\windowsphone8\sqlite-net-wp8.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sqlite-net-wp8.3.8.5\build\windowsphone8\sqlite-net-wp8.targets'))" />
+  </Target>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\packages\sqlite-net-wp8.3.8.5\build\windowsphone8\sqlite-net-wp8.targets" Condition="Exists('..\packages\sqlite-net-wp8.3.8.5\build\windowsphone8\sqlite-net-wp8.targets')" />
+</Project>

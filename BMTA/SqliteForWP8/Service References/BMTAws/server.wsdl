@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://202.6.18.31/bmta/webservice/server.php" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://202.6.18.31/bmta/webservice/server.php" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://202.6.18.31/bmta/webservice/server.php">
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="findRountingByLocationRequest">
+    <wsdl:part name="lat" type="xsd:string" />
+    <wsdl:part name="long" type="xsd:string" />
+    <wsdl:part name="bus_stop_id_end" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="findRountingByLocationResponse">
+    <wsdl:part name="return" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="findRountingByStartEndBusstopRequest">
+    <wsdl:part name="bus_stop_id_start" type="xsd:string" />
+    <wsdl:part name="bus_stop_id_end" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="findRountingByStartEndBusstopResponse">
+    <wsdl:part name="return" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="searchBusStopRequest">
+    <wsdl:part name="keyword" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="searchBusStopResponse">
+    <wsdl:part name="return" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="searchImportantLocationRequest">
+    <wsdl:part name="keyword" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="searchImportantLocationResponse">
+    <wsdl:part name="return" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getAllBuslineRequest">
+    <wsdl:part name="page" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getAllBuslineResponse">
+    <wsdl:part name="return" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getNearBusStopRequest">
+    <wsdl:part name="lat" type="xsd:string" />
+    <wsdl:part name="long" type="xsd:string" />
+    <wsdl:part name="distance" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getNearBusStopResponse">
+    <wsdl:part name="return" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:portType name="BMTAPortType">
+    <wsdl:operation name="findRountingByLocation">
+      <wsdl:input message="tns:findRountingByLocationRequest" />
+      <wsdl:output message="tns:findRountingByLocationResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="findRountingByStartEndBusstop">
+      <wsdl:input message="tns:findRountingByStartEndBusstopRequest" />
+      <wsdl:output message="tns:findRountingByStartEndBusstopResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="searchBusStop">
+      <wsdl:input message="tns:searchBusStopRequest" />
+      <wsdl:output message="tns:searchBusStopResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="searchImportantLocation">
+      <wsdl:input message="tns:searchImportantLocationRequest" />
+      <wsdl:output message="tns:searchImportantLocationResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllBusline">
+      <wsdl:input message="tns:getAllBuslineRequest" />
+      <wsdl:output message="tns:getAllBuslineResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getNearBusStop">
+      <wsdl:input message="tns:getNearBusStopRequest" />
+      <wsdl:output message="tns:getNearBusStopResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BMTABinding" type="tns:BMTAPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="findRountingByLocation">
+      <soap:operation soapAction="http://202.6.18.31/bmta/webservice/server.php" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="http://202.6.18.31/bmta/webservice/server.php" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="http://202.6.18.31/bmta/webservice/server.php" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findRountingByStartEndBusstop">
+      <soap:operation soapAction="http://202.6.18.31/bmta/webservice/server.php" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="http://202.6.18.31/bmta/webservice/server.php" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="http://202.6.18.31/bmta/webservice/server.php" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="searchBusStop">
+      <soap:operation soapAction="http://202.6.18.31/bmta/webservice/server.php" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="http://202.6.18.31/bmta/webservice/server.php" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="http://202.6.18.31/bmta/webservice/server.php" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="searchImportantLocation">
+      <soap:operation soapAction="http://202.6.18.31/bmta/webservice/server.php" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="http://202.6.18.31/bmta/webservice/server.php" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="http://202.6.18.31/bmta/webservice/server.php" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllBusline">
+      <soap:operation soapAction="http://202.6.18.31/bmta/webservice/server.php" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="http://202.6.18.31/bmta/webservice/server.php" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="http://202.6.18.31/bmta/webservice/server.php" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getNearBusStop">
+      <soap:operation soapAction="http://202.6.18.31/bmta/webservice/server.php" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="http://202.6.18.31/bmta/webservice/server.php" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="http://202.6.18.31/bmta/webservice/server.php" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BMTA">
+    <wsdl:port name="BMTAPort" binding="tns:BMTABinding">
+      <soap:address location="http://202.6.18.31/bmta/webservice/server.php" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

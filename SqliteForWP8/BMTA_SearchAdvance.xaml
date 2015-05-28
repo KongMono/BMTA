@@ -1,0 +1,98 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="BMTA.BMTA_SearchAdvance"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    d:DesignWidth="480" d:DesignHeight="728"
+    Loaded="PhoneApplicationPage_Loaded"
+    shell:SystemTray.IsVisible="False"
+    Style="{StaticResource TransitionPageStyle}">
+
+    <phone:PhoneApplicationPage.Resources>
+
+
+
+    </phone:PhoneApplicationPage.Resources>
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar d:IsHidden="True"/>
+    </phone:PhoneApplicationPage.ApplicationBar>
+    <Grid x:Name="LayoutRoot">
+        <Grid.Background>
+            <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/bg_advance_search.png" />
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="78"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="Header" Grid.Row="0" Width="auto" Background="#FF01A54E">
+            <TextBlock  x:Name="titleName" Text="" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+        <Grid Grid.Row="1" Width="auto" Background="#FF18359B"/>
+        <Grid x:Name="top" Grid.Row="2"  Width="auto" Height="auto"  Background="Transparent">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="75"/>
+                <RowDefinition Height="75"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock  Grid.Row="1" Text="สายรถเมล์" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="25"/>
+            <TextBox HorizontalAlignment="Center" Grid.Row="1" Width="200" Grid.Column="2" TextWrapping="Wrap" VerticalAlignment="Top" BorderBrush="{x:Null}" Style="{StaticResource TextBoxStyle1}">
+                <TextBox.Background>
+                    <ImageBrush Stretch="Fill" ImageSource="/Assets/textbox.png"/>
+                </TextBox.Background>
+            </TextBox>
+        </Grid>
+
+        <Grid x:Name="down" Grid.Row="3"  Width="auto" Height="auto"  Background="Transparent">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="75"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock  Grid.Row="1" Text="เส้นทาง" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center"   FontSize="25" />
+            <toolkit:ListPicker x:Name="bustype" Grid.Row="1" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Column="1">
+                <toolkit:ListPickerItem x:Name="t1" Foreground="Black"/>
+                <toolkit:ListPickerItem x:Name="t2" Foreground="Black"/>
+                <toolkit:ListPickerItem x:Name="t3" Foreground="Black"/>
+            </toolkit:ListPicker>
+
+            <TextBlock  Grid.Row="2" Text="ประเภทรถ" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center"  FontSize="25" />
+            <toolkit:ListPicker x:Name="busline" Grid.Row="2" Width="200" HorizontalAlignment="Center"  VerticalAlignment="Center"  Grid.Column="1">
+                <toolkit:ListPickerItem x:Name="x1" Foreground="Black"/>
+                <toolkit:ListPickerItem x:Name="x2" Foreground="Black"/>
+                <toolkit:ListPickerItem x:Name="x3" Foreground="Black"/>
+            </toolkit:ListPicker>
+        </Grid>
+        <Grid x:Name="footer" Grid.Row="4" Width="auto">
+            <StackPanel Background="#FF18359B">
+                <Button x:Name="btsubmit" Grid.Row="1" BorderBrush="Transparent" Width="270" Height="100"  HorizontalAlignment="Center"  VerticalAlignment="Center" Style="{StaticResource ButtonStyle1}">
+                    <Button.Background>
+                        <ImageBrush Stretch="Fill" ImageSource="/Assets/btsubmit.png"/>
+                    </Button.Background>
+                </Button>
+            </StackPanel>
+
+        </Grid>
+
+    </Grid>
+
+</phone:PhoneApplicationPage>
