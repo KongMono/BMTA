@@ -19,12 +19,7 @@
 
     <phone:PhoneApplicationPage.Resources>
 
-
-
     </phone:PhoneApplicationPage.Resources>
-    <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar d:IsHidden="True"/>
-    </phone:PhoneApplicationPage.ApplicationBar>
     <Grid x:Name="LayoutRoot">
         <Grid.Background>
             <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/bg_advance_search.png" />
@@ -46,14 +41,11 @@
                 <RowDefinition Height="75"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <TextBlock  Grid.Row="1" Text="สายรถเมล์" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="25"/>
-            <TextBox HorizontalAlignment="Center" Grid.Row="1" Width="200" Grid.Column="2" TextWrapping="Wrap" VerticalAlignment="Top" BorderBrush="{x:Null}" Style="{StaticResource TextBoxStyle1}">
-                <TextBox.Background>
-                    <ImageBrush Stretch="Fill" ImageSource="/Assets/textbox.png"/>
-                </TextBox.Background>
+            <TextBox HorizontalAlignment="Center" Grid.Row="1" Width="225" Grid.Column="2" TextWrapping="Wrap" VerticalAlignment="Top" BorderBrush="{x:Null}" Style="{StaticResource TextBoxStyle1}">
             </TextBox>
         </Grid>
 
@@ -64,10 +56,10 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-
+            <TextBlock  Grid.Row="0" Grid.ColumnSpan="2" Text="เส้นทาง" Foreground="Black" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"   FontSize="25"/>
             <TextBlock  Grid.Row="1" Text="เส้นทาง" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center"   FontSize="25" />
             <toolkit:ListPicker x:Name="bustype" Grid.Row="1" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Column="1">
                 <toolkit:ListPickerItem x:Name="t1" Foreground="Black"/>
@@ -84,7 +76,7 @@
         </Grid>
         <Grid x:Name="footer" Grid.Row="4" Width="auto">
             <StackPanel Background="#FF18359B">
-                <Button x:Name="btsubmit" Grid.Row="1" BorderBrush="Transparent" Width="270" Height="100"  HorizontalAlignment="Center"  VerticalAlignment="Center" Style="{StaticResource ButtonStyle1}">
+                <Button x:Name="btsubmit" Grid.Row="0" BorderBrush="Transparent" Width="270" Height="100"  HorizontalAlignment="Center"  VerticalAlignment="Center" Style="{StaticResource ButtonStyle1}">
                     <Button.Background>
                         <ImageBrush Stretch="Fill" ImageSource="/Assets/btsubmit.png"/>
                     </Button.Background>
