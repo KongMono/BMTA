@@ -21,83 +21,67 @@ namespace BMTA
 {
     public partial class BMTA_Search_Advance_landmark : PhoneApplicationPage
     {
+        public String lang = (Application.Current as App).Language;
         public BMTA_Search_Advance_landmark()
         {
             InitializeComponent();
         }
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
-            rightmenu.Visibility = System.Windows.Visibility.Collapsed;
-            rightmenux.Visibility = System.Windows.Visibility.Collapsed;
-            close.Visibility = System.Windows.Visibility.Collapsed;
+            if (lang.Equals("th"))
+            {
+                head1.Text = "ค้นหาสถานที่สำคัญ";
+                head2.Text = "ค้นหาประเภทรถ";
+                head3.Text = "เรียงผลการค้นหาตาม";
+                hinthead1.Hint = "ชื่อสถานที่";
 
-            if (!HasNetwork())
-            {
-                Application.Current.Terminate();
-                // new Microsoft.Xna.Framework.Game().Exit();
-            }
-            else if (!HasInternet())
-            {
-                Application.Current.Terminate();
-                // new Microsoft.Xna.Framework.Game().Exit();
+                textlandmark.Text = "ระบุสถานที่";
+                textbusroute.Text = "เส้นทาง";
+                textbustype.Text = "ประเภทรถ";
+                textsorttype.Text = "ระบุประเภท";
+
+                titleName.Text = "ระบบค้นหาอย่างละเอียด";
+                t1.Content = "ทั้งหมด";
+                t2.Content = "ปกติ";
+                t3.Content = "ทางด่วน";
+
+                x1.Content = "ทั้งหมด";
+                x2.Content = "รถธรรมดา";
+                x3.Content = "รถปรับอากาศ";
+
+                z1.Content = "เรียงตามระยะทาง";
+                z2.Content = "เรียงตามราคา";
+                z3.Content = "ต่อรถน้อยที่สุด";
             }
             else
             {
-                string x = BMTA.clGetResolution.Width.ToString();
-                string y = BMTA.clGetResolution.Height.ToString();
-                string xy = x + "x" + y;
-                if (x == "480")
-                {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/480x852/BMTA_Search_Advance_landmark.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
-                }
-                else if (x == "720")
-                {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/720x1280/BMTA_Search_Advance_landmark.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
-                }
-                else
-                {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/768x1280/BMTA_Search_Advance_landmark.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
-                }
+                head1.Text = "Search Landmarks";
+                head2.Text = "Search Bus Type";
+                head3.Text = "Sort By Results";
+                hinthead1.Hint = "Landmark Name";
+
+                textlandmark.Text = "Landmarks";
+                textbusroute.Text = "Route";
+                textbustype.Text = "Bus Type";
+                textsorttype.Text = "Select Type";
+
+                titleName.Text = "Advance Search";
+                t1.Content = "Any";
+                t2.Content = "Freeway";
+                t3.Content = "Expressways";
+
+                x1.Content = "Any";
+                x2.Content = "Regular Bus";
+                x3.Content = "Air Condition Bus";
+
+                z1.Content = "Sort By Distance";
+                z2.Content = "Sort By Price";
+                z3.Content = "Fewer Transfers";
             }
+
         }
 
-        private bool HasInternet()
-        {
-            if (!NetworkInterface.GetIsNetworkAvailable())
-            {
-                MessageBox.Show("No internet connection is available. Try again later.");
-                return false;
-            }
-            return true;
-        }
-
-        private bool HasNetwork()
-        {
-            if (!DeviceNetworkInformation.IsNetworkAvailable)
-            {
-                MessageBox.Show("No network is available. Try again later.");
-                return false;
-            }
-            return true;
-        }
+    
 
         private void btSearchAd_Click(object sender, RoutedEventArgs e)
         {
@@ -126,16 +110,14 @@ namespace BMTA
 
         private void close_Click(object sender, RoutedEventArgs e)
         {
-            rightmenu.Visibility = System.Windows.Visibility.Collapsed;
-            rightmenux.Visibility = System.Windows.Visibility.Collapsed;
-            close.Visibility = System.Windows.Visibility.Collapsed;
+           
         }
 
-        private void btTopMenu_Click(object sender, RoutedEventArgs e)
+
+
+        private void btback_Click(object sender, RoutedEventArgs e)
         {
-            rightmenux.Visibility = Visibility;
-            rightmenu.Visibility = Visibility;
-            close.Visibility = Visibility;
+            NavigationService.GoBack();
         }
 
         private void rhome_Click(object sender, RoutedEventArgs e)

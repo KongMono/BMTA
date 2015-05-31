@@ -21,6 +21,8 @@ namespace BMTA
 {
     public partial class BMTA_Search_Advance_start : PhoneApplicationPage
     {
+        public String lang = (Application.Current as App).Language;
+
         public BMTA_Search_Advance_start()
         {
             InitializeComponent();
@@ -28,115 +30,72 @@ namespace BMTA
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
-            rightmenu.Visibility = System.Windows.Visibility.Collapsed;
-            rightmenux.Visibility = System.Windows.Visibility.Collapsed;
-            close.Visibility = System.Windows.Visibility.Collapsed;
 
-            if (!HasNetwork())
+            if (lang.Equals("th"))
             {
-                Application.Current.Terminate();
-                // new Microsoft.Xna.Framework.Game().Exit();
-            }
-            else if (!HasInternet())
-            {
-                Application.Current.Terminate();
-                // new Microsoft.Xna.Framework.Game().Exit();
+                txtboxstart.Hint = "คำค้นหา";
+                txtboxend.Hint = "คำค้นหา";
+                titleName.Text = "ระบบค้นหาอย่างละเอียด";
+                txtstart.Text = "ต้นทาง";
+                txtend.Text = "ปลายทาง";
+                txtroute.Text = "เส้นทาง";
+                txtrbustype.Text = "ประเภทรถ";
+                txtselecttype.Text = "ระบุประเภท";
+
+                head1.Text = "ค้นหาต้นทาง-ปลายทาง";
+                head2.Text = "ค้นหาประเภทรถ";
+                head3.Text = "เรียงผลการต้นหาตาม";
+
+                t1.Content = "ทั้งหมด";
+                t2.Content = "ปกติ";
+                t3.Content = "ทางด่วน";
+
+                x1.Content = "ทั้งหมด";
+                x2.Content = "รถธรรมดา";
+                x3.Content = "รถปรับอากาศ";
+
+                z1.Content = "เรียงตามระยะทาง";
+                z2.Content = "เรียงตามราคา";
+                z3.Content = "ต่อรถน้อยที่สุด";
             }
             else
             {
-                string x = BMTA.clGetResolution.Width.ToString();
-                string y = BMTA.clGetResolution.Height.ToString();
-                string xy = x + "x" + y;
-                if (x == "480")
-                {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/480x852/BMTA_Search_Advance_start.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
-                }
-                else if (x == "720")
-                {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/720x1280/BMTA_Search_Advance_start.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
-                }
-                else
-                {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/768x1280/BMTA_Search_Advance_start.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
-                }
+                txtboxstart.Hint = "Keyword";
+                txtboxend.Hint = "Keyword";
+                titleName.Text = "Advance Search";
+                txtstart.Text = "Start";
+                txtend.Text = "End";
+                txtroute.Text = "Route";
+                txtrbustype.Text = "Bus Type";
+                txtselecttype.Text = "Select Type";
+
+                head1.Text = "Search Start-End";
+                head2.Text = "Search Bus Type";
+                head3.Text = "Sort By Results";
+
+                t1.Content = "Any";
+                t2.Content = "Freeway";
+                t3.Content = "Expressways";
+
+                x1.Content = "Any";
+                x2.Content = "Regular Bus";
+                x3.Content = "Air Condition Bus";
+
+                z1.Content = "Sort By Distance";
+                z2.Content = "Sort By Price";
+                z3.Content = "Fewer Transfers";
             }
-        }
-
-        private bool HasInternet()
-        {
-            if (!NetworkInterface.GetIsNetworkAvailable())
-            {
-                MessageBox.Show("No internet connection is available. Try again later.");
-                return false;
-            }
-            return true;
-        }
-
-        private bool HasNetwork()
-        {
-            if (!DeviceNetworkInformation.IsNetworkAvailable)
-            {
-                MessageBox.Show("No network is available. Try again later.");
-                return false;
-            }
-            return true;
-        }
-
-        private void btSearchAd_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_Search_Advance_start.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusCoordinates.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_3(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml", UriKind.Relative));
+          
         }
 
         private void close_Click(object sender, RoutedEventArgs e)
         {
-            rightmenu.Visibility = System.Windows.Visibility.Collapsed;
-            rightmenux.Visibility = System.Windows.Visibility.Collapsed;
-            close.Visibility = System.Windows.Visibility.Collapsed;
+           
         }
 
         private void btTopMenu_Click(object sender, RoutedEventArgs e)
         {
-            rightmenux.Visibility = Visibility;
-            rightmenu.Visibility = Visibility;
-            close.Visibility = Visibility;
+          
         }
 
         private void rhome_Click(object sender, RoutedEventArgs e)
@@ -172,6 +131,10 @@ namespace BMTA
         private void rbusnew_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Uri("/BMTA_EventNew.xaml", UriKind.Relative));
+        }
+        private void btback_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
         }
     }
 }

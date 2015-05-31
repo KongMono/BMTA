@@ -26,13 +26,19 @@
         </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="78"/>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="10"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
-        <Grid x:Name="Header" Grid.Row="0" Width="auto" Background="#FF01A54E">
-            <TextBlock  x:Name="titleName" Text="" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Grid x:Name="Header" Grid.Row="0" Width="auto" Background="#FF01A54E" Visibility="Visible">
+            <Button x:Name="btBack" BorderBrush="Transparent" Width="75" Height="75" VerticalAlignment="Center" HorizontalAlignment="Left" Click="btback_Click" Style="{StaticResource ImageButton}">
+                <Button.Background>
+                    <ImageBrush Stretch="Uniform" ImageSource="/Assets/arrowleft.png"/>
+                </Button.Background>
+            </Button>
+            <TextBlock  x:Name="titleName" Text="" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center">
+            </TextBlock>
         </Grid>
         <Grid Grid.Row="1" Width="auto" Background="#FF18359B"/>
         <Grid x:Name="top" Grid.Row="2"  Width="auto" Height="auto"  Background="Transparent">
@@ -44,9 +50,16 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock  Grid.Row="1" Text="สายรถเมล์" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="25"/>
-            <TextBox HorizontalAlignment="Center" Grid.Row="1" Width="225" Grid.Column="2" TextWrapping="Wrap" VerticalAlignment="Top" BorderBrush="{x:Null}" Style="{StaticResource TextBoxStyle1}">
-            </TextBox>
+            <Grid  Grid.Row="0" Grid.ColumnSpan="2" Width="400" Height="51" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <Grid.Background>
+                    <ImageBrush Stretch="Fill" ImageSource="/Assets/header_search_tab.jpg" />
+                </Grid.Background>
+
+                <TextBlock x:Name="headbusline" Text="ค้นหาสายรถเมล์" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center"   FontSize="25" />
+            </Grid>
+            <TextBlock x:Name="textbusline" Grid.Row="1" Text="สายรถเมล์" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="25"/>
+            <toolkit:PhoneTextBox x:Name ="hintbusline" HorizontalAlignment="Center" Grid.Row="1" Width="225" Grid.Column="2" TextWrapping="Wrap" VerticalAlignment="Top" BorderBrush="{x:Null}">
+            </toolkit:PhoneTextBox>
         </Grid>
 
         <Grid x:Name="down" Grid.Row="3"  Width="auto" Height="auto"  Background="Transparent">
@@ -59,16 +72,22 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock  Grid.Row="0" Grid.ColumnSpan="2" Text="เส้นทาง" Foreground="Black" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"   FontSize="25"/>
-            <TextBlock  Grid.Row="1" Text="เส้นทาง" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center"   FontSize="25" />
-            <toolkit:ListPicker x:Name="bustype" Grid.Row="1" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Column="1">
+            <Grid  Grid.Row="0" Grid.ColumnSpan="2" Width="400" Height="51" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <Grid.Background>
+                    <ImageBrush Stretch="Fill" ImageSource="/Assets/header_search_tab.jpg" />
+                </Grid.Background>
+
+                <TextBlock x:Name = "headbustype" Text="ค้นหาประเภทรถ" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center"   FontSize="25" />
+            </Grid>
+            <TextBlock x:Name = "textbusroute" Grid.Row="1" Text="เส้นทาง" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center"   FontSize="25" />
+            <toolkit:ListPicker x:Name="bustype" Grid.Row="1" Width="220" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Column="1">
                 <toolkit:ListPickerItem x:Name="t1" Foreground="Black"/>
                 <toolkit:ListPickerItem x:Name="t2" Foreground="Black"/>
                 <toolkit:ListPickerItem x:Name="t3" Foreground="Black"/>
             </toolkit:ListPicker>
 
-            <TextBlock  Grid.Row="2" Text="ประเภทรถ" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center"  FontSize="25" />
-            <toolkit:ListPicker x:Name="busline" Grid.Row="2" Width="200" HorizontalAlignment="Center"  VerticalAlignment="Center"  Grid.Column="1">
+            <TextBlock x:Name = "textbustype" Grid.Row="2" Text="ประเภทรถ" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center"  FontSize="25" />
+            <toolkit:ListPicker x:Name="busline" Grid.Row="2" Width="220" HorizontalAlignment="Center"  VerticalAlignment="Center"  Grid.Column="1">
                 <toolkit:ListPickerItem x:Name="x1" Foreground="Black"/>
                 <toolkit:ListPickerItem x:Name="x2" Foreground="Black"/>
                 <toolkit:ListPickerItem x:Name="x3" Foreground="Black"/>

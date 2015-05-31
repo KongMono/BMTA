@@ -31,10 +31,23 @@ namespace BMTA
 
         }
 
+        private void btback_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
+        }
+
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
             if (lang.Equals("th"))
             {
+                headbusline.Text = "ค้นหาสายรถเมล์";
+                headbustype.Text = "ค้นหาประเภทรถ";
+                hintbusline.Hint = "กรุณากรอกตัวเลข";
+
+                textbusline.Text = "สายรถเมล์";
+                textbusroute.Text = "เส้นทาง";
+                textbustype.Text = "ประเภทรถ"; 
+
                 titleName.Text = "ระบบค้นหาอย่างละเอียด";
                 t1.Content = "ทั้งหมด";
                 t2.Content = "ปกติ";
@@ -46,6 +59,14 @@ namespace BMTA
             }
             else
             {
+                headbusline.Text = "Search Bus Line";
+                headbustype.Text = "Search Bus Type";
+                hintbusline.Hint = "Bus No.";
+
+                textbusline.Text = "Bus Line";
+                textbusroute.Text = "Route";
+                textbustype.Text = "Bus Type"; 
+
                 titleName.Text = "Advance Search";
                 t1.Content = "Any";
                 t2.Content = "Freeway";

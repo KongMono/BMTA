@@ -182,9 +182,6 @@
     <Compile Include="BMTA_Search_Advance_busstop.xaml.cs">
       <DependentUpon>BMTA_Search_Advance_busstop.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BMTA_Search_Advance_busstop_en.xaml.cs">
-      <DependentUpon>BMTA_Search_Advance_busstop_en.xaml</DependentUpon>
-    </Compile>
     <Compile Include="BMTA_Search_Advance_landmark.xaml.cs">
       <DependentUpon>BMTA_Search_Advance_landmark.xaml</DependentUpon>
     </Compile>
@@ -193,9 +190,6 @@
     </Compile>
     <Compile Include="BMTA_Search_Advance_start.xaml.cs">
       <DependentUpon>BMTA_Search_Advance_start.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BMTA_Search_Advance_start_en.xaml.cs">
-      <DependentUpon>BMTA_Search_Advance_start_en.xaml</DependentUpon>
     </Compile>
     <Compile Include="BMTA_Slot.xaml.cs">
       <DependentUpon>BMTA_Slot.xaml</DependentUpon>
@@ -405,10 +399,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BMTA_Search_Advance_busstop_en.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="BMTA_Search_Advance_landmark.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -418,10 +408,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="BMTA_Search_Advance_start.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BMTA_Search_Advance_start_en.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -507,6 +493,7 @@
     <Content Include="Assets\bg_numberbus.png" />
     <Content Include="Assets\btn_bus.png" />
     <Content Include="Assets\btsubmit.png" />
+    <Content Include="Assets\header_search_tab.jpg" />
     <Content Include="Assets\icon_stat.png" />
     <Content Include="Assets\languagepage.jpg" />
     <Content Include="Assets\left_infobox.png" />

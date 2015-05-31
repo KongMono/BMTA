@@ -12,7 +12,9 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     d:DesignWidth="480" d:DesignHeight="728"
     mc:Ignorable="d" 
-    Loaded="PhoneApplicationPage_Loaded">
+    shell:SystemTray.IsVisible="false"
+    Loaded="PhoneApplicationPage_Loaded"
+    Style="{StaticResource TransitionPageStyle}">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot">
@@ -25,9 +27,9 @@
         </Grid.RowDefinitions>
 
         <Grid x:Name="Header" Grid.Row="0" Width="auto" Background="#FF01A54E" Visibility="Visible">
-            <Button x:Name="btSearch" BorderBrush="Transparent" Width="75" Height="75" VerticalAlignment="Stretch" HorizontalAlignment="Left" Click="btSearch_Click" Style="{StaticResource ImageButton}">
+            <Button x:Name="btBack" BorderBrush="Transparent" Width="75" Height="75" VerticalAlignment="Center" HorizontalAlignment="Left" Click="btback_Click" Style="{StaticResource ImageButton}">
                 <Button.Background>
-                    <ImageBrush Stretch="Uniform" ImageSource="/Assets/720x1280/BMTA_search_icon.png"/>
+                    <ImageBrush Stretch="Uniform" ImageSource="/Assets/arrowleft.png"/>
                 </Button.Background>
             </Button>
             <TextBlock  x:Name="titleName" Text="" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -39,24 +41,24 @@
                 </Button.Background>
             </Button>
         </Grid>
-        <Button Content="btn1" Grid.Row="1" VerticalAlignment="Top"  BorderBrush="Transparent" ClickMode="Hover" Click="Button_Click1"  >
+        <Button Content="btn1" Grid.Row="1" VerticalAlignment="Top"  BorderBrush="Transparent" ClickMode="Hover" Click="Button_Click_1"  >
             <Button.Template>
                 <ControlTemplate>
-                    <Image  Stretch="UniformToFill" Source="/Assets/720x1280/BMTA_new_bt.png" />
+                    <Image  Stretch="Fill" Source="/Assets/720x1280/BMTA_new_bt.png" />
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <Button Content="btn2" Grid.Row="2" VerticalAlignment="Top"  BorderBrush="Transparent" ClickMode="Hover" Click="Button_Click2">
+        <Button Content="btn2" Grid.Row="2" VerticalAlignment="Top"  BorderBrush="Transparent" ClickMode="Hover" Click="Button_Click_2">
             <Button.Template>
                 <ControlTemplate>
-                    <Image  Stretch="UniformToFill"  Source="/Assets/720x1280/BMTA_event_bt.png" />
+                    <Image  Stretch="Fill"  Source="/Assets/720x1280/BMTA_event_bt.png" />
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <Button Content="btn3"  Grid.Row="3" VerticalAlignment="Top"  BorderBrush="Transparent" ClickMode="Hover" Click="Button_Click3" >
+        <Button Content="btn3"  Grid.Row="3" VerticalAlignment="Top"  BorderBrush="Transparent" ClickMode="Hover" Click="Button_Click_3" >
             <Button.Template>
                 <ControlTemplate>
-                    <Image Stretch="UniformToFill"  Source="/Assets/720x1280/BMTA_about_bt.png" />
+                    <Image Stretch="Fill"  Source="/Assets/720x1280/BMTA_about_bt.png" />
                 </ControlTemplate>
             </Button.Template>
         </Button>

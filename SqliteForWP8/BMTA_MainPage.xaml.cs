@@ -67,7 +67,7 @@ namespace BMTA
         }
         private void button6_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/BMTA_EventNew_en.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/BMTA_EventNew.xaml", UriKind.Relative));
         }
 
         private void ShowProgressIndicator(String msg)

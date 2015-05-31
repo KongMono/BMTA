@@ -366,12 +366,15 @@ namespace BMTA
             }
             else if (CurrentPage == "2")
             {
+                NavigationService.Navigate(new Uri("/BMTA_Search_Advance_busstop.xaml", UriKind.Relative));
             }
             else if (CurrentPage == "3")
             {
+                NavigationService.Navigate(new Uri("/BMTA_Search_Advance_start.xaml", UriKind.Relative));
             }
             else
             {
+                NavigationService.Navigate(new Uri("/BMTA_Search_Advance_landmark.xaml", UriKind.Relative));
             }
         }
 
