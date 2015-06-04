@@ -48,7 +48,7 @@ namespace BMTA
         /// <summary>
         /// busline
         /// </summary>
-        ObservableCollection<Article> articles = new ObservableCollection<Article>();
+        ObservableCollection<buslineItem> buslines = new ObservableCollection<buslineItem>();
 
         /// <summary>
         /// map
@@ -99,27 +99,10 @@ namespace BMTA
         {
             //load data 
             ShowProgressIndicator("Loading..");
-            List<busline> retrievedTasks = dbConn.Query<busline>("SELECT * FROM busline WHERE bus_line LIKE '" + CurrentGroup + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
+            List<buslineItem> retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + CurrentGroup + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
+            buslines = new ObservableCollection<buslineItem>(retrievedTasks);
 
-            foreach (var item in retrievedTasks)
-            {
-                Article article = new Article();
-                article.btcontent = item.bus_line;
-                article.Start = item.bus_start;
-                article.Stop = item.bus_end;
-                article.ImagePath = "Assets/arrow.png";
-
-                if (item.bustype == "1")
-                {
-                    article.bg = "Assets/bg_nomal.png";
-                }
-                else if (item.bustype == "2")
-                {
-                    article.bg = "Assets/bg_nomal2.png";
-                }
-                articles.Add(article);
-            }
-            buslinelistbox.ItemsSource = articles;
+            buslinelistbox.ItemsSource = buslines;
             HideProgressIndicator();
             this.buslinelistbox.Visibility = System.Windows.Visibility.Visible;
         }
@@ -127,14 +110,16 @@ namespace BMTA
         public void callServicegetNearBusStop(String lat, String lon)
         {
             webClient = new WebClient();
-            String url = null;
+            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            String url = "http://202.6.18.31:7777/getNearBusstop";
+            string myParameters;
             try
             {
-                url = (Application.Current as App).getNearBusStop + "lat=" + lat + "&lon=" + lon + "&distance=" + "12";
+                myParameters = "lat=" + lat + "&long=" + lon + "&distance=" + "0.5";
                 Debug.WriteLine("URL callServicegetNearBusStop = " + url);
-                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(callServicgetNearBusStop_Completed);
-                webClient.DownloadStringAsync(new Uri(url));
-
+        
+                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicgetNearBusStop_Completed);
+                webClient.UploadStringAsync(new Uri(url), myParameters);
             }
             catch (WebException ex)
             {
@@ -143,26 +128,30 @@ namespace BMTA
 
         }
 
-        private void callServicgetNearBusStop_Completed(object sender, DownloadStringCompletedEventArgs e)
+        private void callServicgetNearBusStop_Completed(object sender, UploadStringCompletedEventArgs e)
         {
             NearBusStopItem results = JsonConvert.DeserializeObject<NearBusStopItem>(e.Result);
             String status = results.status;
 
-            var datas = results.data;
-            foreach (var data in datas)
+            if (status != "0")
             {
-                String stop_name = data.stop_name;
-                Debug.WriteLine(data);
+                var datas = results.data;
+                foreach (var data in datas)
+                {
+                    String stop_name = data.stop_name;
+                    Debug.WriteLine(data);
 
-                //add Tooltip
-                MapOverlay mapoverlay = new MapOverlay();
-                _stooltip = new UCToolTip();
-                _stooltip.Description = data.stop_name.ToString() + "\n" + data.busline;
-                _stooltip.DataContext = data;
-                mapoverlay.Content = _stooltip;
-                mapoverlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(data.latitude), Convert.ToDouble(data.longitude));
-                mymapLayer.Add(mapoverlay);
+                    //add Tooltip
+                    MapOverlay mapoverlay = new MapOverlay();
+                    _stooltip = new UCToolTip();
+                    _stooltip.Description = data.stop_name.ToString() + "\n" + data.busline;
+                    _stooltip.DataContext = data;
+                    mapoverlay.Content = _stooltip;
+                    mapoverlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(data.latitude), Convert.ToDouble(data.longitude));
+                    mymapLayer.Add(mapoverlay);
+                }
             }
+            
         }
 
         private void pushtap_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -383,7 +372,7 @@ namespace BMTA
             Article item = (sender as ListBox).SelectedItem as Article;
             if (buslinelistbox.SelectedIndex != -1)
             {
-                this.NavigationService.Navigate(new Uri("/BMTA_bus_line_details.xaml?Group=" + CurrentGroup + "&Index=" + buslinelistbox.SelectedIndex.ToString(), UriKind.Relative));
+                this.NavigationService.Navigate(new Uri("/BMTA_bus_line_details.xaml?Search=false&Group=" + CurrentGroup + "&Index=" + buslinelistbox.SelectedIndex.ToString(), UriKind.Relative));
             }
             buslinelistbox.SelectedIndex = -1;
         }
@@ -399,41 +388,25 @@ namespace BMTA
             Button btn = (Button)sender;
 
             ShowProgressIndicator("Loading..");
-            articles.Clear();
+            //articles.Clear();
 
-            List<busline> retrievedTasks = new List<busline>();
+            List<buslineItem> retrievedTasks = new List<buslineItem>();
             if (btn.Name == "btn_other")
             {
-                retrievedTasks = dbConn.Query<busline>("SELECT * FROM busline WHERE bus_line GLOB '*[A-Za-z]*' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line GLOB '*[A-Za-z]*' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
             }
             else if (btn.Name == "btn_van")
             {
-                retrievedTasks = dbConn.Query<busline>("SELECT * FROM busline WHERE bus_owner = 4 AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')");
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_owner = 4 AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')");
             }
             else
             {
-                retrievedTasks = dbConn.Query<busline>("SELECT * FROM busline WHERE bus_line LIKE '" + btn.Content + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + btn.Content + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
             }
 
-            foreach (var item in retrievedTasks)
-            {
-                Article article = new Article();
-                article.btcontent = item.bus_line;
-                article.Start = item.bus_start;
-                article.Stop = item.bus_end;
-                article.ImagePath = @"Assets/arrow.png";
+            buslines = new ObservableCollection<buslineItem>(retrievedTasks);
 
-                if (item.bustype == "1")
-                {
-                    article.bg = @"Assets/bg_nomal.png";
-                }
-                else if (item.bustype == "2")
-                {
-                    article.bg = @"Assets/bg_nomal2.png";
-                }
-                articles.Add(article);
-            }
-            buslinelistbox.ItemsSource = articles;
+            buslinelistbox.ItemsSource = buslines;
             HideProgressIndicator();
             CurrentGroup = btn.Content.ToString();
         }
@@ -494,36 +467,19 @@ namespace BMTA
         {
             //load data 
             ShowProgressIndicator("Loading..");
-            articles.Clear();
-            List<busline> retrievedTasks = new List<busline>();
+            //articles.Clear();
+            List<buslineItem> retrievedTasks = new List<buslineItem>();
             if (busline_search.Text != null || busline_search.Text != "")
             {
-                retrievedTasks = dbConn.Query<busline>("SELECT * FROM busline WHERE bus_line LIKE '" + busline_search.Text + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + busline_search.Text + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
             }
             else
             {
-                retrievedTasks = dbConn.Query<busline>("SELECT * FROM busline WHERE bus_line LIKE '" + CurrentGroup + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + CurrentGroup + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
             }
 
-            foreach (var item in retrievedTasks)
-            {
-                Article article = new Article();
-                article.btcontent = item.bus_line;
-                article.Start = item.bus_start;
-                article.Stop = item.bus_end;
-                article.ImagePath = "Assets/arrow.png";
-
-                if (item.bustype == "1")
-                {
-                    article.bg = "Assets/bg_nomal.png";
-                }
-                else if (item.bustype == "2")
-                {
-                    article.bg = "Assets/bg_nomal2.png";
-                }
-                articles.Add(article);
-            }
-            buslinelistbox.ItemsSource = articles;
+            buslines = new ObservableCollection<buslineItem>(retrievedTasks);
+            buslinelistbox.ItemsSource = buslines;
             HideProgressIndicator();
         }
 
@@ -531,38 +487,18 @@ namespace BMTA
         {
             if (e.Key == Key.Enter)
             {
-                //load data 
                 ShowProgressIndicator("Loading..");
-                articles.Clear();
-                List<busline> retrievedTasks = new List<busline>();
+                List<buslineItem> retrievedTasks = new List<buslineItem>();
                 if (busline_search.Text != "")
                 {
-                    retrievedTasks = dbConn.Query<busline>("SELECT * FROM busline WHERE bus_line LIKE '" + busline_search.Text + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
+                    retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + busline_search.Text + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
                 }
                 else
                 {
-                    retrievedTasks = dbConn.Query<busline>("SELECT * FROM busline WHERE bus_line LIKE '" + CurrentGroup + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
+                    retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + CurrentGroup + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
                 }
-
-                foreach (var item in retrievedTasks)
-                {
-                    Article article = new Article();
-                    article.btcontent = item.bus_line;
-                    article.Start = item.bus_start;
-                    article.Stop = item.bus_end;
-                    article.ImagePath = "Assets/arrow.png";
-
-                    if (item.bustype == "1")
-                    {
-                        article.bg = "Assets/bg_nomal.png";
-                    }
-                    else if (item.bustype == "2")
-                    {
-                        article.bg = "Assets/bg_nomal2.png";
-                    }
-                    articles.Add(article);
-                }
-                buslinelistbox.ItemsSource = articles;
+                buslines = new ObservableCollection<buslineItem>(retrievedTasks);
+                buslinelistbox.ItemsSource = buslines;
                 HideProgressIndicator();
             }
         }

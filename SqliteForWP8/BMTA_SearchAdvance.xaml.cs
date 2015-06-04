@@ -19,16 +19,16 @@ using System.Windows.Input;
 
 namespace BMTA
 {
-   
+
 
     public partial class BMTA_SearchAdvance : PhoneApplicationPage
     {
         public String lang = (Application.Current as App).Language;
-
+        private SQLiteConnection dbConn;
+        private String query;
         public BMTA_SearchAdvance()
         {
             InitializeComponent();
-
         }
 
         private void btback_Click(object sender, RoutedEventArgs e)
@@ -36,8 +36,20 @@ namespace BMTA
             NavigationService.GoBack();
         }
 
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            if (dbConn != null)
+            {
+                dbConn.Close();
+                // Close the database connection.  
+            }
+        }
+
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
+            // Create the database connection.  
+            dbConn = new SQLiteConnection(App.DB_PATH);
+
             if (lang.Equals("th"))
             {
                 headbusline.Text = "ค้นหาสายรถเมล์";
@@ -46,7 +58,7 @@ namespace BMTA
 
                 textbusline.Text = "สายรถเมล์";
                 textbusroute.Text = "เส้นทาง";
-                textbustype.Text = "ประเภทรถ"; 
+                textbustype.Text = "ประเภทรถ";
 
                 titleName.Text = "ระบบค้นหาอย่างละเอียด";
                 t1.Content = "ทั้งหมด";
@@ -65,7 +77,7 @@ namespace BMTA
 
                 textbusline.Text = "Bus Line";
                 textbusroute.Text = "Route";
-                textbustype.Text = "Bus Type"; 
+                textbustype.Text = "Bus Type";
 
                 titleName.Text = "Advance Search";
                 t1.Content = "Any";
@@ -76,6 +88,48 @@ namespace BMTA
                 x2.Content = "Regular Bus";
                 x3.Content = "Air Condition Bus";
             }
+            (Application.Current as App).DataSearchList.Clear();
+        }
+
+        private void btsubmit_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(hintbusline.Text))
+            {
+                MessageBox.Show("กรุณากรอกสายสายรถเมล์");
+                return;
+            }
+
+            List<buslineItem> retrievedTasks = new List<buslineItem>();
+            var buslinePick = (ListPickerItem)busline.SelectedItem;
+            var busRunningPick = (ListPickerItem)bustyperunning.SelectedItem;
+
+            if ((buslinePick.Content == "ทั้งหมด" || buslinePick.Content == "Any") && (busRunningPick.Content == "ทั้งหมด" || busRunningPick.Content == "Any"))
+            {
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_name LIKE '%" + hintbusline.Text + "%' AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')");
+                query = "SELECT * FROM busline WHERE bus_name LIKE '%" + hintbusline.Text + "%' AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')";
+            }
+            else
+            {
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_name LIKE '%" + hintbusline.Text + "%' AND bustype LIKE '%" + buslinePick.Tag + "%' AND bus_running LIKE '%" + busRunningPick.Tag + "%'  AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')");
+                query = "SELECT * FROM busline WHERE bus_name LIKE '%" + hintbusline.Text + "%' AND bustype LIKE '%" + buslinePick.Tag + "%' AND bus_running LIKE '%" + busRunningPick.Tag + "%'  AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')";
+            }
+
+            if (retrievedTasks.Count > 0)
+            {
+                MessageBoxResult result = MessageBox.Show("ค้นหาสำเร็จ", (Application.Current as App).AppName, MessageBoxButton.OK);
+
+                if (result == MessageBoxResult.OK)
+                {
+                    (Application.Current as App).DataSearchList = retrievedTasks;
+                    this.NavigationService.Navigate(new Uri("/BMTA_bus_line_details.xaml?Search=true", UriKind.Relative));
+                }
+            }
+            else
+            {
+                MessageBox.Show("ไม่พบข้อมูล");
+                return;
+            }
+
         }
     }
 }

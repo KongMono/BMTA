@@ -29,17 +29,17 @@
             <StackPanel Orientation="Vertical"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="240" Background="#FFFFFFFF" Margin="0,0,0,30">
                 <Grid Width="180" Height="180" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Grid.Background>
-                        <ImageBrush  Stretch="Fill" ImageSource="{Binding bg}" />
+                        <ImageBrush  Stretch="Fill" ImageSource="{Binding bus_line_bg}" />
                     </Grid.Background>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="{Binding btcontent}"  Width="auto" Height="auto" Margin="0,40,0,0" FontSize="60" Foreground="Black" TextTrimming="WordEllipsis" TextAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding bus_line}"  Width="auto" Height="auto" Margin="0,40,0,0" FontSize="60" Foreground="Black" TextTrimming="WordEllipsis" TextAlignment="Center" HorizontalAlignment="Center"/>
                 </Grid>
 
-                <TextBlock Text="{Binding Start}" Width="200" Foreground="Black" TextAlignment="Center"/>
-                <Image Source="{Binding ImagePath}" Height="20" Width="80" CacheMode="BitmapCache" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBlock Text="{Binding Stop}" Width="200" Foreground="Black" TextAlignment="Center"/>
+                <TextBlock Text="{Binding bus_start}" Width="200" Foreground="Black" TextAlignment="Center"/>
+                <Image Source="Assets/arrow.png" Height="20" Width="80" CacheMode="BitmapCache" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding bus_end}" Width="200" Foreground="Black" TextAlignment="Center"/>
             </StackPanel>
         </DataTemplate>
 
@@ -74,7 +74,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Grid x:Name="buslineLayoutSeacrch" Grid.Row="0" Width="auto" Background="#FF18359B">
+            <Grid x:Name="buslineLayoutSearch" Grid.Row="0" Width="auto" Background="#FF18359B">
                 <TextBox x:Name="busline_search"  BorderBrush="Transparent" TextWrapping="Wrap" VerticalAlignment="Center" SelectionBackground="{x:Null}" Grid.RowSpan="2" KeyDown="busline_search_KeyDown" Style="{StaticResource TextBoxStyle1}" />
             </Grid>
 
@@ -112,7 +112,7 @@
                 <ListBox x:Name="buslinelistbox"  ItemTemplate="{StaticResource CustomListTemplate}"  VerticalAlignment="Center" SelectionChanged="buslinelistbox_SelectionChanged">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <toolkit:WrapPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <toolkit:WrapPanel Orientation="Horizontal"  VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                 </ListBox>
@@ -212,7 +212,7 @@
                     <ColumnDefinition Width="75"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="latlonbtn_search" BorderBrush="Transparent" Width="75" Height="75"  HorizontalAlignment="Center" VerticalAlignment="Center" Click="btSearch_Click" Style="{StaticResource ImageButton}">
+                <Button x:Name="latlonbtn_search" BorderBrush="Transparent" Width="75" Height="75"  HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource ImageButton}">
                     <Button.Background>
                         <ImageBrush Stretch="Fill" ImageSource="/Assets/720x1280/BMTA_search_icon.png"/>
                     </Button.Background>

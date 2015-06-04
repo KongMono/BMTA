@@ -40,43 +40,76 @@ namespace BMTA
     {
         public String lang = (Application.Current as App).Language;
         private SQLiteConnection dbConn;
-        public busline ls = new busline();
-        public List<busline> retrievedTasks = new List<busline>();
+        public List<buslineItem> retrievedTasks = new List<buslineItem>();
+        public buslineItem retrievedTask = new buslineItem();
         public string group = "";
+        public string search, query;
         public int index;
         private MapPolyline line;
+        private Boolean isInTwown, showmap;
+        private Boolean iscate1, iscate2;
         ObservableCollection<listBuslineDetailItem> listBuslineDetailItem = new ObservableCollection<listBuslineDetailItem>();
 
         ProgressIndicator progressIndicator = new ProgressIndicator();
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            // Create the database connection.  
+            ShowProgressIndicator("Loading..");
             dbConn = new SQLiteConnection(App.DB_PATH);
             // Create the table Task, if it doesn't exist.  
             dbConn.CreateTable<busline>();
-
-            group = this.NavigationContext.QueryString["Group"];
-            String indexnum = this.NavigationContext.QueryString["Index"];
-            index = Convert.ToInt32(indexnum);
-
-            if (group != null)
+            search = this.NavigationContext.QueryString["Search"];
+            if (search == "true")
             {
-                ShowProgressIndicator("Loading..");
+                retrievedTasks = (Application.Current as App).DataSearchList;
 
-                retrievedTasks = dbConn.Query<busline>("SELECT * FROM busline WHERE bus_line LIKE '" + group + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
-                ls = retrievedTasks[index];
-                lblbusid.Text = ls.bus_line;
-                lblStart.Text = ls.bus_start;
-                lblStop.Text = ls.bus_end;
-                lblbusName.Text = ls.bus_name;
-                lbltime.Text = ls.bus_startstop_time;
-                getListDatabusstop(lblbusid.Text);
+                retrievedTask = retrievedTasks[0];
+
+                lblbusid.Text = retrievedTasks[0].bus_line;
+                lblStart.Text = retrievedTasks[0].bus_start;
+                lblStop.Text = retrievedTasks[0].bus_end;
+                lblbusName.Text = retrievedTasks[0].bus_name;
+                lbltime.Text = retrievedTasks[0].bus_startstop_time;
+                getListDatabusstop(retrievedTasks[0].bus_stop);
+
+                isInTwown = true;
+                iscate1 = true;
+                iscate2 = true;
+                showmap = true;
+
+                this.Pushpin(retrievedTasks[0].bus_stop, retrievedTasks[0].bus_polyline, retrievedTasks[0].important_location, iscate1, iscate2);
             }
+            else
+            {
+                group = this.NavigationContext.QueryString["Group"];
+                String indexnum = this.NavigationContext.QueryString["Index"];
+                index = Convert.ToInt32(indexnum);
 
-            this.LoadMap(ls.bus_line);
+                if (group != null)
+                {
+                    retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + group + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
 
+                    retrievedTask = retrievedTasks[index];
+
+                    lblbusid.Text = retrievedTasks[index].bus_line;
+                    lblStart.Text = retrievedTasks[index].bus_start;
+                    lblStop.Text = retrievedTasks[index].bus_end;
+                    lblbusName.Text = retrievedTasks[index].bus_name;
+                    lbltime.Text = retrievedTasks[index].bus_startstop_time;
+                    getListDatabusstop(retrievedTasks[index].bus_stop);
+                }
+
+                isInTwown = true;
+                iscate1 = true;
+                iscate2 = true;
+                showmap = true;
+
+                this.Pushpin(retrievedTasks[index].bus_stop, retrievedTasks[index].bus_polyline, retrievedTasks[index].important_location, iscate1, iscate2);
+            }
+            
             base.OnNavigatedTo(e);
+
+            
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -90,83 +123,111 @@ namespace BMTA
         public BMTA_bus_line_details()
         {
             InitializeComponent();
+
+            LoadMap();
         }
 
-        protected async void LoadMap(string bus_line)
+        private void LoadMap()
         {
-            // Map
-            map.ZoomLevel = 16;
+            // Map clear
+            map.Layers.Clear();
+            map.MapElements.Clear();
+            map.CartographicMode = MapCartographicMode.Road;
+
+        }
+
+        private void Pushpin(string bus_stop, string bus_polyline, string important_location, Boolean showcateBus, Boolean showcatelocate)
+        {
+            // Map clear
+            map.Layers.Clear();
+            map.MapElements.Clear();
 
             MapLayer layer = new MapLayer();
 
-            List<busline> retrievedTasks = dbConn.Query<busline>("SELECT bus_stop,bus_polyline FROM busline Where bus_line=" + bus_line + " LIMIT 1");
-            foreach (var t in retrievedTasks)
-            {
-                string busStopJson = t.bus_stop;
-                string buspolylineJson = t.bus_polyline;
-                List<listBuslineDetailItem> results = JsonConvert.DeserializeObject<List<listBuslineDetailItem>>(busStopJson);
-                JArray lspoly = JArray.Parse(buspolylineJson);
-                line = new MapPolyline();
-                line.StrokeColor = Colors.Red;
-                line.StrokeThickness = 3;
+            string busStopJson = bus_stop;
+            string buspolylineJson = bus_polyline;
+            string busimportant_location = important_location;
+            
+            line = new MapPolyline();
+            line.StrokeColor = Colors.Red;
+            line.StrokeThickness = 3;
 
-                foreach (listBuslineDetailItem cm in results)
+            List<listBuslineDetailItem> results = new List<listBuslineDetailItem>();
+
+            if (showcatelocate)
+            {
+                results = JsonConvert.DeserializeObject<List<listBuslineDetailItem>>(busimportant_location);
+                if (results != null)
                 {
-                    Pushpin pushpin = new Pushpin();
-                    pushpin.GeoCoordinate = new GeoCoordinate(cm.latitude, cm.longitude);
-                    var uriString = @"Assets/btn_bus.png";
-                    pushpin.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriString, UriKind.Relative)) };
-                    pushpin.Width = 40;
-                    pushpin.Height = 31;
-                    MapOverlay overlay = new MapOverlay();
-                    overlay.Content = pushpin;
-                    overlay.GeoCoordinate = new GeoCoordinate(cm.latitude, cm.longitude);
-                    layer.Add(overlay);
+                    if (results.Count > 0)
+                    {
+                        foreach (listBuslineDetailItem cm in results)
+                        {
+                            Pushpin pushpin = new Pushpin();
+                            pushpin.GeoCoordinate = new GeoCoordinate(cm.lattitude, cm.longtitude);
+
+                            var uriString = @"Assets/" + cm.type + ".png";
+                            pushpin.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriString, UriKind.Relative)) };
+                            pushpin.Width = 40;
+                            pushpin.Height = 31;
+                            MapOverlay overlay = new MapOverlay();
+                            overlay.Content = pushpin;
+                            overlay.GeoCoordinate = new GeoCoordinate(cm.lattitude, cm.longtitude);
+                            layer.Add(overlay);
+                        }
+
+                        map.Center = new GeoCoordinate(results[0].lattitude, results[0].longtitude);
+                    }
                 }
+            }
+
+            if (showcateBus)
+            {
+                results = JsonConvert.DeserializeObject<List<listBuslineDetailItem>>(busStopJson);
+
+                if (results != null)
+                {
+                    if (results.Count > 0)
+                    {
+                        foreach (listBuslineDetailItem cm in results)
+                        {
+                            Pushpin pushpin = new Pushpin();
+                            pushpin.GeoCoordinate = new GeoCoordinate(cm.latitude, cm.longitude);
+                            var uriString = @"Assets/btn_bus.png";
+                            pushpin.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriString, UriKind.Relative)) };
+                            pushpin.Width = 40;
+                            pushpin.Height = 31;
+                            MapOverlay overlay = new MapOverlay();
+                            overlay.Content = pushpin;
+                            overlay.GeoCoordinate = new GeoCoordinate(cm.latitude, cm.longitude);
+                            layer.Add(overlay);
+                        }
+
+                        map.Center = new GeoCoordinate(results[0].latitude, results[0].longitude);
+                    }
+                }
+               
+               
+            }
+
+    
+           
+            // Map Layer
+            map.Layers.Add(layer);
+
+            if (buspolylineJson != null)
+            {
+                JArray lspoly = JArray.Parse(buspolylineJson);
                 string[][] Users = lspoly.ToObject<string[][]>();
                 foreach (String[] cm in Users)
                 {
                     line.Path.Add(new GeoCoordinate(Convert.ToDouble(cm[0]), Convert.ToDouble(cm[1])));
                 }
-
                 map.MapElements.Add(line);
-                // Map Layer
-                map.Layers.Add(layer);
-
-
-                // Get my current location.
-                Geolocator myGeolocator = new Geolocator();
-                Geoposition myGeoposition = await myGeolocator.GetGeopositionAsync();
-                Geocoordinate myGeocoordinate = myGeoposition.Coordinate;
-                GeoCoordinate myGeoCoordinate = CoordinateConverter.ConvertGeocoordinate(myGeocoordinate);
-                map.Center = myGeoCoordinate;
-
-                // Create a small circle to mark the current location.
-                Ellipse myCircle = new Ellipse();
-                myCircle.Fill = new SolidColorBrush(Colors.Blue);
-                myCircle.Height = 20;
-                myCircle.Width = 20;
-                myCircle.Opacity = 50;
-
-                // Create a MapOverlay to contain the circle.
-                MapOverlay myLocationOverlay = new MapOverlay();
-                myLocationOverlay.Content = myCircle;
-                myLocationOverlay.PositionOrigin = new Point(0.5, 0.5);
-                myLocationOverlay.GeoCoordinate = myGeoCoordinate;
-
-                // Create a MapLayer to contain the MapOverlay.
-                MapLayer myLocationLayer = new MapLayer();
-                myLocationLayer.Add(myLocationOverlay);
-
-                // Add the MapLayer to the Map.
-                map.Layers.Add(myLocationLayer);
-
-                // CarphicMode
-                map.Center = myGeoCoordinate;
-                map.CartographicMode = MapCartographicMode.Road;
             }
-
+            map.ZoomLevel = 15;
         }
+
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
@@ -224,7 +285,6 @@ namespace BMTA
             //this.LoadMap(lblbusid.Text);
             //btmap.Visibility = System.Windows.Visibility.Collapsed;
             //btmapback.Visibility = Visibility;
-
         }
 
         private void btback_Click(object sender, RoutedEventArgs e)
@@ -240,16 +300,18 @@ namespace BMTA
             var uriStringout = @"Assets/btn_out_th.png";
             btout.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriStringout, UriKind.Relative)) };
 
-            List<busline> retrievedTasks = dbConn.Query<busline>("select * from busline where bus_line = '" + ls.bus_line + "' and bustype = '" + ls.bustype + "' and bus_owner = '" + ls.bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%' )");
-            foreach (var t in retrievedTasks)
-            {
-                lblStart.Text = t.bus_start;
-                lblStop.Text = t.bus_end;
-                lblbusName.Text = t.bus_name;
-                lbltime.Text = t.bus_startstop_time;
-            }
+            List<buslineItem> ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_end,bus_name,bus_startstop_time,bus_stop,bus_polyline,important_location FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
 
-            getListDatabusstop(ls.bus_stop);
+            retrievedTask = ls[0];
+            lblStart.Text = ls[0].bus_start;
+            lblStop.Text = ls[0].bus_end;
+            lblbusName.Text = ls[0].bus_name;
+            lbltime.Text = ls[0].bus_startstop_time;
+
+            getListDatabusstop(ls[0].bus_stop);
+            this.Pushpin(ls[0].bus_stop, ls[0].bus_polyline, ls[0].important_location, iscate1, iscate2);
+
+            isInTwown = true;
         }
 
         private void btout_Click(object sender, RoutedEventArgs e)
@@ -260,17 +322,18 @@ namespace BMTA
             var uriStringout = @"Assets/btn_out_atvth.png";
             btout.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriStringout, UriKind.Relative)) };
 
-            List<busline> retrievedTasks = dbConn.Query<busline>("SELECT * FROM busline Where bus_line=" + ls.bus_line + " LIMIT 2");
+            List<buslineItem> ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_end,bus_name,bus_startstop_time,bus_stop,bus_polyline,important_location FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
 
-            foreach (var t in retrievedTasks)
-            {
-                lblStart.Text = t.bus_start;
-                lblStop.Text = t.bus_end;
-                lblbusName.Text = t.bus_name;
-                lbltime.Text = t.bus_startstop_time;
-            }
+            retrievedTask = ls[0];
+            lblStart.Text = ls[0].bus_start;
+            lblStop.Text = ls[0].bus_end;
+            lblbusName.Text = ls[0].bus_name;
+            lbltime.Text = ls[0].bus_startstop_time;
 
-            getListDatabusstop(ls.bus_line);
+            getListDatabusstop(ls[0].bus_stop);
+            this.Pushpin(ls[0].bus_stop, ls[0].bus_polyline, ls[0].important_location, iscate1, iscate2);
+
+            isInTwown = false;
         }
 
         private void btmapback_Click(object sender, RoutedEventArgs e)
@@ -279,35 +342,72 @@ namespace BMTA
             {
                 map.Visibility = System.Windows.Visibility.Collapsed;
                 TaskListBox.Visibility = System.Windows.Visibility.Visible;
+                catemap.Visibility = System.Windows.Visibility.Collapsed;
+                btnfullmap.Visibility = System.Windows.Visibility.Collapsed;
             }
             else
             {
                 map.Visibility = System.Windows.Visibility.Visible;
                 TaskListBox.Visibility = System.Windows.Visibility.Collapsed;
+                catemap.Visibility = System.Windows.Visibility.Visible;
+                btnfullmap.Visibility = System.Windows.Visibility.Visible;
             }
         }
 
         private void btnRight_Click(object sender, RoutedEventArgs e)
         {
+
+            List<buslineItem> ls = new List<buslineItem>();
+
             if (retrievedTasks.Last() == retrievedTasks[index])
             {
-                ls = retrievedTasks.Last();
+                if (isInTwown)
+                {
+                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_end,bus_name,bus_startstop_time,bus_stop,bus_polyline,important_location FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
+                }
+                else
+                {
+                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_end,bus_name,bus_startstop_time,bus_stop,bus_polyline,important_location FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
+                }
+
+                if (ls.Count > 0)
+                {
+                    retrievedTask = ls[0];
+                    lblbusid.Text = ls[0].bus_line;
+                    lblStart.Text = ls[0].bus_start;
+                    lblStop.Text = ls[0].bus_end;
+                    lblbusName.Text = ls[0].bus_name;
+                    lbltime.Text = ls[0].bus_startstop_time;
+
+                    getListDatabusstop(ls[0].bus_stop);
+                    this.Pushpin(ls[0].bus_stop, ls[0].bus_polyline, ls[0].important_location, iscate1, iscate2);
+                }
             }
             else
             {
                 index += 1;
-                ls = retrievedTasks[index];
-            }
 
-            if (ls != null)
-            {
-                lblbusid.Text = ls.bus_line;
-                lblStart.Text = ls.bus_start;
-                lblStop.Text = ls.bus_end;
-                lblbusName.Text = ls.bus_name;
-                lbltime.Text = ls.bus_startstop_time;
+                if (isInTwown)
+                {
+                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_end,bus_name,bus_startstop_time,bus_stop,bus_polyline,important_location FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
+                }
+                else
+                {
+                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_end,bus_name,bus_startstop_time,bus_stop,bus_polyline,important_location FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
+                }
 
-                getListDatabusstop(ls.bus_line);
+                if (ls.Count > 0)
+                {
+                    retrievedTask = ls[0];
+                    lblbusid.Text = ls[0].bus_line;
+                    lblStart.Text = ls[0].bus_start;
+                    lblStop.Text = ls[0].bus_end;
+                    lblbusName.Text = ls[0].bus_name;
+                    lbltime.Text = ls[0].bus_startstop_time;
+
+                    getListDatabusstop(ls[0].bus_stop);
+                    this.Pushpin(ls[0].bus_stop, ls[0].bus_polyline, ls[0].important_location, iscate1, iscate2);
+                }
             }
         }
 
@@ -318,19 +418,33 @@ namespace BMTA
             {
                 index -= 1;
             }
-
-            ls = retrievedTasks[index];
-
-            if (ls != null)
+            else
             {
-                lblbusid.Text = ls.bus_line;
+                index = 0;
+            }
 
-                lblStart.Text = ls.bus_start;
-                lblStop.Text = ls.bus_end;
-                lblbusName.Text = ls.bus_name;
-                lbltime.Text = ls.bus_startstop_time;
+            List<buslineItem> ls = new List<buslineItem>();
 
-                getListDatabusstop(ls.bus_line);
+            if (isInTwown)
+            {
+                ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_end,bus_name,bus_startstop_time,bus_stop,bus_polyline,important_location FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
+            }
+            else
+            {
+                ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_end,bus_name,bus_startstop_time,bus_stop,bus_polyline,important_location FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
+            }
+
+            if (ls.Count > 0)
+            {
+                retrievedTask = ls[0];
+                lblbusid.Text = ls[0].bus_line;
+                lblStart.Text = ls[0].bus_start;
+                lblStop.Text = ls[0].bus_end;
+                lblbusName.Text = ls[0].bus_name;
+                lbltime.Text = ls[0].bus_startstop_time;
+
+                getListDatabusstop(ls[0].bus_stop);
+                this.Pushpin(ls[0].bus_stop, ls[0].bus_polyline, ls[0].important_location, iscate1, iscate2);
             }
         }
 
@@ -363,6 +477,57 @@ namespace BMTA
             progressIndicator.IsVisible = false;
             progressIndicator.IsIndeterminate = false;
             SystemTray.SetProgressIndicator(this, progressIndicator);
+        }
+
+        private void btncate1_Click(object sender, RoutedEventArgs e)
+        {
+            if (iscate1)
+            {
+                iscate1 = false;
+                var uriStringin = @"Assets/btbus.png";
+                btncate1.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriStringin, UriKind.Relative)) };
+            }
+            else
+            {
+                iscate1 = true;
+                var uriStringout = @"Assets/btbus_active.png";
+                btncate1.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriStringout, UriKind.Relative)) };
+            }
+
+
+            this.Pushpin(retrievedTask.bus_stop, retrievedTask.bus_polyline, retrievedTask.important_location, iscate1, iscate2);
+        }
+
+        private void btncate2_Click(object sender, RoutedEventArgs e)
+        {
+            if (iscate2)
+            {
+                iscate2 = false;
+                var uriStringin = @"Assets/btlandmark.png";
+                btncate2.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriStringin, UriKind.Relative)) };
+            }
+            else
+            {
+                iscate2 = true;
+                var uriStringin = @"Assets/btlandmark_active.png";
+                btncate2.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriStringin, UriKind.Relative)) };
+            }
+
+            this.Pushpin(retrievedTask.bus_stop, retrievedTask.bus_polyline, retrievedTask.important_location, iscate1, iscate2);
+        }
+
+        private void btnfullmap_Click(object sender, RoutedEventArgs e)
+        {
+            if (showmap)
+            {
+                LayoutRoot.RowDefinitions[1].Height = new GridLength(0);
+                showmap = false;
+            }
+            else
+            {
+                LayoutRoot.RowDefinitions[1].Height = new GridLength(0.8, GridUnitType.Star);
+                showmap = true;
+            }
         }
     }
 }

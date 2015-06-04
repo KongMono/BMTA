@@ -8,6 +8,12 @@ namespace BMTA.Item
 {
     class listBuslineDetailItem
     {
+        public string name { get;set; }
+
+        public string name_en { get; set; }
+
+        public string type { get; set; }
+
         public string bg { get; set; }
 
         public string stop_name { get; set; }
@@ -17,5 +23,9 @@ namespace BMTA.Item
         public double longitude { get; set; }
 
         public double latitude { get; set; }
+
+        public double longtitude { get; set; }
+
+        public double lattitude { get; set; }
     }
 }

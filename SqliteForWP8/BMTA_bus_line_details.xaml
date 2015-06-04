@@ -46,7 +46,7 @@
             </Button>
 
             <TextBlock  x:Name="titleName" Text="" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <Button x:Name="btTopMenu" BorderBrush="Transparent" Width="75" Height="75" VerticalAlignment="Center" HorizontalAlignment="Right" Click="btTopMenu_Click" Style="{StaticResource ImageButton}">
+            <Button x:Name="btTopMenu" BorderBrush="Transparent" Width="75" Height="75" VerticalAlignment="Center" HorizontalAlignment="Right" Click="btTopMenu_Click" Style="{StaticResource ImageButton}" Visibility="Collapsed">
                 <Button.Background>
                     <ImageBrush Stretch="Uniform" ImageSource="/Assets/720x1280/BMTA_top_menu.png"/>
                 </Button.Background>
@@ -55,12 +55,12 @@
 
         <Grid x:Name="MainUp" Grid.Row="1" Width="auto" Background="#FF18359B">
 
-            <Button x:Name="btin" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Top" Height="65" Width="175" Margin="0,5,150,0" BorderBrush="{x:Null}" Style="{StaticResource ImageButton}" Click="btin_Click">
+            <Button x:Name="btin" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Top" Height="57" Width="145" Margin="0,5,110,0" BorderBrush="{x:Null}" Style="{StaticResource ImageButton}" Click="btin_Click">
                 <Button.Background>
                     <ImageBrush Stretch="Fill" ImageSource="/Assets/btn_in_atvth.png"/>
                 </Button.Background>
             </Button>
-            <Button x:Name="btout" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Top" Height="65" Width="175" Margin="150,5,0,0" BorderBrush="{x:Null}" Style="{StaticResource ImageButton}" Click="btout_Click">
+            <Button x:Name="btout" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Top" Height="57" Width="145" Margin="110,5,0,0" BorderBrush="{x:Null}" Style="{StaticResource ImageButton}" Click="btout_Click">
                 <Button.Background>
                     <ImageBrush Stretch="Fill" ImageSource="/Assets/btn_out_th.png"/>
                 </Button.Background>
@@ -94,7 +94,7 @@
             <TextBlock x:Name="lblbusid" HorizontalAlignment="Center"  VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding}" TextAlignment="Center" FontSize="45"/>
             <Grid Width="480" Height="40" VerticalAlignment="Bottom" Background="#FF01A54E">
                 <TextBlock x:Name="lbltime" HorizontalAlignment="Left" Padding="5,5,5,5" FontSize="23" TextWrapping="Wrap" Text="time" TextAlignment="Center"/>
-                <Button x:Name="imgPin" Width="60" Height="60" HorizontalAlignment="Right"   BorderThickness="0" VerticalAlignment="Center" Click="btmapback_Click">
+                <Button x:Name="imgPin" Width="60" Height="60" HorizontalAlignment="Right"   BorderThickness="0" VerticalAlignment="Center" Style="{StaticResource ButtonStyle}" Click="btmapback_Click">
                     <Button.Background>
                         <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/bt_pin.png"/>
                     </Button.Background>
@@ -103,12 +103,30 @@
         </Grid>
 
         <Grid x:Name="MainDown" Grid.Row="2" Width="auto" Background="#FF2C2C2C">
+           
+            
             <ListBox x:Name="TaskListBox" ItemTemplate="{StaticResource CustomListTemplate}" Foreground="#FF2C2C2C" FontSize="26"></ListBox>
-            <Grid x:Name="Layoutmap">
+            <Grid x:Name="Layoutmap" Height="auto">
                 <maps:Map x:Name="map" Visibility="Collapsed" />
             </Grid>
-            
-            
+
+            <Grid x:Name="catemap" HorizontalAlignment="Right" VerticalAlignment="Top" Visibility="Collapsed">
+                <Button x:Name="btncate1" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Center" Height="75" Width="75" Margin="0,0,0,0" BorderBrush="{x:Null}" Style="{StaticResource ButtonStyle}" Click="btncate1_Click">
+                    <Button.Background>
+                        <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/btbus_active.png"/>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="btncate2" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Center" Height="75" Width="75" Margin="0,0,50,0" BorderBrush="{x:Null}" Style="{StaticResource ButtonStyle}" Click="btncate2_Click">
+                    <Button.Background>
+                        <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/btlandmark_active.png"/>
+                    </Button.Background>
+                </Button>
+            </Grid>
+            <Button x:Name="btnfullmap" HorizontalAlignment="Center" Grid.Row="1" Visibility="Collapsed" VerticalAlignment="Top" Height="45" Width="80" BorderBrush="{x:Null}" Style="{StaticResource ButtonStyle}" Click="btnfullmap_Click">
+                <Button.Background>
+                    <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/icon_arrow_close.png"/>
+                </Button.Background>
+            </Button>
         </Grid>
     </Grid>
 </phone:PhoneApplicationPage>

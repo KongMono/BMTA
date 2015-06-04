@@ -22,7 +22,7 @@ namespace BMTA
         public string AppVersion = "1.0";
         public string pathAnalytic = "";
         public string Language = "";
-        //public List<busline> DataList = new List<busline>();
+        public List<buslineItem> DataSearchList = new List<buslineItem>();
         public static string DB_PATH = Path.Combine(Path.Combine(ApplicationData.Current.LocalFolder.Path, "bmtadatabase.sqlite"));
         
         /// <summary>
