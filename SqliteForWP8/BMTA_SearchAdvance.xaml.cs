@@ -25,7 +25,6 @@ namespace BMTA
     {
         public String lang = (Application.Current as App).Language;
         private SQLiteConnection dbConn;
-        private String query;
         public BMTA_SearchAdvance()
         {
             InitializeComponent();
@@ -80,11 +79,11 @@ namespace BMTA
                 textbustype.Text = "Bus Type";
 
                 titleName.Text = "Advance Search";
-                t1.Content = "Any";
+                t1.Content = "All";
                 t2.Content = "Freeway";
                 t3.Content = "Expressways";
 
-                x1.Content = "Any";
+                x1.Content = "All";
                 x2.Content = "Regular Bus";
                 x3.Content = "Air Condition Bus";
             }
@@ -95,7 +94,7 @@ namespace BMTA
         {
             if (string.IsNullOrWhiteSpace(hintbusline.Text))
             {
-                MessageBox.Show("กรุณากรอกสายสายรถเมล์");
+                MessageBox.Show("กรุณากรอกสายรถเมล์");
                 return;
             }
 
@@ -103,15 +102,23 @@ namespace BMTA
             var buslinePick = (ListPickerItem)busline.SelectedItem;
             var busRunningPick = (ListPickerItem)bustyperunning.SelectedItem;
 
-            if ((buslinePick.Content == "ทั้งหมด" || buslinePick.Content == "Any") && (busRunningPick.Content == "ทั้งหมด" || busRunningPick.Content == "Any"))
+
+            if ((buslinePick.Content == "ทั้งหมด" || buslinePick.Content == "All") && (busRunningPick.Content == "ทั้งหมด" || busRunningPick.Content == "All"))
             {
                 retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_name LIKE '%" + hintbusline.Text + "%' AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')");
-                query = "SELECT * FROM busline WHERE bus_name LIKE '%" + hintbusline.Text + "%' AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')";
+            }
+            else if ((buslinePick.Content == "ทั้งหมด" || buslinePick.Content == "All") && (busRunningPick.Content != "ทั้งหมด" || busRunningPick.Content != "All"))
+            {
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_name LIKE '%" + hintbusline.Text + "%' AND bus_running LIKE '%" + busRunningPick.Tag + "%' AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')");
+            }
+
+            else if ((buslinePick.Content != "ทั้งหมด" || buslinePick.Content != "All") && (busRunningPick.Content == "ทั้งหมด" || busRunningPick.Content == "All"))
+            {
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_name LIKE '%" + hintbusline.Text + "%' AND bustype LIKE '%" + buslinePick.Tag + "%' AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')");
             }
             else
             {
-                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_name LIKE '%" + hintbusline.Text + "%' AND bustype LIKE '%" + buslinePick.Tag + "%' AND bus_running LIKE '%" + busRunningPick.Tag + "%'  AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')");
-                query = "SELECT * FROM busline WHERE bus_name LIKE '%" + hintbusline.Text + "%' AND bustype LIKE '%" + buslinePick.Tag + "%' AND bus_running LIKE '%" + busRunningPick.Tag + "%'  AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')";
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_name LIKE '%" + hintbusline.Text + "%' AND bustype LIKE '%" + buslinePick.Tag + "%' AND bus_running LIKE '%" + busRunningPick.Tag + "%' AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')");
             }
 
             if (retrievedTasks.Count > 0)

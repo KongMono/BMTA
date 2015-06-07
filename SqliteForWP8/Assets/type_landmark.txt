@@ -1,0 +1,24 @@
+Type : Landmark
+ประเภทสถานที่สำคัญ
+1              hotel
+2              department store
+3              home
+4              bank
+5              university / school
+6              temple
+7              church
+8              masjid
+9              theme parks
+10           cinema
+11           museum
+12           parks
+13           hospital
+14           Train
+15           BTS
+16           MRT
+17           bus
+18           airport
+19           Port
+20           Capital
+21           police station
+22           ministry

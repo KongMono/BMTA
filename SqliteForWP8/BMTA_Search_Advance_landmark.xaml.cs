@@ -16,15 +16,22 @@ using System.Collections.ObjectModel;
 using SQLite;
 using Windows.Storage;
 using System.Windows.Input;
+using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace BMTA
 {
     public partial class BMTA_Search_Advance_landmark : PhoneApplicationPage
     {
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        private searchlandmarkAndBusstopdetailItem item;
+        Boolean already = false;
+        private WebClient webClient;
         public String lang = (Application.Current as App).Language;
         public BMTA_Search_Advance_landmark()
         {
             InitializeComponent();
+            textbox.ItemFilter = SearchText;
         }
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
@@ -33,7 +40,6 @@ namespace BMTA
                 head1.Text = "ค้นหาสถานที่สำคัญ";
                 head2.Text = "ค้นหาประเภทรถ";
                 head3.Text = "เรียงผลการค้นหาตาม";
-                hinthead1.Hint = "ชื่อสถานที่";
 
                 textlandmark.Text = "ระบุสถานที่";
                 textbusroute.Text = "เส้นทาง";
@@ -58,7 +64,6 @@ namespace BMTA
                 head1.Text = "Search Landmarks";
                 head2.Text = "Search Bus Type";
                 head3.Text = "Sort By Results";
-                hinthead1.Hint = "Landmark Name";
 
                 textlandmark.Text = "Landmarks";
                 textbusroute.Text = "Route";
@@ -66,11 +71,11 @@ namespace BMTA
                 textsorttype.Text = "Select Type";
 
                 titleName.Text = "Advance Search";
-                t1.Content = "Any";
+                t1.Content = "All";
                 t2.Content = "Freeway";
                 t3.Content = "Expressways";
 
-                x1.Content = "Any";
+                x1.Content = "All";
                 x2.Content = "Regular Bus";
                 x3.Content = "Air Condition Bus";
 
@@ -81,78 +86,133 @@ namespace BMTA
 
         }
 
-    
-
-        private void btSearchAd_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_Search_Advance_landmark.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusCoordinates.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_3(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml", UriKind.Relative));
-        }
-
-        private void close_Click(object sender, RoutedEventArgs e)
-        {
-           
-        }
-
-
-
         private void btback_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }
 
-        private void rhome_Click(object sender, RoutedEventArgs e)
+
+        private void btsubmit_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/BMTA_AppTh.xaml", UriKind.Relative));
+            if (string.IsNullOrWhiteSpace(textbox.Text))
+            {
+                MessageBox.Show("กรุณาระบุสถานที่");
+                return;
+            }
+
+            var buslinePick = (ListPickerItem)busline.SelectedItem;
+            var busRunningPick = (ListPickerItem)bustyperunning.SelectedItem;
+
+            callplacecurrentfindRouting(buslinePick, busRunningPick);
         }
 
-        private void rbusline_Click(object sender, RoutedEventArgs e)
+        public void callplacecurrentfindRouting(ListPickerItem buslinePick, ListPickerItem busRunningPick)
         {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml", UriKind.Relative));
+            webClient = new WebClient();
+            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            String url = "http://202.6.18.31:7777/placecurrentfindRouting";
+            string myParameters;
+            try
+            {
+                myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&elatlong=" + item.lattitude + "-" + item.longtitude + "&bus_type=" + buslinePick.Tag + "&running_type=" + busRunningPick.Tag + "&orderby=" + "";
+                Debug.WriteLine("URL callplacecurrentfindRouting = " + url);
+                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callplacecurrentfindRouting_Completed);
+                webClient.UploadStringAsync(new Uri(url), myParameters);
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
-        private void rbusstop_Click(object sender, RoutedEventArgs e)
+        private void callplacecurrentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
+            MessageBox.Show(e.Result);
         }
 
-        private void rcoor_Click(object sender, RoutedEventArgs e)
+        public void callServicegetAutocomplete()
         {
-            NavigationService.Navigate(new Uri("/BMTA_BusCoordinates.xaml", UriKind.Relative));
+            webClient = new WebClient();
+            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            String url = "http://202.6.18.31:7777/getAutocomplete";
+            string myParameters;
+            try
+            {
+                myParameters = "type=" + "place" + "&keyword=" + textbox.Text + "&lang=" + lang;
+                Debug.WriteLine("URL callServicegetAutocomplete = " + url);
+                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocomplete_Completed);
+                webClient.UploadStringAsync(new Uri(url), myParameters);
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
-        private void rbusstartstop_Click(object sender, RoutedEventArgs e)
+        private void callServicegetAutocomplete_Completed(object sender, UploadStringCompletedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml", UriKind.Relative));
+            searchlandmarkItem results = JsonConvert.DeserializeObject<searchlandmarkItem>(e.Result);
+
+            textbox.ItemsSource = results.data;
+
+            HideProgressIndicator();
+            already = false;
         }
 
-        private void rbusspeed_Click(object sender, RoutedEventArgs e)
+        bool SearchText(string search, object value)
         {
-            NavigationService.Navigate(new Uri("/BMTA_Speed_history.xaml", UriKind.Relative));
+            if (value != null)
+            {
+                return true;
+            }
+            //... If no match, return false. 
+            return false;
         }
 
-        private void rbusnew_Click(object sender, RoutedEventArgs e)
+        private void textbox_TextChanged(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/BMTA_EventNew.xaml", UriKind.Relative));
+            if (textbox.Text.Length > 2)
+            {
+                if (!already)
+                {
+                    ShowProgressIndicator("Loading..");
+                    already = true;
+                    callServicegetAutocomplete();
+                }
+            }
         }
+
+        private void ShowProgressIndicator(String msg)
+        {
+            if (progressIndicator == null)
+            {
+                progressIndicator = new ProgressIndicator();
+                progressIndicator.IsIndeterminate = true;
+            }
+            SystemTray.Opacity = 0;
+            progressIndicator.Text = msg;
+            progressIndicator.IsVisible = true;
+            progressIndicator.IsIndeterminate = true;
+            SystemTray.SetProgressIndicator(this, progressIndicator);
+        }
+
+        private void HideProgressIndicator()
+        {
+            progressIndicator.IsVisible = false;
+            progressIndicator.IsIndeterminate = false;
+            SystemTray.SetProgressIndicator(this, progressIndicator);
+        }
+
+        private void textbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            item = (sender as AutoCompleteBox).SelectedItem as searchlandmarkAndBusstopdetailItem;
+        }
+
+
+
+
+
     }
 }

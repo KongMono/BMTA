@@ -115,7 +115,10 @@ namespace BMTA
             string myParameters;
             try
             {
-                myParameters = "lat=" + lat + "&long=" + lon + "&distance=" + "0.5";
+                (Application.Current as App).lat_current = lat;
+                (Application.Current as App).lon_current = lon;
+
+                myParameters = "lat=" + lat + "&long=" + lon;
                 Debug.WriteLine("URL callServicegetNearBusStop = " + url);
         
                 webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicgetNearBusStop_Completed);
@@ -142,13 +145,17 @@ namespace BMTA
                     Debug.WriteLine(data);
 
                     //add Tooltip
-                    MapOverlay mapoverlay = new MapOverlay();
-                    _stooltip = new UCToolTip();
-                    _stooltip.Description = data.stop_name.ToString() + "\n" + data.busline;
-                    _stooltip.DataContext = data;
-                    mapoverlay.Content = _stooltip;
-                    mapoverlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(data.latitude), Convert.ToDouble(data.longitude));
-                    mymapLayer.Add(mapoverlay);
+                    //MapOverlay mapoverlay = new MapOverlay();
+                    //_stooltip = new UCToolTip();
+                    //_stooltip.Description = data.stop_name.ToString() + "\n" + data.busline;
+                    //_stooltip.DataContext = data;
+                    //mapoverlay.Content = _stooltip;
+                    //mapoverlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(data.latitude), Convert.ToDouble(data.longitude));
+                    //mymapLayer.Add(mapoverlay);
+
+
+
+ 
                 }
             }
             

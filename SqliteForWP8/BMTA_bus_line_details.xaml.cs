@@ -191,6 +191,7 @@ namespace BMTA
                     {
                         foreach (listBuslineDetailItem cm in results)
                         {
+                            
                             Pushpin pushpin = new Pushpin();
                             pushpin.GeoCoordinate = new GeoCoordinate(cm.latitude, cm.longitude);
                             var uriString = @"Assets/btn_bus.png";
@@ -206,12 +207,7 @@ namespace BMTA
                         map.Center = new GeoCoordinate(results[0].latitude, results[0].longitude);
                     }
                 }
-               
-               
-            }
-
-    
-           
+            }    
             // Map Layer
             map.Layers.Add(layer);
 

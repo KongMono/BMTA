@@ -58,14 +58,29 @@
                     <ImageBrush Stretch="Fill" ImageSource="/Assets/header_search_tab.jpg" />
                 </Grid.Background>
 
-                <TextBlock x:Name="head1" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center"   FontSize="25" />
+                <TextBlock x:Name="head1" Text="ค้นหาต้นทางปลายทาง" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center"   FontSize="25" />
             </Grid>
             <TextBlock  x:Name="txtstart" Grid.Row="1" Text="ต้นทาง" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="25"/>
-            <toolkit:PhoneTextBox x:Name="txtboxstart" HorizontalAlignment="Center"  Grid.Row="1" Width="225" Grid.Column="2" TextWrapping="Wrap" VerticalAlignment="Top" BorderBrush="{x:Null}" >
-            </toolkit:PhoneTextBox>
+            <toolkit:AutoCompleteBox x:Name="txtboxstart" HorizontalAlignment="Center" Grid.Row="1" Width="225" Grid.Column="2" VerticalAlignment="Top" TextChanged="txtboxstart_TextChanged" FilterMode="None" ValueMemberBinding="{Binding stop_name}" SelectionChanged="txtboxstart_SelectionChanged">
+                <toolkit:AutoCompleteBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding stop_name}" FontSize="25" Foreground="Black"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </toolkit:AutoCompleteBox.ItemTemplate>
+            </toolkit:AutoCompleteBox>
+
             <TextBlock  x:Name="txtend" Grid.Row="2" Text="ปลายทาง" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="25"/>
-            <toolkit:PhoneTextBox  x:Name="txtboxend" HorizontalAlignment="Center"  Grid.Row="2" Width="225" Grid.Column="2" TextWrapping="Wrap" VerticalAlignment="Top" BorderBrush="{x:Null}">
-            </toolkit:PhoneTextBox>
+            <toolkit:AutoCompleteBox x:Name="txtboxend" HorizontalAlignment="Center" Grid.Row="2" Width="225" Grid.Column="2" VerticalAlignment="Top" TextChanged="txtboxend_TextChanged" FilterMode="None" ValueMemberBinding="{Binding stop_name}" SelectionChanged="txtboxend_SelectionChanged">
+                <toolkit:AutoCompleteBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding stop_name}" FontSize="25" Foreground="Black"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </toolkit:AutoCompleteBox.ItemTemplate>
+            </toolkit:AutoCompleteBox>
         </Grid>
 
         <Grid x:Name="middle" Grid.Row="3"  Width="auto" Height="auto"  Background="Transparent">
@@ -83,21 +98,21 @@
                     <ImageBrush Stretch="Fill" ImageSource="/Assets/header_search_tab.jpg" />
                 </Grid.Background>
 
-                <TextBlock x:Name="head2" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center"   FontSize="25" />
+                <TextBlock x:Name="head2" Text="ค้นหาประเภทรถ" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center"   FontSize="25" />
             </Grid>
 
             <TextBlock   x:Name="txtroute" Grid.Row="1" Text="เส้นทาง" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center"   FontSize="25" />
-            <toolkit:ListPicker x:Name="bustype" Grid.Row="1" Width="220" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Column="1">
-                <toolkit:ListPickerItem x:Name="t1" Foreground="Black"/>
-                <toolkit:ListPickerItem x:Name="t2" Foreground="Black"/>
-                <toolkit:ListPickerItem x:Name="t3" Foreground="Black"/>
+            <toolkit:ListPicker x:Name ="bustyperunning" Grid.Row="1" Width="220" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Column="1">
+                <toolkit:ListPickerItem x:Name="t1" Tag="" Foreground="Black"/>
+                <toolkit:ListPickerItem x:Name="t2" Tag="1" Foreground="Black"/>
+                <toolkit:ListPickerItem x:Name="t3" Tag="2" Foreground="Black"/>
             </toolkit:ListPicker>
 
             <TextBlock   x:Name="txtrbustype" Grid.Row="2" Text="ประเภทรถ" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center"  FontSize="25" />
             <toolkit:ListPicker x:Name="busline" Grid.Row="2" Width="220" HorizontalAlignment="Center"  VerticalAlignment="Center"  Grid.Column="1">
-                <toolkit:ListPickerItem x:Name="x1" Foreground="Black"/>
-                <toolkit:ListPickerItem x:Name="x2" Foreground="Black"/>
-                <toolkit:ListPickerItem x:Name="x3" Foreground="Black"/>
+                <toolkit:ListPickerItem x:Name="x1" Tag="" Foreground="Black"/>
+                <toolkit:ListPickerItem x:Name="x2" Tag="1" Foreground="Black"/>
+                <toolkit:ListPickerItem x:Name="x3" Tag="2" Foreground="Black"/>
             </toolkit:ListPicker>
         </Grid>
 
@@ -115,7 +130,7 @@
                     <ImageBrush Stretch="Fill" ImageSource="/Assets/header_search_tab.jpg" />
                 </Grid.Background>
 
-                <TextBlock x:Name="head3" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center"   FontSize="25" />
+                <TextBlock x:Name="head3" Text="เรียงผลการค้นหาตาม" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center"   FontSize="25" />
             </Grid>
             <TextBlock  x:Name="txtselecttype" Grid.Row="1" Text="ระบุประเภท" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="25"/>
             <toolkit:ListPicker x:Name="typebusline" Grid.Row="2" Width="220" HorizontalAlignment="Center"  VerticalAlignment="Center"  Grid.Column="1">
@@ -127,7 +142,7 @@
 
         <Grid x:Name="footer" Grid.Row="5" Width="auto">
             <StackPanel Background="#FF18359B">
-                <Button x:Name="btsubmit" Grid.Row="0" BorderBrush="Transparent" Width="270" Height="100"  HorizontalAlignment="Center"  VerticalAlignment="Center" Style="{StaticResource ImageButton}">
+                <Button x:Name="btsubmit" Grid.Row="0" BorderBrush="Transparent" Width="270" Height="100"  HorizontalAlignment="Center"  VerticalAlignment="Center" Style="{StaticResource ImageButton}" Click="btsubmit_Click">
                     <Button.Background>
                         <ImageBrush Stretch="Fill" ImageSource="/Assets/btsubmit.png"/>
                     </Button.Background>

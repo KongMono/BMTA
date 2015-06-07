@@ -233,6 +233,11 @@
     <Compile Include="Item\Article.cs" />
     <Compile Include="Item\busline.cs" />
     <Compile Include="Item\buslineItem.cs" />
+    <Compile Include="Item\searchStartStopItem.cs" />
+    <Compile Include="Item\searchStartStopDetailItem.cs" />
+    <Compile Include="Item\searchbusstopItem.cs" />
+    <Compile Include="Item\searchlandmarkAndBusstopdetailItem.cs" />
+    <Compile Include="Item\searchlandmarkItem.cs" />
     <Compile Include="Item\listBuslineDetailItem.cs" />
     <Compile Include="Item\LanguageItem.cs" />
     <Compile Include="Item\dataNearBusStopItem.cs" />
