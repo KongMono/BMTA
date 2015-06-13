@@ -13,6 +13,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
+using BMTA.Item;
 
 namespace BMTA
 {
@@ -24,6 +25,8 @@ namespace BMTA
         public string Language = "";
         public string lat_current,lon_current;
         public List<buslineItem> DataSearchList = new List<buslineItem>();
+        public List<buslineItem> DataBuslinehList = new List<buslineItem>();
+        public dataNearBusStopItem DataBusstopDetail = new dataNearBusStopItem();
         public static string DB_PATH = Path.Combine(Path.Combine(ApplicationData.Current.LocalFolder.Path, "bmtadatabase.sqlite"));
         
         /// <summary>

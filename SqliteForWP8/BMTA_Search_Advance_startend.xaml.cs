@@ -22,7 +22,7 @@ using BMTA.Item;
 
 namespace BMTA
 {
-    public partial class BMTA_Search_Advance_start : PhoneApplicationPage
+    public partial class BMTA_Search_Advance_startend : PhoneApplicationPage
     {
         ProgressIndicator progressIndicator = new ProgressIndicator();
         public String lang = (Application.Current as App).Language;
@@ -32,7 +32,7 @@ namespace BMTA
         private WebClient webClient;
 
 
-        public BMTA_Search_Advance_start()
+        public BMTA_Search_Advance_startend()
         {
             InitializeComponent();
             txtboxstart.ItemFilter = SearchTextstart;
@@ -130,7 +130,15 @@ namespace BMTA
             string myParameters;
             try
             {
-                myParameters = "busstop_start_id=" + itemstart.id + "&busstop_end_id" + itemend.id + "&bus_type=" + buslinePick.Tag + "&running_type=" + busRunningPick.Tag + "&orderby=" + "";
+                if (itemend == null || itemstart == null)
+                {
+                    myParameters = "busstop_start_id=" + "0" + "&busstop_end_id=" + "0" + "&bus_type=" + buslinePick.Tag + "&running_type=" + busRunningPick.Tag + "&orderby=" + "";
+                }
+                else
+                {
+                    myParameters = "busstop_start_id=" + itemstart.id + "&busstop_end_id=" + itemend.id + "&bus_type=" + buslinePick.Tag + "&running_type=" + busRunningPick.Tag + "&orderby=" + "";
+                }
+
                 Debug.WriteLine("URL callServicecurrentfindRouting = " + url);
 
                 webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicecurrentfindRouting_Completed);

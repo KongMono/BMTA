@@ -8,58 +8,8 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    d:DesignHeight="180" d:DesignWidth="350">
-    <UserControl.Resources>
-        <Style x:Key="btimgorder" TargetType="Button">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="{StaticResource PhoneForegroundBrush}"/>
-            <Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}"/>
-            <Setter Property="BorderThickness" Value="{StaticResource PhoneBorderThickness}"/>
-            <Setter Property="FontFamily" Value="{StaticResource PhoneFontFamilySemiBold}"/>
-            <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeMedium}"/>
-            <Setter Property="Padding" Value="10,5,10,6"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid Background="Transparent">
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="CommonStates">
-                                    <VisualState x:Name="Normal"/>
-                                    <VisualState x:Name="MouseOver"/>
-                                    <VisualState x:Name="Pressed">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentContainer">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneButtonBasePressedForegroundBrush}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ButtonBackground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Null}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Disabled">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentContainer">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneDisabledBrush}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ButtonBackground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneDisabledBrush}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ButtonBackground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                            <Border x:Name="ButtonBackground" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="0" Margin="{StaticResource PhoneTouchTargetOverhang}">
-                                <ContentControl x:Name="ContentContainer" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                            </Border>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </UserControl.Resources>
+    d:DesignHeight="210" d:DesignWidth="350">
+   
 
     <!--<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
         <Button x:Name="imgborder" Height="164" Width="440" BorderBrush="{x:Null}" Style="{StaticResource btimgorder}" BorderThickness="0">
@@ -93,24 +43,30 @@
 
     </StackPanel>-->
 
-    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Border Background="#FFFFFF" BorderBrush="Gray"  CornerRadius="10" Height="120" Width="350"  x:Name="imgborderg"  HorizontalAlignment="Center" Visibility="Collapsed" >
-            <!--<TextBlock  x:Name="Lbltext" FontSize="20" Foreground="White" Text="This is Description on ToolTip" TextWrapping="Wrap" Margin="5,5,5,5" />-->
+    <Grid HorizontalAlignment="Center"  VerticalAlignment="Top" Width="350" Margin="-160,-140,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="120"/>
+            <RowDefinition Height="12"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
 
-            <Button x:Name="imgborder"  Tag="{Binding id}" CommandParameter="{Binding latitude}" Height="120" Width="350" BorderBrush="{x:Null}" Style="{StaticResource btimgorder}" BorderThickness="0" VerticalAlignment="Top">
-                <TextBlock  x:Name="Lbltext" FontSize="18"  Foreground="Black" Text="This is Description on ToolTip" TextWrapping="Wrap" TextAlignment="Left" Height="120" FlowDirection="LeftToRight" Width="260" Margin="65,-20,0,0" VerticalAlignment="Top" />
-            </Button>
+        <Border BorderBrush="Gray" Grid.Row="0"  CornerRadius="10" Height="120" Width="350"  x:Name="imgborderg"  HorizontalAlignment="Center" Visibility="Collapsed" >
+            <Border.Background>
+                <ImageBrush Stretch="Fill" ImageSource="/Assets/720x1280/busstop/BMTA_infobox.png"/>
+            </Border.Background>
+            <TextBlock x:Name="Lbltext" Tag="{Binding id}"  FontSize="16"  Foreground="Black" Text="This is Description on ToolTip" TextWrapping="Wrap" TextAlignment="Left" Height="80" FlowDirection="LeftToRight" Width="260" Margin="100,20,0,0" VerticalAlignment="Top" />
         </Border>
-        <Image Height="120" Name="imginfo" Width="85" Margin="0,-120,0,0" HorizontalAlignment="Left" Source="/Assets/left_infobox.png" VerticalAlignment="Top" Stretch="Fill" Visibility="Collapsed"/>
         <Path 
-							Data="M0,0 L0,1 L1,0"
-							Fill="#FFFFFF"
-							Stretch="Fill"
-							Margin="32,0"
-							Height="12"
-							Width="18"
-                            HorizontalAlignment="Left" x:Name="imgpath" Visibility="Collapsed"  />
-        <Image Source="/Assets/pin_blue.png" Stretch="None" x:Name="imgmarker" HorizontalAlignment="Left" Tap="imgmarker_Tap"/>
-    </StackPanel>
+            Grid.Row ="1"
+			Data="M0,1 L1,1 L1,0"
+			Fill="#FFFFFF"
+			Stretch="Fill"
+			Margin="12,0"
+			Height="12"
+			Width="18"
+            Opacity="0"
+            HorizontalAlignment="Center" x:Name="imgpath" Visibility="Collapsed"  />
+        <Image Source="/Assets/pin_blue.png" Width="40"  Height="48" Grid.Row="1" Grid.RowSpan="2" Stretch="Fill" x:Name="imgmarker" Tag="{Binding id}"  HorizontalAlignment="Center" Tap="imgmarker_Tap" />
+    </Grid>
 
 </UserControl>

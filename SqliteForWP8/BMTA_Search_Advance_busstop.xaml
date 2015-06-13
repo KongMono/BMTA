@@ -43,12 +43,6 @@
             </Button>
             <TextBlock  x:Name="titleName" Text="" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center">
             </TextBlock>
-
-            <Button x:Name="btTopMenu" BorderBrush="Transparent" Width="75" Height="75" VerticalAlignment="Center" HorizontalAlignment="Right" Click="btTopMenu_Click" Style="{StaticResource ImageButton}">
-                <Button.Background>
-                    <ImageBrush Stretch="Uniform" ImageSource="/Assets/720x1280/BMTA_top_menu.png"/>
-                </Button.Background>
-            </Button>
         </Grid>
         <Grid Grid.Row="1" Width="auto" Background="#FF18359B"/>
         <Grid x:Name="top" Grid.Row="2"  Width="auto" Height="auto"  Background="Transparent" Margin="0,5" Grid.RowSpan="2">
@@ -138,7 +132,7 @@
 
         <Grid x:Name="footer" Grid.Row="5" Width="auto">
             <StackPanel Background="#FF18359B">
-                <Button x:Name="btsubmit" Grid.Row="0" BorderBrush="Transparent" Width="270" Height="100"  HorizontalAlignment="Center"  VerticalAlignment="Center" Style="{StaticResource ButtonStyle1}" Click="btsubmit_Click">
+                <Button x:Name="btsubmit" Grid.Row="0" BorderBrush="Transparent" Width="270" Height="100"  HorizontalAlignment="Center"  VerticalAlignment="Center" Style="{StaticResource ImageButton}" Click="btsubmit_Click">
                     <Button.Background>
                         <ImageBrush Stretch="Fill" ImageSource="/Assets/btsubmit.png"/>
                     </Button.Background>

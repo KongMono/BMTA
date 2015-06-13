@@ -36,13 +36,10 @@ namespace BMTA.Usercontrols
         void UCCustomToolTip_Loaded(object sender, RoutedEventArgs e)
         {
             Lbltext.Text = Description;
-           // Lblbusline.Text = Busline;
         }
         public void FillDescription()
         {
             Lbltext.Text = Description;
-           // Lblbusline.Text = Busline;
-
         }
 
         private void imgmarker_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -51,19 +48,16 @@ namespace BMTA.Usercontrols
             if (imgpath.Opacity == 0)
             {
                 imgpath.Opacity = 1;
-                imgpath.Visibility = Visibility;
+                imgpath.Visibility = System.Windows.Visibility.Collapsed;
                 imgborderg.Opacity = 1;
                 imgborderg.Visibility = Visibility;
-                imginfo.Visibility = Visibility;
             }
             else
             {
                 imgpath.Opacity = 0;
                 imgpath.Visibility = System.Windows.Visibility.Collapsed;
                 imgborderg.Opacity = 0;
-                
                 imgborderg.Visibility = System.Windows.Visibility.Collapsed;
-                imginfo.Visibility = System.Windows.Visibility.Collapsed;
             }
         }
     }

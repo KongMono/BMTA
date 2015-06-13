@@ -81,14 +81,13 @@ namespace BMTA
             }
             else
             {
-                group = this.NavigationContext.QueryString["Group"];
                 String indexnum = this.NavigationContext.QueryString["Index"];
                 index = Convert.ToInt32(indexnum);
 
-                if (group != null)
-                {
-                    retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + group + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
+                retrievedTasks = (Application.Current as App).DataBuslinehList;
 
+                if (retrievedTasks.Count > 0)
+                {
                     retrievedTask = retrievedTasks[index];
 
                     lblbusid.Text = retrievedTasks[index].bus_line;

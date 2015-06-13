@@ -114,7 +114,15 @@ namespace BMTA
             string myParameters;
             try
             {
-                myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&elatlong=" + item.lattitude + "-" + item.longtitude + "&bus_type=" + buslinePick.Tag + "&running_type=" + busRunningPick.Tag + "&orderby=" + "";
+                if (item == null)
+                {
+                    myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&elatlong=" + "0.0-0.0" + "&bus_type=" + buslinePick.Tag + "&running_type=" + busRunningPick.Tag + "&orderby=" + "";
+                }
+                else
+                {
+                    myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&elatlong=" + item.lattitude + "-" + item.longtitude + "&bus_type=" + buslinePick.Tag + "&running_type=" + busRunningPick.Tag + "&orderby=" + "";
+                }
+                
                 Debug.WriteLine("URL callplacecurrentfindRouting = " + url);
                 webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callplacecurrentfindRouting_Completed);
                 webClient.UploadStringAsync(new Uri(url), myParameters);

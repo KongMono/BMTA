@@ -41,7 +41,7 @@ using BMTA.Item;
 
 namespace BMTA
 {
-    public partial class BMTA_BusStop : PhoneApplicationPage
+    public partial class BMTA_BusStartStopDetailMap : PhoneApplicationPage
     {
         public String lang = (Application.Current as App).Language;
         UCCustomToolTip _tooltip = new UCCustomToolTip();
@@ -52,7 +52,7 @@ namespace BMTA
         MapLayer mymapLayer = new MapLayer();
         List<GeoCoordinate> MyCoordinates = new List<GeoCoordinate>();
 
-        public BMTA_BusStop()
+        public BMTA_BusStartStopDetailMap()
         {
             InitializeComponent();
             ShowMyLocationOnTheMap();
@@ -185,7 +185,7 @@ namespace BMTA
                     titleName.Text = "Bus Stop";
                     textName.Text = data.stop_name_en;
                 }
-                textBusline.Text = data.busline;
+                
               
                 btBusStop.Click += btBusStop_Click;
             }

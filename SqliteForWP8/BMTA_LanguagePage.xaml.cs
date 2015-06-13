@@ -32,13 +32,13 @@ namespace BMTA
         private void btn_th_Click(object sender, RoutedEventArgs e)
         {
             (Application.Current as App).Language = "th";
-            this.NavigationService.Navigate(new Uri("/BMTA_MainPage.xaml", UriKind.Relative));
+            this.NavigationService.Navigate(new Uri("/BMTA_OrderPage.xaml", UriKind.Relative));
         }
 
         private void btn_en_Click(object sender, RoutedEventArgs e)
         {
             (Application.Current as App).Language = "en";
-            this.NavigationService.Navigate(new Uri("/BMTA_MainPage.xaml", UriKind.Relative));
+            this.NavigationService.Navigate(new Uri("/BMTA_OrderPage.xaml", UriKind.Relative));
         }
 
         private void ShowProgressIndicator(String msg)

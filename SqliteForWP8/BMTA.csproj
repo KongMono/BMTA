@@ -107,8 +107,8 @@
     <Compile Include="BMTA_Abouts_details.xaml.cs">
       <DependentUpon>BMTA_Abouts_details.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BMTA_MainPage.xaml.cs">
-      <DependentUpon>BMTA_MainPage.xaml</DependentUpon>
+    <Compile Include="BMTA_OrderPage.xaml.cs">
+      <DependentUpon>BMTA_OrderPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="BMTA_AppTh.xaml.cs">
       <DependentUpon>BMTA_AppTh.xaml</DependentUpon>
@@ -143,14 +143,11 @@
     <Compile Include="BMTA_BusStop_SearchAdvance_en.xaml.cs">
       <DependentUpon>BMTA_BusStop_SearchAdvance_en.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BMTA_bus_line.xaml.cs">
-      <DependentUpon>BMTA_bus_line.xaml</DependentUpon>
+    <Compile Include="BMTA_bus_mainpage.xaml.cs">
+      <DependentUpon>BMTA_bus_mainpage.xaml</DependentUpon>
     </Compile>
     <Compile Include="BMTA_bus_line_details.xaml.cs">
       <DependentUpon>BMTA_bus_line_details.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BMTA_bus_line_details_en.xaml.cs">
-      <DependentUpon>BMTA_bus_line_details_en.xaml</DependentUpon>
     </Compile>
     <Compile Include="BMTA_bus_line_en.xaml.cs">
       <DependentUpon>BMTA_bus_line_en.xaml</DependentUpon>
@@ -188,8 +185,8 @@
     <Compile Include="BMTA_Search_Advance_landmark_en.xaml.cs">
       <DependentUpon>BMTA_Search_Advance_landmark_en.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BMTA_Search_Advance_start.xaml.cs">
-      <DependentUpon>BMTA_Search_Advance_start.xaml</DependentUpon>
+    <Compile Include="BMTA_Search_Advance_startend.xaml.cs">
+      <DependentUpon>BMTA_Search_Advance_startend.xaml</DependentUpon>
     </Compile>
     <Compile Include="BMTA_Slot.xaml.cs">
       <DependentUpon>BMTA_Slot.xaml</DependentUpon>
@@ -230,9 +227,18 @@
     <Compile Include="BMTA_Splashscreen.xaml.cs">
       <DependentUpon>BMTA_Splashscreen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BMTA_BusStartStopDetailMap.xaml.cs">
+      <DependentUpon>BMTA_BusStartStopDetailMap.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Item\Article.cs" />
     <Compile Include="Item\busline.cs" />
     <Compile Include="Item\buslineItem.cs" />
+    <Compile Include="Item\searchfindRoutingItem_routingdetail_busstop.cs" />
+    <Compile Include="Item\searchfindRoutingItem_routingdetail.cs" />
+    <Compile Include="Item\searchfindRoutingItem_total.cs" />
+    <Compile Include="Item\searchfindRoutingItem_routing.cs" />
+    <Compile Include="Item\searchfindRoutingItem_data.cs" />
+    <Compile Include="Item\searchfindRoutingItem.cs" />
     <Compile Include="Item\searchStartStopItem.cs" />
     <Compile Include="Item\searchStartStopDetailItem.cs" />
     <Compile Include="Item\searchbusstopItem.cs" />
@@ -244,6 +250,9 @@
     <Compile Include="Item\NearBusStopItem.cs" />
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteAsync.cs" />
+    <Compile Include="Usercontrols\UCStartStop.xaml.cs">
+      <DependentUpon>UCStartStop.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utillity\clGetResolution.cs" />
     <Compile Include="Utillity\CoordinateConverter.cs" />
     <Compile Include="Geo\AngleConverter.cs" />
@@ -305,7 +314,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BMTA_MainPage.xaml">
+    <Page Include="BMTA_OrderPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -353,15 +362,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BMTA_bus_line.xaml">
+    <Page Include="BMTA_bus_mainpage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="BMTA_bus_line_details.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BMTA_bus_line_details_en.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -413,7 +418,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BMTA_Search_Advance_start.xaml">
+    <Page Include="BMTA_Search_Advance_startend.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -469,6 +474,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="BMTA_BusStartStopDetailMap.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SampleAutoComplete.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -478,6 +487,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Style\CustomStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Usercontrols\UCStartStop.xaml">
+      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Usercontrols\UCCostomPushpin.xaml">
@@ -519,6 +532,7 @@
     <Content Include="Assets\9.png" />
     <Content Include="Assets\bg_advance_search.png" />
     <Content Include="Assets\bg_numberbus.png" />
+    <Content Include="Assets\BMTA_infobox.png" />
     <Content Include="Assets\btbus.png" />
     <Content Include="Assets\btbus_active.png" />
     <Content Include="Assets\btlandmark.png" />
@@ -570,6 +584,7 @@
     <Content Include="Assets\left_infobox.png" />
     <Content Include="Assets\mrt_icon.png" />
     <Content Include="Assets\Official_Logo_bts.jpg" />
+    <Content Include="Assets\pin_blue.png" />
     <Content Include="bmtadatabase.sqlite" />
     <None Include="packages.config">
       <SubType>Designer</SubType>

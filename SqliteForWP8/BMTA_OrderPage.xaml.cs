@@ -15,13 +15,13 @@ using System.Windows.Media.Imaging;
 
 namespace BMTA
 {
-    public partial class BMTA_MainPage : PhoneApplicationPage
+    public partial class BMTA_OrderPage : PhoneApplicationPage
     {
         ProgressIndicator progressIndicator;
         ImageBrush background;
         public String lang = (Application.Current as App).Language;
 
-        public BMTA_MainPage()
+        public BMTA_OrderPage()
         {
             InitializeComponent();
 
@@ -31,7 +31,7 @@ namespace BMTA
         private void button1_Click(object sender, RoutedEventArgs e)
         {
 
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml?busCate=1", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/BMTA_bus_mainpage.xaml?busCate=1", UriKind.Relative));
         }
         private void button2_Click(object sender, RoutedEventArgs e)
         {
@@ -41,13 +41,13 @@ namespace BMTA
             }
             else
             {
-                NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml?busCate=2", UriKind.Relative));
+                NavigationService.Navigate(new Uri("/BMTA_bus_mainpage.xaml?busCate=2", UriKind.Relative));
             }
 
         }
         private void button3_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml?busCate=3", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/BMTA_bus_mainpage.xaml?busCate=3", UriKind.Relative));
         }
         private void button4_Click(object sender, RoutedEventArgs e)
         {
@@ -57,7 +57,7 @@ namespace BMTA
             }
             else
             {
-                NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml?busCate=4", UriKind.Relative));
+                NavigationService.Navigate(new Uri("/BMTA_bus_mainpage.xaml?busCate=4", UriKind.Relative));
             }
 
         }

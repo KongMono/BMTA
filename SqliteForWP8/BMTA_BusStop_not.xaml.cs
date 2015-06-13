@@ -456,8 +456,8 @@ namespace BMTA
                         _tooltip.Description = LocationListobj[i].stop_name.ToString() + "\n" + LocationListobj[i].busline;
                         _tooltip.DataContext = LocationListobj[i];
                         // _tooltip.Menuitem.Click += Menuitem_Click;
-                        _tooltip.imgmarker.Tap += _tooltip_Tapimg;
-                        _tooltip.imgborder.Click += _tooltip_url;
+                        //_tooltip.imgmarker.Tap += _tooltip_Tapimg;
+                        //_tooltip.imgborder.Click += _tooltip_url;
 
                         MapOverlay overlay = new MapOverlay();
                         overlay.Content = _tooltip;
@@ -507,7 +507,7 @@ namespace BMTA
                 _tooltip.Description = LocationListobj[i].stop_name.ToString() + "\n" + LocationListobj[i].distance;
                 _tooltip.DataContext = LocationListobj[i];
                // _tooltip.Menuitem.Click += Menuitem_Click;
-                _tooltip.imgmarker.Tap += _tooltip_Tapimg;
+                //_tooltip.imgmarker.Tap += _tooltip_Tapimg;
 
                 MapOverlay overlay = new MapOverlay();
                 overlay.Content = _tooltip;
@@ -570,7 +570,7 @@ namespace BMTA
                    _stooltip.Description = items[i].stop_name.ToString() + "\n" + items[i].busline;
                    _stooltip.DataContext = items[i];
                    // _tooltip.Menuitem.Click += Menuitem_Click;
-                   _tooltip.imgmarker.Tap += _tooltip_Tapimg;
+                   //_tooltip.imgmarker.Tap += _tooltip_Tapimg;
                  //  _tooltip.imgborder.Click += _tooltip_url;
 
                    MapOverlay overlaypoly = new MapOverlay();
@@ -606,7 +606,6 @@ namespace BMTA
                    line.Path.Add(new GeoCoordinate(pl.latitude, pl.longitude));
                }
 
-              
                mymap.MapElements.Add(line);
 
                mymap.Layers.Add(mapLayer);

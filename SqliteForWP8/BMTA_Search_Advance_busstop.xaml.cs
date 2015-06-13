@@ -32,6 +32,7 @@ namespace BMTA
         public BMTA_Search_Advance_busstop()
         {
             InitializeComponent();
+            textbox.MinimumPrefixLength = 2;
             textbox.ItemFilter = SearchText;
             
         }
@@ -64,8 +65,6 @@ namespace BMTA
             }
             else
             {
-
-
                 headbusstop.Text = "Search Bus Stop";
                 headbustype.Text = "Search Bus Type";
                 headbussort.Text = "Sort By Results";
@@ -111,41 +110,6 @@ namespace BMTA
             return true;
         }
 
-        private void btSearchAd_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_Search_Advance_busstop.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusCoordinates.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_3(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml", UriKind.Relative));
-        }
-
-        private void close_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btTopMenu_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void btback_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
@@ -154,37 +118,7 @@ namespace BMTA
         private void rhome_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Uri("/BMTA_AppTh.xaml", UriKind.Relative));
-        }
-
-        private void rbusline_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml", UriKind.Relative));
-        }
-
-        private void rbusstop_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
-        }
-
-        private void rcoor_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusCoordinates.xaml", UriKind.Relative));
-        }
-
-        private void rbusstartstop_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml", UriKind.Relative));
-        }
-
-        private void rbusspeed_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_Speed_history.xaml", UriKind.Relative));
-        }
-
-        private void rbusnew_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_EventNew.xaml", UriKind.Relative));
-        }
+        }    
 
         private void btsubmit_Click(object sender, RoutedEventArgs e)
         {
@@ -203,11 +137,19 @@ namespace BMTA
         {
             webClient = new WebClient();
             webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/getNearBusstop";
+            String url = "http://202.6.18.31:7777/currentfindRouting";
             string myParameters;
             try
             {
-                myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&busstop_end_id=" + item.id + "&bus_type=" + buslinePick.Tag + "&running_type=" + busRunningPick.Tag + "&orderby=" + "";
+                if (item == null)
+                {
+                    myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&busstop_end_id=" + "0" + "&bus_type=" + buslinePick.Tag + "&running_type=" + busRunningPick.Tag + "&orderby=" + "";
+                }
+                else
+                {
+                    myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&busstop_end_id=" + item.id + "&bus_type=" + buslinePick.Tag + "&running_type=" + busRunningPick.Tag + "&orderby=" + "";
+                }
+              
                 Debug.WriteLine("URL callServicecurrentfindRouting = " + url);
 
                 webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicecurrentfindRouting_Completed);

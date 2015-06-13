@@ -27,10 +27,11 @@ using Microsoft.Phone.Maps.Toolkit;
 using System.Diagnostics;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using BMTA.Item;
 
 namespace BMTA
 {
-    public partial class BMTA_bus_line : PhoneApplicationPage
+    public partial class BMTA_bus_mainpage : PhoneApplicationPage
     {
         /// <summary>
         /// other
@@ -44,6 +45,13 @@ namespace BMTA
         bool Menu2 = true;
         bool Menu3 = true;
         bool Menu4 = true;
+        Boolean alreadyStart = false;
+        Boolean alreadyEnd = false;
+        Boolean alreadyBusStop = false;
+        Boolean alreadyLandMark = false;
+
+        private searchStartStopDetailItem itemstart, itemend;
+        private searchlandmarkAndBusstopdetailItem itemLandMark,itemBusStop;
         public String CurrentGroup = "1";
         /// <summary>
         /// busline
@@ -55,13 +63,12 @@ namespace BMTA
         /// </summary>
         UCToolTip _stooltip = new UCToolTip();
         MapLayer mymapLayer = new MapLayer();
+        NearBusStopItem NearBusStopResults = new NearBusStopItem();
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
             // Create the database connection.  
             dbConn = new SQLiteConnection(App.DB_PATH);
-            // Create the table Task, if it doesn't exist.  
-            dbConn.CreateTable<busline>();
 
             if (e.NavigationMode == System.Windows.Navigation.NavigationMode.New)
             {
@@ -101,7 +108,7 @@ namespace BMTA
             ShowProgressIndicator("Loading..");
             List<buslineItem> retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + CurrentGroup + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
             buslines = new ObservableCollection<buslineItem>(retrievedTasks);
-
+            (Application.Current as App).DataBuslinehList = retrievedTasks;
             buslinelistbox.ItemsSource = buslines;
             HideProgressIndicator();
             this.buslinelistbox.Visibility = System.Windows.Visibility.Visible;
@@ -118,9 +125,9 @@ namespace BMTA
                 (Application.Current as App).lat_current = lat;
                 (Application.Current as App).lon_current = lon;
 
-                myParameters = "lat=" + lat + "&long=" + lon;
+                myParameters = "lat=" + lat + "&long=" + lon + "&distance=" + "12";
                 Debug.WriteLine("URL callServicegetNearBusStop = " + url);
-        
+
                 webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicgetNearBusStop_Completed);
                 webClient.UploadStringAsync(new Uri(url), myParameters);
             }
@@ -128,47 +135,55 @@ namespace BMTA
             {
                 MessageBox.Show(ex.Message);
             }
-
         }
 
         private void callServicgetNearBusStop_Completed(object sender, UploadStringCompletedEventArgs e)
         {
-            NearBusStopItem results = JsonConvert.DeserializeObject<NearBusStopItem>(e.Result);
-            String status = results.status;
-
-            if (status != "0")
+            NearBusStopResults = JsonConvert.DeserializeObject<NearBusStopItem>(e.Result);
+            if (NearBusStopResults != null)
             {
-                var datas = results.data;
-                foreach (var data in datas)
+                String status = NearBusStopResults.status;
+                MapLayer layer = new MapLayer();
+                if (status != "0")
                 {
-                    String stop_name = data.stop_name;
-                    Debug.WriteLine(data);
+                    var datas = NearBusStopResults.data;
+                    foreach (var data in datas)
+                    {
+                        String stop_name = data.stop_name;
+                        Debug.WriteLine(data);
 
-                    //add Tooltip
-                    //MapOverlay mapoverlay = new MapOverlay();
-                    //_stooltip = new UCToolTip();
-                    //_stooltip.Description = data.stop_name.ToString() + "\n" + data.busline;
-                    //_stooltip.DataContext = data;
-                    //mapoverlay.Content = _stooltip;
-                    //mapoverlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(data.latitude), Convert.ToDouble(data.longitude));
-                    //mymapLayer.Add(mapoverlay);
+                        //add Tooltip
+                        MapOverlay mapoverlay = new MapOverlay();
 
+                        UCCustomToolTip _tooltip = new UCCustomToolTip();
+                        _tooltip.Description = data.stop_name.ToString() + "\n" + data.busline;
+                        _tooltip.DataContext = data;
+                        _tooltip.Lbltext.Tap += _tooltip_TapLbltext;
 
-
- 
+                        mapoverlay.Content = _tooltip;
+                        mapoverlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(data.latitude), Convert.ToDouble(data.longitude));
+                        layer.Add(mapoverlay);
+                    }
                 }
+                this.map.Layers.Add(layer);
             }
-            
         }
 
-        private void pushtap_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        private void _tooltip_TapLbltext(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            Pushpin pushpin = sender as Pushpin;
-            if (pushpin.Content != null)
+            TextBlock item = (TextBlock)sender;
+            string selecteditem = item.Tag.ToString();
+            var selected = NearBusStopResults.data.Where(s => s.id == selecteditem).ToList();
+          
+            if (selected.Count > 0)
             {
-
-
+                foreach (var items in selected)
+                {
+                    (Application.Current as App).DataBusstopDetail = items;
+                    NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
+                }
             }
+          
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -180,10 +195,25 @@ namespace BMTA
             }
         }
 
-        public BMTA_bus_line()
+        public BMTA_bus_mainpage()
         {
             InitializeComponent();
+
             ShowMyLocationOnTheMap();
+            busStartStopFrom_search.ItemFilter = SearchText;
+            busStartStopTo_search.ItemFilter = SearchText;
+            busstop_search.ItemFilter = SearchText;
+            StreetsandLandmarks_search.ItemFilter = SearchText;
+        }
+
+        bool SearchText(string search, object value)
+        {
+            if (value != null)
+            {
+                return true;
+            }
+            //... If no match, return false. 
+            return false;
         }
 
         private async void ShowMyLocationOnTheMap()
@@ -210,8 +240,8 @@ namespace BMTA
             MapOverlay myLocationOverlay = new MapOverlay();
             myLocationOverlay.Content = myCircle;
             myLocationOverlay.GeoCoordinate = myGeoCoordinate;
+
             // Create a MapLayer to contain the MapOverlay.
-            mymapLayer = new MapLayer();
             mymapLayer.Add(myLocationOverlay);
 
             // Add the MapLayer to the Map.
@@ -264,7 +294,6 @@ namespace BMTA
             {
                 titleName.Text = "Bus line";
             }
-
         }
 
         private void setViewBusstop()
@@ -366,7 +395,7 @@ namespace BMTA
             }
             else if (CurrentPage == "3")
             {
-                NavigationService.Navigate(new Uri("/BMTA_Search_Advance_start.xaml", UriKind.Relative));
+                NavigationService.Navigate(new Uri("/BMTA_Search_Advance_startend.xaml", UriKind.Relative));
             }
             else
             {
@@ -379,7 +408,7 @@ namespace BMTA
             Article item = (sender as ListBox).SelectedItem as Article;
             if (buslinelistbox.SelectedIndex != -1)
             {
-                this.NavigationService.Navigate(new Uri("/BMTA_bus_line_details.xaml?Search=false&Group=" + CurrentGroup + "&Index=" + buslinelistbox.SelectedIndex.ToString(), UriKind.Relative));
+                this.NavigationService.Navigate(new Uri("/BMTA_bus_line_details.xaml?Search=false&Index=" + buslinelistbox.SelectedIndex.ToString(), UriKind.Relative));
             }
             buslinelistbox.SelectedIndex = -1;
         }
@@ -411,6 +440,7 @@ namespace BMTA
                 retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + btn.Content + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
             }
 
+            (Application.Current as App).DataBuslinehList = retrievedTasks;
             buslines = new ObservableCollection<buslineItem>(retrievedTasks);
 
             buslinelistbox.ItemsSource = buslines;
@@ -504,12 +534,320 @@ namespace BMTA
                 {
                     retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + CurrentGroup + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
                 }
+
+                (Application.Current as App).DataBuslinehList = retrievedTasks;
                 buslines = new ObservableCollection<buslineItem>(retrievedTasks);
                 buslinelistbox.ItemsSource = buslines;
                 HideProgressIndicator();
             }
         }
 
+        private void busStartStopTo_search_TextChanged(object sender, RoutedEventArgs e)
+        {
+            if (busStartStopTo_search.Text.Length > 2)
+            {
+                if (!alreadyEnd)
+                {
+                    ShowProgressIndicator("Loading..");
+                    alreadyEnd = true;
+                    callServicegetAutocompleteend();
+                }
+            }
+        }
+
+        private void busStartStopTo_search_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            itemstart = (sender as AutoCompleteBox).SelectedItem as searchStartStopDetailItem;
+        }
+
+        private void busStartStopFrom_search_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            itemend = (sender as AutoCompleteBox).SelectedItem as searchStartStopDetailItem;
+        }
+
+        private void busStartStopFrom_search_TextChanged(object sender, RoutedEventArgs e)
+        {
+            if (busStartStopFrom_search.Text.Length > 2)
+            {
+                if (!alreadyStart)
+                {
+                    ShowProgressIndicator("Loading..");
+                    alreadyStart = true;
+                    callServicegetAutocompletestart();
+                }
+            }
+        }
+
+        public void callServicegetAutocompletestart()
+        {
+            webClient = new WebClient();
+            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            String url = "http://202.6.18.31:7777/getAutocomplete";
+            string myParameters;
+            try
+            {
+                myParameters = "type=" + "busstop" + "&keyword=" + busStartStopFrom_search.Text + "&lang=" + lang;
+                Debug.WriteLine("URL callServicegetAutocompletestart = " + url);
+                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocompletestart_Completed);
+                webClient.UploadStringAsync(new Uri(url), myParameters);
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+        private void callServicegetAutocompletestart_Completed(object sender, UploadStringCompletedEventArgs e)
+        {
+            searchStartStopItem results = JsonConvert.DeserializeObject<searchStartStopItem>(e.Result);
+
+            busStartStopFrom_search.ItemsSource = results.data;
+
+            HideProgressIndicator();
+            alreadyStart = false;
+        }
+
+        public void callServicegetAutocompleteend()
+        {
+            webClient = new WebClient();
+            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            String url = "http://202.6.18.31:7777/getAutocomplete";
+            string myParameters;
+            try
+            {
+                myParameters = "type=" + "busstop" + "&keyword=" + busStartStopTo_search.Text + "&lang=" + lang;
+                Debug.WriteLine("URL callServicegetAutocompleteend = " + url);
+                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocompleteend_Completed);
+                webClient.UploadStringAsync(new Uri(url), myParameters);
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+        private void callServicegetAutocompleteend_Completed(object sender, UploadStringCompletedEventArgs e)
+        {
+            searchStartStopItem results = JsonConvert.DeserializeObject<searchStartStopItem>(e.Result);
+
+            busStartStopTo_search.ItemsSource = results.data;
+
+            HideProgressIndicator();
+            alreadyEnd = false;
+        }
+
+        private void busStartStopbtn_search_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(busStartStopFrom_search.Text))
+            {
+                MessageBox.Show("กรุณากรอกต้นทาง");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(busStartStopTo_search.Text))
+            {
+                MessageBox.Show("กรุณากรอกปลายทาง");
+                return;
+            }
+
+            callService_startstop_searchfindRouting();
+        }
+
+        public void callService_startstop_searchfindRouting()
+        {
+            webClient = new WebClient();
+            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            String url = "http://202.6.18.31:7777/searchfindRouting";
+            string myParameters;
+            try
+            {
+                if (itemend == null || itemstart == null)
+                {
+                    myParameters = "busstop_start_id=" + "0" + "&busstop_end_id=" + "0" + "&bus_type=&running_type=&orderby=" + "";
+                }
+                else
+                {
+                    myParameters = "busstop_start_id=" + "1376" + "&busstop_end_id=" + "4100" + "&bus_type=&running_type=&orderby=" + "";
+                }
+
+                Debug.WriteLine("URL callServicecurrentfindRouting = " + url);
+
+                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callService_startstop_searchfindRouting_Completed);
+                webClient.UploadStringAsync(new Uri(url), myParameters);
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void callService_startstop_searchfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
+        {
+            MessageBox.Show(e.Result);
+            UCStartStop UCStartStop = new UCStartStop();
+            UCStartStop.textKm.Text = "5000";
+            UCStartStop.textPrice.Text = "500033";
+
+            busStartStoplistbox.Items.Add(UCStartStop);
+            UCStartStop = new UCStartStop();
+            UCStartStop.textKm.Text = "5000";
+            UCStartStop.textPrice.Text = "500033";
+
+            busStartStoplistbox.Items.Add(UCStartStop);
+            UCStartStop = new UCStartStop();
+            UCStartStop.textKm.Text = "5000";
+            UCStartStop.textPrice.Text = "500033";
+
+            busStartStoplistbox.Items.Add(UCStartStop);
+            UCStartStop = new UCStartStop();
+            UCStartStop.textKm.Text = "5000";
+            UCStartStop.textPrice.Text = "500033";
+
+            busStartStoplistbox.Items.Add(UCStartStop);
+            UCStartStop = new UCStartStop();
+            UCStartStop.textKm.Text = "5000";
+            UCStartStop.textPrice.Text = "500033";
+
+            busStartStoplistbox.Items.Add(UCStartStop);
+            UCStartStop = new UCStartStop();
+            UCStartStop.textKm.Text = "5000";
+            UCStartStop.textPrice.Text = "500033";
+
+            busStartStoplistbox.Items.Add(UCStartStop);
+        }
+
+        public void callServicegetAutocompleteLandMark()
+        {
+            webClient = new WebClient();
+            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            String url = "http://202.6.18.31:7777/getAutocomplete";
+            string myParameters;
+            try
+            {
+                myParameters = "type=" + "place" + "&keyword=" + StreetsandLandmarks_search.Text + "&lang=" + lang;
+                Debug.WriteLine("URL callServicegetAutocompleteLandMark = " + url);
+                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocomplete_Completed);
+                webClient.UploadStringAsync(new Uri(url), myParameters);
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void callServicegetAutocomplete_Completed(object sender, UploadStringCompletedEventArgs e)
+        {
+            searchlandmarkItem results = JsonConvert.DeserializeObject<searchlandmarkItem>(e.Result);
+
+            StreetsandLandmarks_search.ItemsSource = results.data;
+
+            HideProgressIndicator();
+            alreadyLandMark = false;
+        }
+
+        private void StreetsandLandmarks_search_TextChanged(object sender, RoutedEventArgs e)
+        {
+            if (StreetsandLandmarks_search.Text.Length > 2)
+            {
+                if (!alreadyLandMark)
+                {
+                    ShowProgressIndicator("Loading..");
+                    alreadyLandMark = true;
+                    callServicegetAutocompleteLandMark();
+                }
+            }
+        }
+
+        private void StreetsandLandmarks_search_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            itemLandMark = (sender as AutoCompleteBox).SelectedItem as searchlandmarkAndBusstopdetailItem;
+        }
+
+        public void callServicegetAutocompleteBusStop()
+        {
+            webClient = new WebClient();
+            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            String url = "http://202.6.18.31:7777/getAutocomplete";
+            string myParameters;
+            try
+            {
+                myParameters = "type=" + "busstop" + "&keyword=" + busstop_search.Text + "&lang=" + lang;
+                Debug.WriteLine("URL StreetsandLandmarks_search_SelectionChanged = " + url);
+                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocompleteBusStop_Completed);
+                webClient.UploadStringAsync(new Uri(url), myParameters);
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void callServicegetAutocompleteBusStop_Completed(object sender, UploadStringCompletedEventArgs e)
+        {
+            searchbusstopItem results = JsonConvert.DeserializeObject<searchbusstopItem>(e.Result);
+
+            busstop_search.ItemsSource = results.data;
+
+            HideProgressIndicator();
+            alreadyBusStop = false;
+        }
+
+        private void busstop_search_TextChanged(object sender, RoutedEventArgs e)
+        {
+            if (busstop_search.Text.Length > 2)
+            {
+                if (!alreadyBusStop)
+                {
+                    ShowProgressIndicator("Loading..");
+                    alreadyBusStop = true;
+                    callServicegetAutocompleteBusStop();
+                }
+            }
+        }
+
+        private void busstop_search_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            itemBusStop = (sender as AutoCompleteBox).SelectedItem as searchlandmarkAndBusstopdetailItem;
+        }
+
+        public void callService_busstop_currentfindRouting()
+        {
+            webClient = new WebClient();
+            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            String url = "http://202.6.18.31:7777/currentfindRouting";
+            string myParameters;
+            try
+            {
+                if (itemBusStop == null)
+                {
+                    myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&busstop_end_id=" + "0" + "&bus_type=&running_type=&orderby=" + "";
+                }
+                else
+                {
+                    myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&busstop_end_id=" + itemBusStop.id + "&bus_type=&running_type=&orderby=" + "";
+                }
+
+                Debug.WriteLine("URL callService_busstop_currentfindRouting = " + url);
+
+                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callService_busstop_currentfindRouting_Completed);
+                webClient.UploadStringAsync(new Uri(url), myParameters);
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void callService_busstop_currentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
+        {
+            MessageBox.Show(e.Result);
+        }
+
+        private void busStartStoplistbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/BMTA_BusStartStopDetailMap.xaml", UriKind.Relative));
+        }
 
     }
 }

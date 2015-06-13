@@ -87,7 +87,7 @@ namespace BMTA
                 x2.Content = "Regular Bus";
                 x3.Content = "Air Condition Bus";
             }
-            (Application.Current as App).DataSearchList.Clear();
+            (Application.Current as App).DataBuslinehList.Clear();
         }
 
         private void btsubmit_Click(object sender, RoutedEventArgs e)
