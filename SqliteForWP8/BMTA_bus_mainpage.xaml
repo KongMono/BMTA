@@ -215,7 +215,7 @@
                     </Button.Background>
                 </Button>
             </Grid>
-            <Grid x:Name="busStartStopLayoutList" Grid.Row="2" Grid.ColumnSpan="3" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FFFFFFFF" >
+            <Grid x:Name="busStartStopLayoutList" Grid.Row="2" Grid.ColumnSpan="3" Width="auto" Background="#FFFFFFFF" >
                 <ListBox x:Name="busStartStoplistbox" SelectionChanged="busStartStoplistbox_SelectionChanged"/>
             </Grid>
         </Grid>

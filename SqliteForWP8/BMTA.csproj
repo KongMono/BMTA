@@ -233,10 +233,9 @@
     <Compile Include="Item\Article.cs" />
     <Compile Include="Item\busline.cs" />
     <Compile Include="Item\buslineItem.cs" />
-    <Compile Include="Item\searchfindRoutingItem_routingdetail_busstop.cs" />
-    <Compile Include="Item\searchfindRoutingItem_routingdetail.cs" />
-    <Compile Include="Item\searchfindRoutingItem_total.cs" />
+    <Compile Include="Item\searchfindRoutingItem_routing_busstop.cs" />
     <Compile Include="Item\searchfindRoutingItem_routing.cs" />
+    <Compile Include="Item\searchfindRoutingItem_total.cs" />
     <Compile Include="Item\searchfindRoutingItem_data.cs" />
     <Compile Include="Item\searchfindRoutingItem.cs" />
     <Compile Include="Item\searchStartStopItem.cs" />
@@ -530,6 +529,7 @@
     <Content Include="Assets\7.png" />
     <Content Include="Assets\8.png" />
     <Content Include="Assets\9.png" />
+    <Content Include="Assets\arrow_list.png" />
     <Content Include="Assets\bg_advance_search.png" />
     <Content Include="Assets\bg_numberbus.png" />
     <Content Include="Assets\BMTA_infobox.png" />
@@ -579,6 +579,7 @@
     <Content Include="Assets\bus_up.png" />
     <Content Include="Assets\header_search_tab.jpg" />
     <Content Include="Assets\icon_arrow_close.png" />
+    <Content Include="Assets\icon_bus.png" />
     <Content Include="Assets\icon_stat.png" />
     <Content Include="Assets\languagepage.jpg" />
     <Content Include="Assets\left_infobox.png" />

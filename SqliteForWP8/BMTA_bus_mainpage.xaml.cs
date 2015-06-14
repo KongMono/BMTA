@@ -51,7 +51,7 @@ namespace BMTA
         Boolean alreadyLandMark = false;
 
         private searchStartStopDetailItem itemstart, itemend;
-        private searchlandmarkAndBusstopdetailItem itemLandMark,itemBusStop;
+        private searchlandmarkAndBusstopdetailItem itemLandMark, itemBusStop;
         public String CurrentGroup = "1";
         /// <summary>
         /// busline
@@ -174,7 +174,7 @@ namespace BMTA
             TextBlock item = (TextBlock)sender;
             string selecteditem = item.Tag.ToString();
             var selected = NearBusStopResults.data.Where(s => s.id == selecteditem).ToList();
-          
+
             if (selected.Count > 0)
             {
                 foreach (var items in selected)
@@ -183,7 +183,7 @@ namespace BMTA
                     NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
                 }
             }
-          
+
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -557,12 +557,12 @@ namespace BMTA
 
         private void busStartStopTo_search_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            itemstart = (sender as AutoCompleteBox).SelectedItem as searchStartStopDetailItem;
+            itemend = (sender as AutoCompleteBox).SelectedItem as searchStartStopDetailItem;
         }
 
         private void busStartStopFrom_search_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            itemend = (sender as AutoCompleteBox).SelectedItem as searchStartStopDetailItem;
+            itemstart = (sender as AutoCompleteBox).SelectedItem as searchStartStopDetailItem;
         }
 
         private void busStartStopFrom_search_TextChanged(object sender, RoutedEventArgs e)
@@ -668,7 +668,7 @@ namespace BMTA
                 }
                 else
                 {
-                    myParameters = "busstop_start_id=" + "1376" + "&busstop_end_id=" + "4100" + "&bus_type=&running_type=&orderby=" + "";
+                    myParameters = "busstop_start_id=" + "2891" + "&busstop_end_id=" + "2523" + "&bus_type=&running_type=&orderby=" + "";
                 }
 
                 Debug.WriteLine("URL callServicecurrentfindRouting = " + url);
@@ -684,37 +684,70 @@ namespace BMTA
 
         private void callService_startstop_searchfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
         {
-            MessageBox.Show(e.Result);
+            searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
             UCStartStop UCStartStop = new UCStartStop();
-            UCStartStop.textKm.Text = "5000";
-            UCStartStop.textPrice.Text = "500033";
+            foreach (var item in results.data)
+            {
+                UCStartStop = new UCStartStop();
 
-            busStartStoplistbox.Items.Add(UCStartStop);
-            UCStartStop = new UCStartStop();
-            UCStartStop.textKm.Text = "5000";
-            UCStartStop.textPrice.Text = "500033";
+                if (lang.Equals("th"))
+                {
+                    UCStartStop.textKm.Text = item.total.total_distance + " กม.";
+                    UCStartStop.textPrice.Text = "ราคา " + item.total.total_price + " บ.";
+                }
+                else
+                {
+                    UCStartStop.textKm.Text = item.total.total_distance + " km.";
+                    UCStartStop.textPrice.Text = "Price " + item.total.total_price + " ฿";
+                }
 
-            busStartStoplistbox.Items.Add(UCStartStop);
-            UCStartStop = new UCStartStop();
-            UCStartStop.textKm.Text = "5000";
-            UCStartStop.textPrice.Text = "500033";
+                if (item.routing.Count == 1)
+                {
+                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
+                    UCStartStop.img_route2.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_route3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
 
-            busStartStoplistbox.Items.Add(UCStartStop);
-            UCStartStop = new UCStartStop();
-            UCStartStop.textKm.Text = "5000";
-            UCStartStop.textPrice.Text = "500033";
+                    UCStartStop.img_cen2.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_cen3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_cen4.Visibility = System.Windows.Visibility.Collapsed;
 
-            busStartStoplistbox.Items.Add(UCStartStop);
-            UCStartStop = new UCStartStop();
-            UCStartStop.textKm.Text = "5000";
-            UCStartStop.textPrice.Text = "500033";
+                    UCStartStop.text_route2.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.text_route3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
+                    
+                   
+                }
+                else if (item.routing.Count == 2)
+                {
+                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
+                    UCStartStop.text_route2.Text = item.routing[1].bus_line;
 
-            busStartStoplistbox.Items.Add(UCStartStop);
-            UCStartStop = new UCStartStop();
-            UCStartStop.textKm.Text = "5000";
-            UCStartStop.textPrice.Text = "500033";
+                    UCStartStop.img_route3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
 
-            busStartStoplistbox.Items.Add(UCStartStop);
+                    UCStartStop.img_cen3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_cen4.Visibility = System.Windows.Visibility.Collapsed;
+                    
+                    UCStartStop.text_route3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
+                    
+                }
+                else if (item.routing.Count == 3)
+                {
+                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
+                    UCStartStop.text_route2.Text = item.routing[1].bus_line;
+                    UCStartStop.text_route3.Text = item.routing[2].bus_line;
+
+                    UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_cen4.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
+                }
+
+                busStartStoplistbox.Items.Add(UCStartStop);
+            }
+           
+
         }
 
         public void callServicegetAutocompleteLandMark()

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BMTA.Item
 {
-    public class searchfindRoutingItem_routingdetail_busstop
+    public class searchfindRoutingItem_routing_busstop
     {
         public string busstop_id { get; set; }
         public string latitude { get; set; }

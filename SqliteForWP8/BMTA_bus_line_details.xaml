@@ -75,7 +75,6 @@
                     <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/arrowright.png"/>
                 </Button.Background>
             </Button>
-
             <TextBlock x:Name="FixStart" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="ต้นทาง" VerticalAlignment="Center" Width="auto" TextAlignment="Center" Margin="80,0,0,90" Foreground="White" FontSize="23" />
             <TextBlock x:Name="FixStop" HorizontalAlignment="Right" Grid.Row="1" TextWrapping="Wrap" Text="ปลายทาง" VerticalAlignment="Center" Width="auto" TextAlignment="Center" Margin="0,0,80,90" Foreground="White" FontSize="23"/>
             <TextBlock x:Name="lblStart" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="120" TextAlignment="Center" Margin="50,0,0,0" Foreground="#FFD6CD0E" FontSize="23" />
@@ -102,9 +101,7 @@
             </Grid>
         </Grid>
 
-        <Grid x:Name="MainDown" Grid.Row="2" Width="auto" Background="#FF2C2C2C">
-           
-            
+        <Grid x:Name="MainDown" Grid.Row="2" Width="auto" Background="#FF2C2C2C"> 
             <ListBox x:Name="TaskListBox" ItemTemplate="{StaticResource CustomListTemplate}" Foreground="#FF2C2C2C" FontSize="26"></ListBox>
             <Grid x:Name="Layoutmap" Height="auto">
                 <maps:Map x:Name="map" Visibility="Collapsed" />

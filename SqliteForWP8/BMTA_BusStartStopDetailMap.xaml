@@ -39,7 +39,6 @@
             <TextBlock  x:Name="titleName" Text="" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center">
             </TextBlock>
         </Grid>
-
         <Grid x:Name="busStartStopLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"/>
@@ -64,7 +63,6 @@
                     </toolkit:AutoCompleteBox.ItemTemplate>
                 </toolkit:AutoCompleteBox>
             </Grid>
-
             <Grid Grid.RowSpan="2" Width="auto" Grid.Column="0" Background="#FF18359B">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="75"/>
@@ -104,8 +102,8 @@
                     </Button.Background>
                 </Button>
             </Grid>
-            <Grid x:Name="busStartStopLayoutList" Grid.Row="2" Grid.ColumnSpan="3" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FFFFFFFF" >
-                <maps:Map  PedestrianFeaturesEnabled="True"  LandmarksEnabled="True" x:Name="map" ZoomLevel="18" Height="auto" Width="auto">
+            <Grid x:Name="busStartStopLayoutList" Grid.Row="2" Grid.ColumnSpan="3" Background="#FFFFFFFF" >
+                <maps:Map  PedestrianFeaturesEnabled="True"  LandmarksEnabled="True" x:Name="map" ZoomLevel="18" Height="auto">
                 </maps:Map>
             </Grid>
         </Grid>
