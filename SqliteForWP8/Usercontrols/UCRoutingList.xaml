@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="BMTA.Usercontrols.UCRoutingList"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:Toolkit="clr-namespace:Microsoft.Phone.Maps.Toolkit;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    d:DesignWidth="480" d:DesignHeight="180">
+    <UserControl.Resources>
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="390"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0" Grid.RowSpan="3" Background="White" HorizontalAlignment="Center">
+            <Image x:Name="img_route" HorizontalAlignment="Left" Width="auto" Height="auto" VerticalAlignment="Center"  Source="/Assets/walk.png" Stretch="Fill" Margin="10,0,0,0" />
+        </Grid>
+        <Grid Grid.Row="0" Grid.Column="1" Background="#FF18359B">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">
+                <TextBlock x:Name="textstop_name" Text="ป้ายรถเมล์" Foreground="White" TextTrimming="WordEllipsis" TextWrapping="Wrap" Height="60" Padding="10,10,10,10" FontSize="25"  HorizontalAlignment="Stretch"/>
+            </StackPanel>
+           
+            <Button x:Name="btn_collapsed" Grid.Column="1" BorderBrush="Transparent" Width="60" Height="60"  HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ImageButton}" Visibility="Collapsed" >
+                <Button.Background>
+                    <ImageBrush Stretch="Fill" ImageSource="/Assets/down-arrow-icon.png"/>
+                </Button.Background>
+            </Button>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="1" Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="textbusline_name" Text="สาย"  MaxWidth="300" Foreground="#00A54E" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Padding="20,0,0,0" FontSize="25" />
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="1" Background="White">
+            <TextBlock x:Name="textRoute" Grid.Row="1" Text="ระยะทาง" Foreground="#FF18359B" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Padding="20,0,0,0" FontSize="25"/>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -182,9 +182,6 @@
     <Compile Include="BMTA_Search_Advance_landmark.xaml.cs">
       <DependentUpon>BMTA_Search_Advance_landmark.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BMTA_Search_Advance_landmark_en.xaml.cs">
-      <DependentUpon>BMTA_Search_Advance_landmark_en.xaml</DependentUpon>
-    </Compile>
     <Compile Include="BMTA_Search_Advance_startend.xaml.cs">
       <DependentUpon>BMTA_Search_Advance_startend.xaml</DependentUpon>
     </Compile>
@@ -230,6 +227,9 @@
     <Compile Include="BMTA_BusStartStopDetailMap.xaml.cs">
       <DependentUpon>BMTA_BusStartStopDetailMap.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BMTA_BusStartStopDetailList.xaml.cs">
+      <DependentUpon>BMTA_BusStartStopDetailList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Item\Article.cs" />
     <Compile Include="Item\busline.cs" />
     <Compile Include="Item\buslineItem.cs" />
@@ -249,6 +249,12 @@
     <Compile Include="Item\NearBusStopItem.cs" />
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteAsync.cs" />
+    <Compile Include="Usercontrols\UCStartStopBusLine.xaml.cs">
+      <DependentUpon>UCStartStopBusLine.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Usercontrols\UCRoutingList.xaml.cs">
+      <DependentUpon>UCRoutingList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Usercontrols\UCStartStop.xaml.cs">
       <DependentUpon>UCStartStop.xaml</DependentUpon>
     </Compile>
@@ -413,10 +419,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BMTA_Search_Advance_landmark_en.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="BMTA_Search_Advance_startend.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -477,6 +479,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="BMTA_BusStartStopDetailList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SampleAutoComplete.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -486,6 +492,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Style\CustomStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Usercontrols\UCStartStopBusLine.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Usercontrols\UCRoutingList.xaml">
+      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Usercontrols\UCStartStop.xaml">
@@ -577,6 +591,9 @@
     <Content Include="Assets\bus_continue.png" />
     <Content Include="Assets\bus_down.png" />
     <Content Include="Assets\bus_up.png" />
+    <Content Include="Assets\change.png" />
+    <Content Include="Assets\down-arrow-icon.png" />
+    <Content Include="Assets\down.png" />
     <Content Include="Assets\header_search_tab.jpg" />
     <Content Include="Assets\icon_arrow_close.png" />
     <Content Include="Assets\icon_bus.png" />
@@ -586,6 +603,8 @@
     <Content Include="Assets\mrt_icon.png" />
     <Content Include="Assets\Official_Logo_bts.jpg" />
     <Content Include="Assets\pin_blue.png" />
+    <Content Include="Assets\up.png" />
+    <Content Include="Assets\walk.png" />
     <Content Include="bmtadatabase.sqlite" />
     <None Include="packages.config">
       <SubType>Designer</SubType>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BMTA.Item
 {
-    class searchfindRoutingItem
+    public class searchfindRoutingItem
     {
         public string status { get; set; }
         public List<searchfindRoutingItem_data> data { get; set; }

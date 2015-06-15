@@ -174,26 +174,24 @@ namespace BMTA
             else
             {
                 dataNearBusStopItem data = (Application.Current as App).DataBusstopDetail;
+              
 
                 if (lang.Equals("th"))
                 {
                     titleName.Text = "ป้ายหยุดรถประจำทาง";
                     textName.Text = data.stop_name;
+                    textRoute.Text =  data.distance.Substring(0,4) + " กม.";
                 }
                 else
                 {
                     titleName.Text = "Bus Stop";
                     textName.Text = data.stop_name_en;
+                    textRoute.Text = data.distance.Substring(0,4) + " km.";
                 }
+               
                 textBusline.Text = data.busline;
-              
-                btBusStop.Click += btBusStop_Click;
+               
             }
-        }
-
-        private void btBusStop_Click(object sender, RoutedEventArgs e)
-        {
-         
         }
 
         private bool HasInternet()

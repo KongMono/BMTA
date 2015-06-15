@@ -94,16 +94,12 @@ namespace BMTA
                 z2.Content = "Sort By Price";
                 z3.Content = "Fewer Transfers";
             }
-
         }
-
-
         private void btback_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }
 
-        //koy
         private void btsubmit_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtboxstart.Text))
@@ -193,15 +189,22 @@ namespace BMTA
             return false;
         }
 
-
-
-
         private void callServicecurrentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
         {
-            MessageBox.Show(e.Result);
+            searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
+            if (results == null)
+            {
+                MessageBox.Show("ไม่พบข้อมูล");
+                return;
+            }
+            if (results.status == "0")
+            {
+                MessageBox.Show("ไม่พบข้อมูล");
+                return;
+            }
+            (Application.Current as App).DataStartStop = results;
+            this.NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml?TextFrom=" + txtboxstart.Text + "&TextTo=" + txtboxend.Text, UriKind.Relative));
         }
-
-        //
 
         public void callServicegetAutocompletestart()
         {

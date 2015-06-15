@@ -35,779 +35,374 @@ using System.Diagnostics;
 using System.Net.Browser;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Collections; // for 'IEnumerable'
+using System.Collections;
 using System.Threading;
-
+using BMTA.Item;
+using BMTA.Usercontrols;
 
 namespace BMTA
 {
     public partial class BMTA_BusStartStop : PhoneApplicationPage
     {
-        string bstartid = "";
-        string bstopid = "";
-        string responetext = "";
+        public String lang = (Application.Current as App).Language;
+        Boolean alreadyStart = false;
+        Boolean alreadyEnd = false;
+        static WebClient webClient;
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        private searchStartStopDetailItem itemstart, itemend;
+
         public BMTA_BusStartStop()
         {
             InitializeComponent();
-            // createRandomItemSource();
 
-        }
-
-        bool SearchPhones(string search, object value)
-        {
-            if (value != null)
+      
+            UCStartStop UCStartStop = new UCStartStop();
+            foreach (var item in (Application.Current as App).DataStartStop.data)
             {
-                WP7Phone datasourceValue = value as WP7Phone;
-                string name = datasourceValue.stop_name;
-
-                if (name.ToLower().StartsWith(search.ToLower()))
-                    return true;
-            }
-            //... If no match, return false. 
-            return false;
-        }
-        public class WP7Phone
-        {
-
-            public string id
-            {
-                get;
-                set;
-            }
-
-            public string stop_name
-            {
-                get;
-                set;
-            }
-        }
-
-        private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            rightmenu.Visibility = System.Windows.Visibility.Collapsed;
-            rightmenux.Visibility = System.Windows.Visibility.Collapsed;
-            close.Visibility = System.Windows.Visibility.Collapsed;
-            ContentPanel.Visibility = System.Windows.Visibility.Collapsed;
-            if (!HasNetwork())
-            {
-                Application.Current.Terminate();
-                // new Microsoft.Xna.Framework.Game().Exit();
-            }
-            else if (!HasInternet())
-            {
-                Application.Current.Terminate();
-                // new Microsoft.Xna.Framework.Game().Exit();
-            }
-            else
-            {
-                string x = BMTA.clGetResolution.Width.ToString();
-                string y = BMTA.clGetResolution.Height.ToString();
-                string xy = x + "x" + y;
-                if (x == "480")
+                UCStartStop = new UCStartStop();
+                UCStartStop.DataContext = item;
+                if (lang.Equals("th"))
                 {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/480x852/BMTA_BusStart_Stop_bg.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
-                }
-                else if (x == "720")
-                {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/720x1280/BMTA_BusStart_Stop_bg.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
+                    UCStartStop.textKm.Text = item.total.total_distance + " กม.";
+                    UCStartStop.textPrice.Text = "ราคา " + item.total.total_price + " บ.";
                 }
                 else
                 {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/768x1280/BMTA_BusStart_Stop_bg.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
+                    UCStartStop.textKm.Text = item.total.total_distance + " km.";
+                    UCStartStop.textPrice.Text = "Price " + item.total.total_price + " ฿";
                 }
-            }
-        }
 
-        private bool HasInternet()
-        {
-            if (!NetworkInterface.GetIsNetworkAvailable())
-            {
-                MessageBox.Show("No internet connection is available. Try again later.");
-                return false;
-            }
-            return true;
-        }
-
-        private bool HasNetwork()
-        {
-            if (!DeviceNetworkInformation.IsNetworkAvailable)
-            {
-                MessageBox.Show("No network is available. Try again later.");
-                return false;
-            }
-            return true;
-        }
-
-        private void btSearchAd_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_Search_Advance_start.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusCoordinates.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_3(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml", UriKind.Relative));
-        }
-
-        private void close_Click(object sender, RoutedEventArgs e)
-        {
-            rightmenu.Visibility = System.Windows.Visibility.Collapsed;
-            rightmenux.Visibility = System.Windows.Visibility.Collapsed;
-            close.Visibility = System.Windows.Visibility.Collapsed;
-        }
-
-        private void btTopMenu_Click(object sender, RoutedEventArgs e)
-        {
-            rightmenux.Visibility = Visibility;
-            rightmenu.Visibility = Visibility;
-            close.Visibility = Visibility;
-        }
-
-        private void rhome_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_AppTh.xaml", UriKind.Relative));
-        }
-
-        private void rbusline_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml", UriKind.Relative));
-        }
-
-        private void rbusstop_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
-        }
-
-        private void rcoor_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusCoordinates.xaml", UriKind.Relative));
-        }
-
-        private void rbusstartstop_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml", UriKind.Relative));
-        }
-
-        private void rbusspeed_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_Speed_history.xaml", UriKind.Relative));
-        }
-
-        private void rbusnew_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_EventNew.xaml", UriKind.Relative));
-        }
-
-        private void btSearch_Click(object sender, RoutedEventArgs e)
-        {
-
-
-            ContentPanel.Visibility = Visibility;
-
-            // getsearchfindRouting();
-            DoUIThings();
-
-            ContentPanel.Visibility = System.Windows.Visibility.Collapsed;
-
-        }
-
-
-
-
-        public void getsearchfindRouting()
-        {
-            string url = "http://202.6.18.31/bmta/webservice/bmta_service_bo.php/";
-            HttpWebRequest request = WebRequest.CreateHttp(new Uri(url)) as HttpWebRequest;
-
-            string data = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-            "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
-            "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"\n" +
-            "xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
-            "<soap:Body>\n" +
-            "<searchfindRouting xmlns=\"http://202.6.18.31/bmta/webservice/bmta_service_bo.php\">\n" +
-            "<busstop_start_id>" + bstartid + "</busstop_start_id>\n" +
-            "<busstop_end_id>" + bstopid + "</busstop_end_id>\n" +
-            "<bus_type></bus_type>\n" +
-            "<running_type></running_type>\n" +
-            "<orderby></orderby>\n" +
-            "</searchfindRouting>\n" +
-            "</soap:Body>\n" +
-            "</soap:Envelope>";
-
-            request.ContentType = "text/xml; charset=utf-8";// "application/x-www-form-urlencoded";
-            request.UserAgent = "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0; Touch)";
-            request.Headers["SOAPAction"] = "http://202.6.18.31/bmta/webservice/bmta_service.php?wsdl";
-            // Set the Method property to 'POST' to post data to the URI.
-            request.Method = "POST";
-            request.ContentLength = data.Length;
-            // start the asynchronous operation
-            ContentPanel.Visibility = Visibility;
-            request.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), request);
-
-
-        }
-
-        void GetRequestStreamCallback(IAsyncResult asynchronousResult)
-        {
-            HttpWebRequest request = (HttpWebRequest)asynchronousResult.AsyncState;
-            // End the operation
-            Stream postStream = request.EndGetRequestStream(asynchronousResult);
-            Deployment.Current.Dispatcher.BeginInvoke(() =>
-            {
-
-                string data = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-               "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
-               "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"\n" +
-               "xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
-               "<soap:Body>\n" +
-               "<searchfindRouting xmlns=\"http://202.6.18.31/bmta/webservice/bmta_service.php\">\n" +
-               "<busstop_start_id>" + bstartid + "</busstop_start_id>\n" +
-               "<busstop_end_id>" + bstopid + "</busstop_end_id>\n" +
-               "<bus_type></bus_type>\n" +
-               "<running_type></running_type>\n" +
-               "<orderby></orderby>\n" +
-               "</searchfindRouting>\n" +
-               "</soap:Body>\n" +
-               "</soap:Envelope>";
-                // Convert the string into a byte array. 
-                byte[] byteArray = Encoding.UTF8.GetBytes(data);
-
-                // Write to the request stream.
-                postStream.Write(byteArray, 0, data.Length);
-                postStream.Close();
-            });
-
-            // Start the asynchronous operation to get the response
-            request.BeginGetResponse(new AsyncCallback(GetResponseCallback), request);
-
-        }
-
-        void GetResponseCallback(IAsyncResult getNearBusStopResponse)
-        {
-
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)getNearBusStopResponse.AsyncState;
-
-                // End the operation
-                HttpWebResponse response = (HttpWebResponse)request.EndGetResponse(getNearBusStopResponse);//.EndGetResponse(getNearBusStopResponse);
-
-                if (response.StatusCode == HttpStatusCode.OK)
+                if (item.routing.Count == 1)
                 {
-                    Stream streamResponse = response.GetResponseStream();
-                    StreamReader streamRead = new StreamReader(streamResponse);
-                    // string Notificationdata = Helper.RemoveNameSpace.RemoveAllNamespaces(streamRead.ReadToEnd()); 
-                    string responseString = streamRead.ReadToEnd();
+                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
+                    UCStartStop.img_route2.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_route3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
 
-                    //display the web response
-                    //  Debug.WriteLine("Response String : " + responseString);
-                    String restext = responseString;
+                    UCStartStop.img_cen2.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_cen3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_cen4.Visibility = System.Windows.Visibility.Collapsed;
 
-                    XDocument xDocx = XDocument.Load(new StringReader(restext));
-                    var id = xDocx.Descendants("return").First().Value;
-                    string sd = id.ToString();
-                    //  sd = sd.Replace("{\"status\":\"1\",\"data\":", "");
-                    //  sd = sd.Replace("]}", "]");
-
-                    responetext = sd;
-
-                    // Close the stream object
-                    streamResponse.Close();
-                    streamRead.Close();
-
-                    // Release the HttpWebResponse
-                    response.Close();
-                    //allDone.Set();
-
+                    UCStartStop.text_route2.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.text_route3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
                 }
-            }
-            catch (WebException ex)
-            {
-                using (StreamReader reader = new StreamReader(ex.Response.GetResponseStream()))
+                else if (item.routing.Count == 2)
                 {
-                    Debug.WriteLine("Exception output : " + ex);
+                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
+                    UCStartStop.text_route2.Text = item.routing[1].bus_line;
+
+                    UCStartStop.img_route3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
+
+                    UCStartStop.img_cen3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_cen4.Visibility = System.Windows.Visibility.Collapsed;
+
+                    UCStartStop.text_route3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
+
                 }
-            }
+                else if (item.routing.Count == 3)
+                {
+                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
+                    UCStartStop.text_route2.Text = item.routing[1].bus_line;
+                    UCStartStop.text_route3.Text = item.routing[2].bus_line;
 
-            ContinueDoUIThings();
+                    UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_cen4.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
+                }
+
+                busStartStoplistbox.Items.Add(UCStartStop);
+            }
         }
 
-        public void DoUIThings()
+        private void ShowProgressIndicator(String msg)
         {
-            // Do some UI related things.
-            getsearchfindRouting();
-            // Don't continue doing things here.... Wait for the ContinueDoUIThings() to be called.
+            if (progressIndicator == null)
+            {
+                progressIndicator = new ProgressIndicator();
+                progressIndicator.IsIndeterminate = true;
+            }
+            SystemTray.Opacity = 0;
+            progressIndicator.Text = msg;
+            progressIndicator.IsVisible = true;
+            progressIndicator.IsIndeterminate = true;
+            SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 
-        public void ContinueDoUIThings()
+        private void HideProgressIndicator()
         {
-            if (responetext == "")
+            progressIndicator.IsVisible = false;
+            progressIndicator.IsIndeterminate = false;
+            SystemTray.SetProgressIndicator(this, progressIndicator);
+        }
+
+
+        private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            busStartStopFrom_search.Text = this.NavigationContext.QueryString["TextFrom"];
+            busStartStopTo_search.Text = this.NavigationContext.QueryString["TextTo"];
+
+            if (lang.Equals("th"))
             {
-                MessageBox.Show("ไม่พบข้อมูลที่ค้นหา");
-            }
-            else if (responetext == "{\"routing\":{\"status\":0}}")
-            {
-                MessageBox.Show("ไม่พบข้อมูลที่ค้นหา");
+                titleName.Text = "ต้นทางปลายทาง";
             }
             else
             {
-                string strJSON = null;
-                strJSON = responetext;
-
-
-                string json = strJSON;// @"{ ""names"" : [ {""name"":""bla""} , {""name"":""bla2""} ] }";
-
-                var dict = (JObject)JsonConvert.DeserializeObject(json);
-                List<Routings> newsResults = new List<Routings>();
-                foreach (var objx in dict["data"])
-                {
-                    // foreach (var sx in objx["routing"])
-                    for (int i = 0; i < objx["routing"].Count(); i++)
-                    {
-                      //  newsResults.Add(new Routings { bus_line = objx["routing"][i]["bus_line"].ToString() });
-                        // string row = sx.ToString();
-                    }
-                }
-
-
-
-                Dish addressMap = JsonConvert.DeserializeObject<Dish>(json);
-                //  var j = JsonConvert.DeserializeObject<SmallestDotNetThing>(json);
-                // var sa = addressMap.bus_line;
-
-                JObject obj = JObject.Parse(strJSON);
-                List<Routings> Dishes_1 = new List<Routings>();
-                List<JToken> jdata = obj.SelectTokens("data[*].routing").ToList();
-                for (int i = 0; i < jdata.Count(); i++)
-                {
-                    Dishes_1.Add(new Routings { routing = jdata[i].ToString() });
-                }
-
-                var articles = new List<DotNetVersion>();
-                for (int x = 0; x < Dishes_1.Count; x++)
-                {
-                    string strLoop = null;
-                    strLoop = Dishes_1[x].routing;
-                    MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(strLoop));
-                    ObservableCollection<Dish> LocationListobj = new ObservableCollection<Dish>();
-                    DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(ObservableCollection<Dish>));
-                    LocationListobj = (ObservableCollection<Dish>)serializer.ReadObject(ms);
-                    
-                    foreach (var t in LocationListobj)
-                    {
-                        DotNetVersion article = new DotNetVersion() { bus_line = t.bus_line, bus_polyline = t.bus_polyline, busline_coordinates = t.busline_coordinates, busline_id = t.busline_id, busline_name = t.busline_name };
-                        articles.Add(article);
-                    }
-                    Mainpivot.DataContext = articles;
-                }
-               
-
-                //foreach (JToken result in jdata)
-                //{
-                    //Console.WriteLine(result.ToString());
-                    // newsResults.Add(new Routings { bus_line = result.Children()["bus_line"].Value<string>() });
-
-                    //  Dishes_1.Add(new Dish { busline_id = result.SelectToken("busline_id").ToList() });
-              //  }
-
-                //foreach (JToken result in jdata)
-                //{
-                //    Routings searchResult = JsonConvert.DeserializeObject<Routings>(result.ToString());
-
-                //}
-
-                //for (int i = 0; i < jdata.Count; i++)
-                //{
-                //   // var tracknames = jdata[i].Children()["bus_line"].Values<string>();
-
-                //    foreach (var pair in jdata[i])
-                //    {
-
-                //    }
-                //}
+                titleName.Text = "Start - End";
             }
-        }
-
-        public class SmallestDotNetThing
-        {
-            public DotNetVersion data { get; set; }
-            public List<DotNetVersion> routing { get; set; }
-            //   public List<DotNetVersion> routing { get; set; }
-        }
-
-        public class DotNetVersion
-        {
-            public string busline_id { get; set; }
-            public string busline_name { get; set; }
-            public string bus_line { get; set; }
-            public string bustation_id_start { get; set; }
-            public string bustation_id_end { get; set; }
-            public string busline_coordinates { get; set; }
-            public string bus_polyline { get; set; }
-            public string price { get; set; }
-            public string distance { get; set; }
-            public string type { get; set; }
-            public string route_type { get; set; }
-            public string exchange_point { get; set; }
-            public string busstop { get; set; }
 
         }
 
-
-        private async void dataws(object sender, KeyEventArgs e)
+        private void btback_Click(object sender, RoutedEventArgs e)
         {
-            items.Clear();
-            if (acBox.Text.Length > 3 && acBox.Text != "")
+            NavigationService.GoBack();
+        }
+
+
+        private void busStartStopTo_search_TextChanged(object sender, RoutedEventArgs e)
+        {
+            if (busStartStopTo_search.Text.Length > 2)
             {
-                try
+                if (!alreadyEnd)
                 {
-                    string gq = acBox.Text;
-                    using (HttpClient client = new HttpClient())
-                    {
-                        client.BaseAddress = new Uri("http://202.6.18.31/bmta/webservice/keyword.php");
-
-                        var url = "?type=busstop&q={0}";
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                        HttpResponseMessage response = await client.GetAsync(String.Format(url, gq));
-
-                        if (response.IsSuccessStatusCode)
-                        {
-                            var data = response.Content.ReadAsStringAsync();
-
-                            var weatherdata = JsonConvert.DeserializeObject<WeatherObject>(data.Result.ToString());
-
-                            string sd = data.Result.ToString();
-                            sd = sd.Replace("{\"status\":1,\"data\":", "");
-                            sd = sd.Replace("]}", "]");
-
-
-                            string strJSON = null;
-                            strJSON = sd;
-                            MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(strJSON));
-                            ObservableCollection<landmarkObject> list = new ObservableCollection<landmarkObject>();
-                            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(ObservableCollection<landmarkObject>));
-                            list = (ObservableCollection<landmarkObject>)serializer.ReadObject(ms);
-
-                            List<landmarkObject> myMember = new List<landmarkObject>();
-
-                            foreach (var item in list)
-                            {
-
-                                try
-                                {
-                                    landmarkObject c = new landmarkObject();
-                                    c.id = item.id;
-                                    c.stop_name = item.stop_name;
-                                    items.Add(c);
-                                }
-                                catch (Exception ex)
-                                {
-
-                                }
-                            }
-                            this.acBox.ItemsSource = items;
-                        }
-                    }
-                }
-
-                catch (Exception ex)
-                {
-                    // MessageBox.Show("ไม่พบข้อมูลที่ค้นหาต้นทาง");
+                    ShowProgressIndicator("Loading..");
+                    alreadyEnd = true;
+                    callServicegetAutocompleteend();
                 }
             }
         }
 
-        private async void datawse(object sender, KeyEventArgs e)
+        private void busStartStopTo_search_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            itemse.Clear();
-            if (acBoxe.Text.Length > 3 && acBoxe.Text != "")
+            itemend = (sender as AutoCompleteBox).SelectedItem as searchStartStopDetailItem;
+        }
+
+        private void busStartStopFrom_search_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            itemstart = (sender as AutoCompleteBox).SelectedItem as searchStartStopDetailItem;
+        }
+
+        private void busStartStopFrom_search_TextChanged(object sender, RoutedEventArgs e)
+        {
+            if (busStartStopFrom_search.Text.Length > 2)
             {
-                try
+                if (!alreadyStart)
                 {
-                    string gq = acBoxe.Text;
-                    using (HttpClient client = new HttpClient())
-                    {
-                        client.BaseAddress = new Uri("http://202.6.18.31/bmta/webservice/keyword.php");
-
-                        var url = "?type=busstop&q={0}";
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                        HttpResponseMessage response = await client.GetAsync(String.Format(url, gq));
-
-                        if (response.IsSuccessStatusCode)
-                        {
-                            var data = response.Content.ReadAsStringAsync();
-
-                            var weatherdata = JsonConvert.DeserializeObject<WeatherObject>(data.Result.ToString());
-
-                            string sd = data.Result.ToString();
-                            sd = sd.Replace("{\"status\":1,\"data\":", "");
-                            sd = sd.Replace("]}", "]");
-
-
-                            string strJSON = null;
-                            strJSON = sd;
-                            MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(strJSON));
-                            ObservableCollection<landmarkObjecte> liste = new ObservableCollection<landmarkObjecte>();
-                            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(ObservableCollection<landmarkObjecte>));
-                            liste = (ObservableCollection<landmarkObjecte>)serializer.ReadObject(ms);
-
-                            List<landmarkObjecte> myMember = new List<landmarkObjecte>();
-                            itemse.Clear();
-                            foreach (var iteme in liste)
-                            {
-
-                                try
-                                {
-                                    landmarkObjecte c = new landmarkObjecte();
-                                    c.id = iteme.id;
-                                    c.stop_name = iteme.stop_name;
-                                    itemse.Add(c);
-                                }
-                                catch (Exception ex)
-                                {
-                                    MessageBox.Show(ex.Message);
-                                }
-                            }
-                            this.acBoxe.ItemsSource = itemse;
-                        }
-                    }
-                }
-
-                catch (Exception ex)
-                {
-                    // MessageBox.Show("ไม่พบข้อมูลที่ค้นหาต้นทาง");
+                    ShowProgressIndicator("Loading..");
+                    alreadyStart = true;
+                    callServicegetAutocompletestart();
                 }
             }
         }
 
-        public class Menu
+        public void callServicegetAutocompletestart()
         {
-            public string Name { get; set; }
-            public List<Dish> Dishes_1 { get; set; }
-            public List<Dish> Dishes_2 { get; set; }
-            public List<Dish> Dishes_3 { get; set; }
-            public List<Dish> Dishes_4 { get; set; }
-            public List<Dish> Dishes_5 { get; set; }
-            public List<Dish> Dishes_6 { get; set; }
-            public List<Dish> Dishes_7 { get; set; }
-            public List<Dish> Dishes_8 { get; set; }
-            public List<Dish> Dishes_9 { get; set; }
-            public List<Dish> Dishes_10 { get; set; }
-        }
-
-        public class Dish
-        {
-            public string busline_id { get; set; }
-            public string busline_name { get; set; }
-            public string bus_line { get; set; }
-            public string bustation_id_start { get; set; }
-            public string bustation_id_end { get; set; }
-            public string busline_coordinates { get; set; }
-            public string bus_polyline { get; set; }
-            public string price { get; set; }
-            public string distance { get; set; }
-            public string type { get; set; }
-            public string route_type { get; set; }
-            public string exchange_point { get; set; }
-            public string busstop { get; set; }
-        }
-
-        public class WeatherObject
-        {
-            public int id { get; set; }
-            public string stop_name { get; set; }
-        }
-
-        public class landmarkObject
-        {
-            public int id { get; set; }
-            public string stop_name { get; set; }
-        }
-        public class landmarkObjecte
-        {
-            public int id { get; set; }
-            public string stop_name { get; set; }
-        }
-        public static List<landmarkObject> items = new List<landmarkObject>();
-        public static List<landmarkObjecte> itemse = new List<landmarkObjecte>();
-
-        public class Routings
-        {
-         public string routing { get; set; }
-        }
-
-        public class LocationDetail
-        {
-            public string id { get; set; }
-            public string stop_name { get; set; }
-            public string latitude { get; set; }
-            public string longitude { get; set; }
-            public string _number;
-            public string busline { get; set; }
-            public string distance
+            webClient = new WebClient();
+            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            String url = "http://202.6.18.31:7777/getAutocomplete";
+            string myParameters;
+            try
             {
-                get
-                {
-                    return this._number;
-                }
-                set
-                {
-                    if (value != null)
-                    {
-
-                        this._number = value + " " + "";
-                    }
-                    else
-                    {
-                        this._number = value;
-                    }
-                }
+                myParameters = "type=" + "busstop" + "&keyword=" + busStartStopFrom_search.Text + "&lang=" + lang;
+                Debug.WriteLine("URL callServicegetAutocompletestart = " + url);
+                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocompletestart_Completed);
+                webClient.UploadStringAsync(new Uri(url), myParameters);
             }
-
-
-        }
-
-        public class LocationList : List<LocationDetail>
-        {
-        }
-
-        private void acbstop_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //if (acb_stop.SelectedItem != null)
-            //{
-            //    // selectedText.Text = acb.SelectedItem.ToString();
-            //    // searchText.Text = acb.SearchText;
-            //}
-
-
-            var selectitemac = items.Where(sp => sp.stop_name == acBox.Text);
-            foreach (var item in selectitemac)
+            catch (WebException ex)
             {
-                // MessageBox.Show(item.id.ToString());
-                bstartid = item.id.ToString();
-            }
-            var selectitemace = itemse.Where(st => st.stop_name == acBoxe.Text);
-            foreach (var iteme in selectitemace)
-            {
-                // MessageBox.Show(iteme.id.ToString());
-                bstopid = iteme.id.ToString();
+                MessageBox.Show(ex.Message);
             }
         }
 
-        private void acb_GotFocus(object sender, RoutedEventArgs e)
-        {
-            // acb_start.Text = "";
-        }
-
-
-        List<string> textList = new List<string>();
-
-        private void createRandomItemSource()
-        {
-            for (int i = 0; i < 50; i++)
-            {
-                // textList.Add(getRandomText());
-            }
-
-            // acb_start.ItemsSource = textList;
-            // acb_stop.ItemsSource = textList;
-        }
-
-
-        Random random = new Random();
-        private async void getRandomText()
+        private void callServicegetAutocompletestart_Completed(object sender, UploadStringCompletedEventArgs e)
         {
             try
             {
-                using (HttpClient client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri("http://202.6.18.31/bmta/webservice/keyword.php");
-
-                    var url = "?type=busstop&q={0}";
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    HttpResponseMessage response = await client.GetAsync(String.Format(url, acBox.Text));
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var data = response.Content.ReadAsStringAsync();
-
-                        var weatherdata = JsonConvert.DeserializeObject<WeatherObject>(data.Result.ToString());
-
-                        string sd = data.Result.ToString();
-                        sd = sd.Replace("{\"status\":1,\"data\":", "");
-                        sd = sd.Replace("]}", "]");
-
-
-                        string strJSON = null;
-                        strJSON = sd;
-                        MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(strJSON));
-                        ObservableCollection<landmarkObject> list = new ObservableCollection<landmarkObject>();
-                        DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(ObservableCollection<landmarkObject>));
-                        list = (ObservableCollection<landmarkObject>)serializer.ReadObject(ms);
-
-                        List<landmarkObject> myMember = new List<landmarkObject>();
-                        foreach (var item in list)
-                        {
-
-                            try
-                            {
-                                landmarkObject c = new landmarkObject();
-                                c.id = item.id;
-                                c.stop_name = item.stop_name;
-                                items.Add(c);
-                            }
-                            catch (Exception ex)
-                            {
-
-                            }
-                        }
-                        this.acBox.ItemsSource = items;
-                    }
-                }
+                searchStartStopItem results = JsonConvert.DeserializeObject<searchStartStopItem>(e.Result);
+                busStartStopFrom_search.ItemsSource = results.data;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("ไม่พบข้อมูลที่ค้นหาต้นทาง");
+                MessageBox.Show(ex.Message);
             }
-
+            finally
+            {
+                HideProgressIndicator();
+                alreadyStart = false;
+            }
 
         }
 
+        public void callServicegetAutocompleteend()
+        {
+            webClient = new WebClient();
+            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            String url = "http://202.6.18.31:7777/getAutocomplete";
+            string myParameters;
+            try
+            {
+                myParameters = "type=" + "busstop" + "&keyword=" + busStartStopTo_search.Text + "&lang=" + lang;
+                Debug.WriteLine("URL callServicegetAutocompleteend = " + url);
+                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocompleteend_Completed);
+                webClient.UploadStringAsync(new Uri(url), myParameters);
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
+        }
+
+        private void callServicegetAutocompleteend_Completed(object sender, UploadStringCompletedEventArgs e)
+        {
+            try
+            {
+                searchStartStopItem results = JsonConvert.DeserializeObject<searchStartStopItem>(e.Result);
+                busStartStopTo_search.ItemsSource = results.data;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                HideProgressIndicator();
+                alreadyEnd = false;
+            }
+        }
+
+        private void busStartStopbtn_search_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(busStartStopFrom_search.Text))
+            {
+                MessageBox.Show("กรุณากรอกต้นทาง");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(busStartStopTo_search.Text))
+            {
+                MessageBox.Show("กรุณากรอกปลายทาง");
+                return;
+            }
+
+            callService_startstop_searchfindRouting();
+        }
+
+        public void callService_startstop_searchfindRouting()
+        {
+            webClient = new WebClient();
+            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            String url = "http://202.6.18.31:7777/searchfindRouting";
+            string myParameters;
+            try
+            {
+                if (itemend == null || itemstart == null)
+                {
+                    myParameters = "busstop_start_id=" + "0" + "&busstop_end_id=" + "0" + "&bus_type=&running_type=&orderby=" + "";
+                }
+                else
+                {
+                    myParameters = "busstop_start_id=" + "2891" + "&busstop_end_id=" + "2523" + "&bus_type=&running_type=&orderby=" + "";
+                }
+
+                Debug.WriteLine("URL callServicecurrentfindRouting = " + url);
+
+                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callService_startstop_searchfindRouting_Completed);
+                webClient.UploadStringAsync(new Uri(url), myParameters);
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void callService_startstop_searchfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
+        {
+            busStartStoplistbox.Items.Clear();
+            searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
+            if (results == null)
+            {
+                MessageBox.Show("ไม่พบข้อมูล");
+                return;
+            }
+            if (results.status == "0")
+            {
+                MessageBox.Show("ไม่พบข้อมูล");
+                return;
+            }
+            UCStartStop UCStartStop = new UCStartStop();
+            foreach (var item in results.data)
+            {
+                UCStartStop = new UCStartStop();
+                UCStartStop.DataContext = item;
+                if (lang.Equals("th"))
+                {
+                    UCStartStop.textKm.Text = item.total.total_distance + " กม.";
+                    UCStartStop.textPrice.Text = "ราคา " + item.total.total_price + " บ.";
+                }
+                else
+                {
+                    UCStartStop.textKm.Text = item.total.total_distance + " km.";
+                    UCStartStop.textPrice.Text = "Price " + item.total.total_price + " ฿";
+                }
+
+                if (item.routing.Count == 1)
+                {
+                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
+                    UCStartStop.img_route2.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_route3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
+
+                    UCStartStop.img_cen2.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_cen3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_cen4.Visibility = System.Windows.Visibility.Collapsed;
+
+                    UCStartStop.text_route2.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.text_route3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
+                }
+                else if (item.routing.Count == 2)
+                {
+                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
+                    UCStartStop.text_route2.Text = item.routing[1].bus_line;
+
+                    UCStartStop.img_route3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
+
+                    UCStartStop.img_cen3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_cen4.Visibility = System.Windows.Visibility.Collapsed;
+
+                    UCStartStop.text_route3.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
+
+                }
+                else if (item.routing.Count == 3)
+                {
+                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
+                    UCStartStop.text_route2.Text = item.routing[1].bus_line;
+                    UCStartStop.text_route3.Text = item.routing[2].bus_line;
+
+                    UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.img_cen4.Visibility = System.Windows.Visibility.Collapsed;
+                    UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
+                }
+
+                busStartStoplistbox.Items.Add(UCStartStop);
+            }
+        }
+
+        private void busStartStoplistbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            if (busStartStoplistbox.SelectedIndex != -1)
+            {
+                UCStartStop item = (sender as ListBox).SelectedItem as UCStartStop;
+                (Application.Current as App).RountingData = (searchfindRoutingItem_data)item.DataContext;
+
+                this.NavigationService.Navigate(new Uri("/BMTA_BusStartStopDetailMap.xaml?TextFrom=" + busStartStopFrom_search.Text + "&TextTo=" + busStartStopTo_search.Text, UriKind.Relative));
+            }
+            busStartStoplistbox.SelectedIndex = -1;
+        }
     }
 }

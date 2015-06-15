@@ -27,6 +27,8 @@ namespace BMTA
         public List<buslineItem> DataSearchList = new List<buslineItem>();
         public List<buslineItem> DataBuslinehList = new List<buslineItem>();
         public dataNearBusStopItem DataBusstopDetail = new dataNearBusStopItem();
+        public searchfindRoutingItem DataStartStop = new searchfindRoutingItem();
+        public searchfindRoutingItem_data RountingData = new searchfindRoutingItem_data();
         public static string DB_PATH = Path.Combine(Path.Combine(ApplicationData.Current.LocalFolder.Path, "bmtadatabase.sqlite"));
         
         /// <summary>

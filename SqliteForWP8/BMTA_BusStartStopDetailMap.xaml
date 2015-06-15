@@ -103,25 +103,25 @@
                 </Button>
             </Grid>
             <Grid x:Name="busStartStopLayoutList" Grid.Row="2" Grid.ColumnSpan="3" Background="#FFFFFFFF" >
-                <maps:Map  PedestrianFeaturesEnabled="True"  LandmarksEnabled="True" x:Name="map" ZoomLevel="18" Height="auto">
+                <maps:Map  x:Name="map"  PedestrianFeaturesEnabled="True"  LandmarksEnabled="True" ZoomLevel="18" Height="auto">
                 </maps:Map>
             </Grid>
         </Grid>
         <Grid  Grid.Row="1" Background="#D9D4D4D4" Width="auto" Height="180" VerticalAlignment="Bottom"  >
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="2*"/>
+                <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="0.4*"/>
+                <ColumnDefinition Width="0.3*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock  x:Name="textName" Grid.Row="0" Text="ระยะทาง" FontSize="30"  Foreground="Black" VerticalAlignment="Bottom" HorizontalAlignment="Left" Padding="30,5,5,5">
+            <TextBlock  x:Name="textRoute" Grid.Row="0" Text="ระยะทาง" FontSize="30"  Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Left" Padding="20,5,5,5">
             </TextBlock>
-            <TextBlock  x:Name="textStart" Grid.Row="1" Grid.Column="1" Text="Start>" FontSize="35" Foreground="#1B6BC2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="30,5,5,5">
+            <TextBlock  x:Name="textStart" Grid.Row="1" Grid.Column="1" Text="Start>" FontSize="30" Foreground="#1B6BC2" VerticalAlignment="Bottom" Tap="textStart_Tap" HorizontalAlignment="Right" Padding="0,0,20,20">
             </TextBlock>
-            <Button x:Name="btBusStop" FontSize="20" Foreground="Black"  Style="{StaticResource ImageButton}" ClickMode="Hover" Margin="0,0,0,-20"/>
+            <ListBox x:Name="busStartStoplistbox" Grid.Row="1"/>
         </Grid>
     </Grid>
 

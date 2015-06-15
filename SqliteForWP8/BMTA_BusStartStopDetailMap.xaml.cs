@@ -47,7 +47,8 @@ namespace BMTA
         UCCustomToolTip _tooltip = new UCCustomToolTip();
         UCToolTip _stooltip = new UCToolTip();
         UCCostomPushpin _Pushpin = new UCCostomPushpin();
-
+        private MapPolyline line;
+        MapLayer layer;
         string lat, lon;
         MapLayer mymapLayer = new MapLayer();
         List<GeoCoordinate> MyCoordinates = new List<GeoCoordinate>();
@@ -80,148 +81,135 @@ namespace BMTA
             MapOverlay myLocationOverlay = new MapOverlay();
             myLocationOverlay.Content = myCircle;
             myLocationOverlay.GeoCoordinate = myGeoCoordinate;
-
+         
             // Create a MapLayer to contain the MapOverlay.
             mymapLayer.Add(myLocationOverlay);
 
             // Add the MapLayer to the Map.
             this.map.Layers.Add(mymapLayer);
-
-        }
-
-        void Query_QueryCompleted(object sender, QueryCompletedEventArgs<IList<MapLocation>> e)
-        {
-            _tooltip.Description = "";
-            StringBuilder _description = new StringBuilder();
-            foreach (var item in e.Result)
-            {
-                if (!(item.Information.Address.BuildingName == ""))
-                {
-                    _description.Append(item.Information.Address.BuildingName + ", ");
-
-                }
-                if (!(item.Information.Address.BuildingFloor == ""))
-                {
-                    _description.Append(item.Information.Address.BuildingFloor + ", ");
-
-                }
-                if (!(item.Information.Address.Street == ""))
-                {
-                    _description.Append(item.Information.Address.Street + ", ");
-
-                }
-                if (!(item.Information.Address.District == ""))
-                {
-                    _description.Append(item.Information.Address.District + ",");
-
-                }
-                if (!(item.Information.Address.City == ""))
-                {
-                    _description.Append(item.Information.Address.City + ", ");
-
-                }
-                if (!(item.Information.Address.State == ""))
-                {
-                    _description.Append(item.Information.Address.State + ", ");
-
-                }
-                if (!(item.Information.Address.Street == ""))
-                {
-                    _description.Append(item.Information.Address.Street + ", ");
-
-                }
-                if (!(item.Information.Address.Country == ""))
-                {
-                    _description.Append(item.Information.Address.Country + ", ");
-
-                }
-
-                if (!(item.Information.Address.Province == ""))
-                {
-                    _description.Append(item.Information.Address.Province + ", ");
-
-                }
-                if (!(item.Information.Address.PostalCode == ""))
-                {
-                    _description.Append(item.Information.Address.PostalCode);
-
-                }
-
-                _tooltip.Description = _description.ToString();
-                _tooltip.FillDescription();
-                break;
-            }
-        }
-
-        private void MapView_Loaded(object sender, RoutedEventArgs e)
-        {
-            loadLocation();
+            map.CartographicMode = MapCartographicMode.Road;
         }
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
 
-            if (!HasNetwork())
-            {
-                Application.Current.Terminate();
+            searchfindRoutingItem_data data = (Application.Current as App).RountingData;
 
-            }
-            else if (!HasInternet())
+            if (lang.Equals("th"))
             {
-                Application.Current.Terminate();
-
+                titleName.Text = "ต้นทางปลายทาง";
+                textRoute.Text = data.total.total_distance + " กม.";
             }
             else
             {
-                dataNearBusStopItem data = (Application.Current as App).DataBusstopDetail;
-
-                if (lang.Equals("th"))
-                {
-                    titleName.Text = "ป้ายหยุดรถประจำทาง";
-                    textName.Text = data.stop_name;
-                }
-                else
-                {
-                    titleName.Text = "Bus Stop";
-                    textName.Text = data.stop_name_en;
-                }
-                
-              
-                btBusStop.Click += btBusStop_Click;
+                titleName.Text = "Start - End";
+                textRoute.Text = data.total.total_distance + " km.";
             }
+
+            busStartStopFrom_search.Text = this.NavigationContext.QueryString["TextFrom"];
+            busStartStopTo_search.Text = this.NavigationContext.QueryString["TextTo"];
+
+            UCStartStopBusLine UCStartStopBusLine = new UCStartStopBusLine();
+
+            UCStartStopBusLine.DataContext = data;
+
+
+            if (data.routing.Count == 1)
+            {
+                UCStartStopBusLine.text_route1.Text = data.routing[0].bus_line;
+                UCStartStopBusLine.img_route2.Visibility = System.Windows.Visibility.Collapsed;
+                UCStartStopBusLine.img_route3.Visibility = System.Windows.Visibility.Collapsed;
+                UCStartStopBusLine.img_route4.Visibility = System.Windows.Visibility.Collapsed;
+
+                UCStartStopBusLine.img_cen2.Visibility = System.Windows.Visibility.Collapsed;
+                UCStartStopBusLine.img_cen3.Visibility = System.Windows.Visibility.Collapsed;
+                UCStartStopBusLine.img_cen4.Visibility = System.Windows.Visibility.Collapsed;
+
+                UCStartStopBusLine.text_route2.Visibility = System.Windows.Visibility.Collapsed;
+                UCStartStopBusLine.text_route3.Visibility = System.Windows.Visibility.Collapsed;
+                UCStartStopBusLine.text_route4.Visibility = System.Windows.Visibility.Collapsed;
+
+
+            }
+            else if (data.routing.Count == 2)
+            {
+                UCStartStopBusLine.text_route1.Text = data.routing[0].bus_line;
+                UCStartStopBusLine.text_route2.Text = data.routing[1].bus_line;
+
+                UCStartStopBusLine.img_route3.Visibility = System.Windows.Visibility.Collapsed;
+                UCStartStopBusLine.img_route4.Visibility = System.Windows.Visibility.Collapsed;
+
+                UCStartStopBusLine.img_cen3.Visibility = System.Windows.Visibility.Collapsed;
+                UCStartStopBusLine.img_cen4.Visibility = System.Windows.Visibility.Collapsed;
+
+                UCStartStopBusLine.text_route3.Visibility = System.Windows.Visibility.Collapsed;
+                UCStartStopBusLine.text_route4.Visibility = System.Windows.Visibility.Collapsed;
+
+            }
+            else if (data.routing.Count == 3)
+            {
+                UCStartStopBusLine.text_route1.Text = data.routing[0].bus_line;
+                UCStartStopBusLine.text_route2.Text = data.routing[1].bus_line;
+                UCStartStopBusLine.text_route3.Text = data.routing[2].bus_line;
+
+                UCStartStopBusLine.img_route4.Visibility = System.Windows.Visibility.Collapsed;
+                UCStartStopBusLine.img_cen4.Visibility = System.Windows.Visibility.Collapsed;
+                UCStartStopBusLine.text_route4.Visibility = System.Windows.Visibility.Collapsed;
+            }
+
+            busStartStoplistbox.Items.Add(UCStartStopBusLine);
+
+            this.Pushpin(data);
+
+        }
+
+        private async void Pushpin(searchfindRoutingItem_data bus_stop)
+        {
+            // Map clear
+            map.Layers.Clear();
+            map.MapElements.Clear();
+
+            foreach (var item in bus_stop.routing)
+            {
+                layer = new MapLayer();
+
+                foreach (var busstop in item.busstop)
+                {
+                    Pushpin pushpin = new Pushpin();
+                    pushpin.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(busstop.latitude), Convert.ToDouble(busstop.longitude));
+                    var uriString = @"Assets/btn_bus.png";
+                    pushpin.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriString, UriKind.Relative)) };
+                    pushpin.Width = 35;
+                    pushpin.Height = 31;
+                    MapOverlay overlay = new MapOverlay();
+                    overlay.Content = pushpin;
+                    overlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(busstop.latitude), Convert.ToDouble(busstop.longitude));
+                    layer.Add(overlay);
+                }
+                // Map Layer
+                map.Center = new GeoCoordinate(Convert.ToDouble(item.busstop[0].latitude), Convert.ToDouble(item.busstop[0].longitude));
+                map.Layers.Add(layer);
+
+                line = new MapPolyline();
+                line.StrokeColor = Colors.Red;
+                line.StrokeThickness = 3;
+
+                foreach (String[] polyline in item.bus_polyline)
+                {
+                    line.Path.Add(new GeoCoordinate(Convert.ToDouble(polyline[0]), Convert.ToDouble(polyline[1])));
+                }
+              
+                // Map Polyline
+                map.MapElements.Add(line);
+             
+            }
+
+            map.ZoomLevel = 12;
         }
 
         private void btBusStop_Click(object sender, RoutedEventArgs e)
         {
-         
-        }
 
-        private bool HasInternet()
-        {
-            if (!NetworkInterface.GetIsNetworkAvailable())
-            {
-                MessageBox.Show("No internet connection is available. Try again later.");
-                return false;
-            }
-            return true;
-        }
-
-        private bool HasNetwork()
-        {
-            if (!DeviceNetworkInformation.IsNetworkAvailable)
-            {
-                MessageBox.Show("No network is available. Try again later.");
-                return false;
-            }
-            return true;
-        }
-
-        private void Box_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key.Equals(Key.Enter))
-            {
-
-            }
         }
 
         private void btback_Click(object sender, RoutedEventArgs e)
@@ -229,23 +217,10 @@ namespace BMTA
             NavigationService.GoBack();
         }
 
-        public async void loadLocation()
-        {
-            Geolocator myGeolocator = new Geolocator();
-            try
-            {
-                Geoposition myGeoposition = await myGeolocator.GetGeopositionAsync();
-                Geocoordinate myGeocoordinate = myGeoposition.Coordinate;
-                GeoCoordinate myGeoCoordinate = CoordinateConverter.ConvertGeocoordinate(myGeocoordinate);
-                lat = myGeocoordinate.Latitude.ToString();
-                lon = myGeocoordinate.Longitude.ToString();
-            }
-            catch (UnauthorizedAccessException)
-            {
 
-                MessageBox.Show("location is disabled in phone settings.");
-                return;
-            }
+        private void textStart_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            this.NavigationService.Navigate(new Uri("/BMTA_BusStartStopDetailList.xaml?TextFrom=" + busStartStopFrom_search.Text + "&TextTo=" + busStartStopTo_search.Text, UriKind.Relative));
         }
     }
 }
