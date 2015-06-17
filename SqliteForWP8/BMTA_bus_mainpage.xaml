@@ -7,6 +7,7 @@
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:c4f="clr-namespace:Coding4Fun.Toolkit.Controls;assembly=Coding4Fun.Toolkit.Controls"
     xmlns:controls="clr-namespace:Additional.WindowsPhone.Controls"
     xmlns:maps="clr-namespace:Microsoft.Phone.Maps.Controls;assembly=Microsoft.Phone.Maps"
     xmlns:maptk="clr-namespace:Microsoft.Phone.Maps.Toolkit;assembly=Microsoft.Phone.Controls.Toolkit"
@@ -67,7 +68,7 @@
             </Button>
         </Grid>
 
-        <Grid x:Name="buslineLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Collapsed">
+        <Grid x:Name="buslineLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="75"/>
@@ -78,37 +79,29 @@
                 <TextBox x:Name="busline_search"  BorderBrush="Transparent" TextWrapping="Wrap" VerticalAlignment="Center" SelectionBackground="{x:Null}" Grid.RowSpan="2" KeyDown="busline_search_KeyDown" Style="{StaticResource TextBoxStyle1}" />
             </Grid>
 
-            <Grid x:Name="HeaderNumber" Grid.Row="1" Width="auto" Background="#EBEBEB"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="auto">
+            <Grid x:Name="HeaderNumber" Grid.Row="1" Width="auto" Background="#D9D4D4D4">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="43.63"/>
-                    <ColumnDefinition Width="43.63"/>
-                    <ColumnDefinition Width="43.63"/>
-                    <ColumnDefinition Width="43.63"/>
-                    <ColumnDefinition Width="43.63"/>
-                    <ColumnDefinition Width="43.63"/>
-                    <ColumnDefinition Width="43.63"/>
-                    <ColumnDefinition Width="43.63"/>
-                    <ColumnDefinition Width="43.63"/>
-                    <ColumnDefinition Width="43.63"/>
-                    <ColumnDefinition Width="43.63"/>
-                </Grid.ColumnDefinitions>
-                <Button x:Name="btn1" Content="1" HorizontalAlignment="Stretch" Padding="0" Grid.Row="0" Grid.Column="0" Foreground="#FF999696" FontSize="21" Style="{StaticResource ImageButton}" Click="BtnNumber_Click" />
-                <Button x:Name="btn2" Content="2" HorizontalAlignment="Stretch" Padding="0" Grid.Row="0" Grid.Column="1" BorderBrush="{x:Null}" Foreground="#FF999696" FontSize="21" Style="{StaticResource ImageButton}" Click="BtnNumber_Click"/>
-                <Button x:Name="btn3" Content="3" HorizontalAlignment="Stretch" Padding="0" Grid.Row="0" Grid.Column="2" BorderBrush="{x:Null}" Foreground="#FF999696" FontSize="21" Style="{StaticResource ImageButton}" Click="BtnNumber_Click"/>
-                <Button x:Name="btn4" Content="4" HorizontalAlignment="Stretch" Padding="0" Grid.Row="0" Grid.Column="3" BorderBrush="{x:Null}" Foreground="#FF999696" FontSize="21" Style="{StaticResource ImageButton}" Click="BtnNumber_Click"/>
-                <Button x:Name="btn5" Content="5" HorizontalAlignment="Stretch" Padding="0" Grid.Row="0" Grid.Column="4" BorderBrush="{x:Null}" Foreground="#FF999696" FontSize="21" Style="{StaticResource ImageButton}" Click="BtnNumber_Click"/>
-                <Button x:Name="btn6" Content="6" HorizontalAlignment="Stretch" Padding="0" Grid.Row="0" Grid.Column="5" BorderBrush="{x:Null}" Foreground="#FF999696" FontSize="21" Style="{StaticResource ImageButton}" Click="BtnNumber_Click"/>
-                <Button x:Name="btn7" Content="7" HorizontalAlignment="Stretch" Padding="0" Grid.Row="0" Grid.Column="6" BorderBrush="{x:Null}" Foreground="#FF999696" FontSize="21" Style="{StaticResource ImageButton}" Click="BtnNumber_Click"/>
-                <Button x:Name="btn8" Content="8" HorizontalAlignment="Stretch" Padding="0" Grid.Row="0" Grid.Column="7" BorderBrush="{x:Null}" Foreground="#FF999696" FontSize="21" Style="{StaticResource ImageButton}" Click="BtnNumber_Click"/>
-                <Button x:Name="btn9" Content="9" HorizontalAlignment="Stretch" Padding="0" Grid.Row="0" Grid.Column="8" BorderBrush="{x:Null}" Foreground="#FF999696" FontSize="21" Style="{StaticResource ImageButton}" Click="BtnNumber_Click"/>
-                <Button x:Name="btn_other" Content="อื่นๆ" HorizontalAlignment="Stretch" Padding="0" Grid.Row="0" Grid.Column="9" BorderBrush="{x:Null}" Foreground="#FF999696" FontSize="13" Style="{StaticResource ImageButton}" Click="BtnNumber_Click"/>
-                <Button x:Name="btn_van" Content="ต" HorizontalAlignment="Stretch" Padding="0" Grid.Row="0" Grid.Column="13" BorderBrush="{x:Null}" Foreground="#FF999696" FontSize="21" Style="{StaticResource ImageButton}" Click="BtnNumber_Click" UseLayoutRounding="True" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+                <ScrollViewer HorizontalScrollBarVisibility="Hidden" >
+                    <StackPanel Orientation="Horizontal" Width="auto" VerticalAlignment="Bottom">
+                        <c4f:RoundToggleButton x:Name="btn1" Content="1" BorderBrush="{x:Null}" FontSize="21" Click="BtnNumber_Click" CheckedBrush="#FF01A54E" Checked="btn_Checked" IsChecked="true"/>
+                        <c4f:RoundToggleButton x:Name="btn2" Content="2" BorderBrush="{x:Null}" FontSize="21" Click="BtnNumber_Click" CheckedBrush="#FF01A54E" Checked="btn_Checked"/>
+                        <c4f:RoundToggleButton x:Name="btn3" Content="3" BorderBrush="{x:Null}" FontSize="21" Click="BtnNumber_Click" CheckedBrush="#FF01A54E" Checked="btn_Checked"/>
+                        <c4f:RoundToggleButton x:Name="btn4" Content="4" BorderBrush="{x:Null}" FontSize="21" Click="BtnNumber_Click" CheckedBrush="#FF01A54E" Checked="btn_Checked"/>
+                        <c4f:RoundToggleButton x:Name="btn5" Content="5" BorderBrush="{x:Null}" FontSize="21" Click="BtnNumber_Click" CheckedBrush="#FF01A54E" Checked="btn_Checked"/>
+                        <c4f:RoundToggleButton x:Name="btn6" Content="6" BorderBrush="{x:Null}" FontSize="21" Click="BtnNumber_Click" CheckedBrush="#FF01A54E" Checked="btn_Checked"/>
+                        <c4f:RoundToggleButton x:Name="btn7" Content="7" BorderBrush="{x:Null}" FontSize="21" Click="BtnNumber_Click" CheckedBrush="#FF01A54E" Checked="btn_Checked"/>
+                        <c4f:RoundToggleButton x:Name="btn8" Content="8" BorderBrush="{x:Null}" FontSize="21" Click="BtnNumber_Click" CheckedBrush="#FF01A54E" Checked="btn_Checked"/>
+                        <c4f:RoundToggleButton x:Name="btn9" Content="9" BorderBrush="{x:Null}" FontSize="21" Click="BtnNumber_Click" CheckedBrush="#FF01A54E" Checked="btn_Checked"/>
+                        <c4f:RoundToggleButton x:Name="btn_other" Content="อื่นๆ" BorderBrush="{x:Null}" FontSize="21" Click="BtnNumber_Click" CheckedBrush="#FF01A54E" Checked="btn_Checked"/>
+                        <c4f:RoundToggleButton x:Name="btn_van" Content="ต" BorderBrush="{x:Null}" FontSize="21" Click="BtnNumber_Click" CheckedBrush="#FF01A54E" Checked="btn_Checked"/>
+                    </StackPanel>
+                </ScrollViewer>
+
             </Grid>
 
-            <Grid x:Name="MainList" Grid.Row="2" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FFFFFFFF" >
+            <Grid x:Name="MainList" Grid.Row="2" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FFFFFFFF">
                 <ListBox x:Name="buslinelistbox"  ItemTemplate="{StaticResource CustomListTemplate}"  VerticalAlignment="Center" SelectionChanged="buslinelistbox_SelectionChanged">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -119,14 +112,14 @@
             </Grid>
         </Grid>
 
-        <Grid x:Name="busstopLayout" Grid.Row="1" Width="auto" Height="auto" Background="#FFFFFFFF" Visibility="Visible">
+        <Grid x:Name="busstopLayout" Grid.Row="1" Width="auto" Height="auto" Background="#FFFFFFFF" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <Grid x:Name="busstopSeacrch" Grid.Row="0" Width="auto" Background="#FF18359B">
-                <toolkit:AutoCompleteBox x:Name="busstop_search" Grid.RowSpan="2" VerticalAlignment="Center" TextChanged="busstop_search_TextChanged" FilterMode="None" ValueMemberBinding="{Binding stop_name}" SelectionChanged="busstop_search_SelectionChanged">
+                <toolkit:AutoCompleteBox x:Name="busstop_search" Grid.RowSpan="2" VerticalAlignment="Center" TextChanged="busstop_search_TextChanged" FilterMode="None" ValueMemberBinding="{Binding stop_name}" SelectionChanged="busstop_search_SelectionChanged" KeyUp="busstop_search_KeyUp">
                     <toolkit:AutoCompleteBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -151,7 +144,7 @@
             </Grid>
         </Grid>
 
-        <Grid x:Name="busStartStopLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Visible">
+        <Grid x:Name="busStartStopLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="75"/>
@@ -226,7 +219,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid x:Name="StreetsandLandmarkssearch" Grid.Row="0" Width="auto" Background="#FF18359B">
-                <toolkit:AutoCompleteBox x:Name="StreetsandLandmarks_search"  Grid.RowSpan="2" VerticalAlignment="Center" TextChanged="StreetsandLandmarks_search_TextChanged" FilterMode="None" ValueMemberBinding="{Binding name}" SelectionChanged="StreetsandLandmarks_search_SelectionChanged">
+                <toolkit:AutoCompleteBox x:Name="StreetsandLandmarks_search"  Grid.RowSpan="2" VerticalAlignment="Center" TextChanged="StreetsandLandmarks_search_TextChanged" FilterMode="None" ValueMemberBinding="{Binding name}" SelectionChanged="StreetsandLandmarks_search_SelectionChanged" KeyUp="StreetsandLandmarks_search_KeyUp">
                     <toolkit:AutoCompleteBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -257,7 +250,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
-                
+
                 <Grid Grid.Row="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"/>
@@ -278,7 +271,7 @@
                     </Grid>
                     <ListBox x:Name="LandmarksDatalistbox" Grid.Row="1"/>
                 </Grid>
-               
+
             </Grid>
         </Grid>
         <Grid x:Name="HeaderCate" Grid.Row="2" Width="auto" VerticalAlignment="Bottom">

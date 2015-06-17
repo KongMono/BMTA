@@ -33,31 +33,29 @@ using System.Windows.Controls.Primitives;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Net.Browser;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Collections;
-using System.Threading;
-using BMTA.Item;
 using BMTA.Usercontrols;
+using Microsoft.Phone.Maps.Services;
+using System.IO.IsolatedStorage;
+using BMTA.Item;
+
 
 namespace BMTA
 {
-    public partial class BMTA_BusStartStop : PhoneApplicationPage
+    public partial class BMTA_BusLandMarkDetailBus : PhoneApplicationPage
     {
         public String lang = (Application.Current as App).Language;
-        Boolean alreadyStart = false;
-        Boolean alreadyEnd = false;
         static WebClient webClient;
+        Boolean alreadyLandMark = false;
         ProgressIndicator progressIndicator = new ProgressIndicator();
-        private searchStartStopDetailItem itemstart, itemend;
+        private searchlandmarkAndBusstopdetailItem itemLandMark;
+        UCStartStop UCStartStop = new UCStartStop();
 
-        public BMTA_BusStartStop()
+        public BMTA_BusLandMarkDetailBus()
         {
             InitializeComponent();
-
-      
-            UCStartStop UCStartStop = new UCStartStop();
-            foreach (var item in (Application.Current as App).DataStartStop.data)
+            landMarklistbox.Items.Clear();
+            UCStartStop = new UCStartStop();
+            foreach (var item in (Application.Current as App).DataLandMark.data)
             {
                 UCStartStop = new UCStartStop();
                 UCStartStop.DataContext = item;
@@ -113,7 +111,15 @@ namespace BMTA
                     UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
                 }
 
-                busStartStoplistbox.Items.Add(UCStartStop);
+                landMarklistbox.Items.Add(UCStartStop);
+            }
+        }
+        private void landMark_search_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            searchlandmarkAndBusstopdetailItem item = (sender as AutoCompleteBox).SelectedItem as searchlandmarkAndBusstopdetailItem;
+            if (item != null)
+            {
+                itemLandMark = item;
             }
         }
 
@@ -138,66 +144,45 @@ namespace BMTA
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 
-
-        private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            busStartStopFrom_search.Text = this.NavigationContext.QueryString["TextFrom"];
-            busStartStopTo_search.Text = this.NavigationContext.QueryString["TextTo"];
-
-            if (lang.Equals("th"))
-            {
-                titleName.Text = "ต้นทางปลายทาง";
-            }
-            else
-            {
-                titleName.Text = "Start - End";
-            }
-
-        }
-
         private void btback_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }
 
-
-        private void busStartStopTo_search_TextChanged(object sender, RoutedEventArgs e)
+        private void landMarklistbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (busStartStopTo_search.Text.Length > 2)
+
+            if (landMarklistbox.SelectedIndex != -1)
             {
-                if (!alreadyEnd)
-                {
-                    ShowProgressIndicator("Loading..");
-                    alreadyEnd = true;
-                    callServicegetAutocompleteend();
-                }
+                UCStartStop item = (sender as ListBox).SelectedItem as UCStartStop;
+                (Application.Current as App).RountingDataLandMark = (searchfindRoutingItem_data)item.DataContext;
+
+                this.NavigationService.Navigate(new Uri("/BMTA_BusLandMarkDetailMap.xaml?TextFrom=" + landMark_search.Text, UriKind.Relative));
+            }
+            landMarklistbox.SelectedIndex = -1;
+        }
+
+        private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            landMark_search.Text = this.NavigationContext.QueryString["TextFrom"];
+
+            if (lang.Equals("th"))
+            {
+                titleName.Text = "ถนนและสถานที่สำคัญ";
+                p1.Content = "เรียงตามระยะทาง";
+                p2.Content = "เรียงตามราคา";
+                p3.Content = "ต่อรถน้อยที่สุด";
+            }
+            else
+            {
+                titleName.Text = "Streets and Landmarks";
+                p1.Content = "Sort By Distance";
+                p2.Content = "Sort By Price";
+                p3.Content = "Fewer Transfers";
             }
         }
 
-        private void busStartStopTo_search_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            itemend = (sender as AutoCompleteBox).SelectedItem as searchStartStopDetailItem;
-        }
-
-        private void busStartStopFrom_search_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            itemstart = (sender as AutoCompleteBox).SelectedItem as searchStartStopDetailItem;
-        }
-
-        private void busStartStopFrom_search_TextChanged(object sender, RoutedEventArgs e)
-        {
-            if (busStartStopFrom_search.Text.Length > 2)
-            {
-                if (!alreadyStart)
-                {
-                    ShowProgressIndicator("Loading..");
-                    alreadyStart = true;
-                    callServicegetAutocompletestart();
-                }
-            }
-        }
-
-        public void callServicegetAutocompletestart()
+        public void callServicegetAutocompleteLandMark()
         {
             webClient = new WebClient();
             webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
@@ -205,9 +190,9 @@ namespace BMTA
             string myParameters;
             try
             {
-                myParameters = "type=" + "busstop" + "&keyword=" + busStartStopFrom_search.Text + "&lang=" + lang;
-                Debug.WriteLine("URL callServicegetAutocompletestart = " + url);
-                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocompletestart_Completed);
+                myParameters = "type=" + "place" + "&keyword=" + landMark_search.Text + "&lang=" + lang;
+                Debug.WriteLine("URL callServicegetAutocompleteLandMark = " + url);
+                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocompleteBusStop_Completed);
                 webClient.UploadStringAsync(new Uri(url), myParameters);
             }
             catch (WebException ex)
@@ -216,99 +201,62 @@ namespace BMTA
             }
         }
 
-        private void callServicegetAutocompletestart_Completed(object sender, UploadStringCompletedEventArgs e)
+        private void callServicegetAutocompleteBusStop_Completed(object sender, UploadStringCompletedEventArgs e)
         {
-            try
-            {
-                searchStartStopItem results = JsonConvert.DeserializeObject<searchStartStopItem>(e.Result);
-                busStartStopFrom_search.ItemsSource = results.data;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                HideProgressIndicator();
-                alreadyStart = false;
-            }
+            searchbusstopItem results = JsonConvert.DeserializeObject<searchbusstopItem>(e.Result);
 
+            landMark_search.ItemsSource = results.data;
+
+            HideProgressIndicator();
+            alreadyLandMark = false;
         }
 
-        public void callServicegetAutocompleteend()
+
+        private void landMark_search_TextChanged(object sender, RoutedEventArgs e)
         {
-            webClient = new WebClient();
-            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/getAutocomplete";
-            string myParameters;
-            try
+            if (landMark_search.Text.Length > 2)
             {
-                myParameters = "type=" + "busstop" + "&keyword=" + busStartStopTo_search.Text + "&lang=" + lang;
-                Debug.WriteLine("URL callServicegetAutocompleteend = " + url);
-                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocompleteend_Completed);
-                webClient.UploadStringAsync(new Uri(url), myParameters);
-            }
-            catch (WebException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-        }
-
-        private void callServicegetAutocompleteend_Completed(object sender, UploadStringCompletedEventArgs e)
-        {
-            try
-            {
-                searchStartStopItem results = JsonConvert.DeserializeObject<searchStartStopItem>(e.Result);
-                busStartStopTo_search.ItemsSource = results.data;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                HideProgressIndicator();
-                alreadyEnd = false;
-            }
-        }
-
-        private void busStartStopbtn_search_Click(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(busStartStopFrom_search.Text))
-            {
-                MessageBox.Show("กรุณากรอกต้นทาง");
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(busStartStopTo_search.Text))
-            {
-                MessageBox.Show("กรุณากรอกปลายทาง");
-                return;
-            }
-
-            callService_startstop_searchfindRouting();
-        }
-
-        public void callService_startstop_searchfindRouting()
-        {
-            webClient = new WebClient();
-            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/searchfindRouting";
-            string myParameters;
-            try
-            {
-                if (itemend == null || itemstart == null)
+                if (!alreadyLandMark)
                 {
-                    myParameters = "busstop_start_id=" + "0" + "&busstop_end_id=" + "0" + "&bus_type=&running_type=&orderby=" + "";
+                    ShowProgressIndicator("Loading..");
+                    alreadyLandMark = true;
+                    callServicegetAutocompleteLandMark();
+                }
+            }
+        }
+
+        private void landMark_search_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (string.IsNullOrWhiteSpace(landMark_search.Text))
+                {
+                    MessageBox.Show("กรุณาใส่ป้ายรถเมล์ที่ต้องการ");
+                    return;
+                }
+                callplacecurrentfindRouting();
+            }
+        }
+
+        public void callplacecurrentfindRouting()
+        {
+            webClient = new WebClient();
+            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            String url = "http://202.6.18.31:7777/placecurrentfindRouting";
+            string myParameters;
+            try
+            {
+                if (itemLandMark == null)
+                {
+                    myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&elatlong=" + "0.0-0.0" + "&bus_type=" + "" + "&running_type=" + "" + "&orderby=" + "";
                 }
                 else
                 {
-                    myParameters = "busstop_start_id=" + itemstart.id + "&busstop_end_id=" + itemend.id + "&bus_type=&running_type=&orderby=" + "";
+                    myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&elatlong=" + itemLandMark.lattitude + "-" + itemLandMark.longtitude + "&bus_type=" + "" + "&running_type=" + "" + "&orderby=" + "";
                 }
 
-                Debug.WriteLine("URL callServicecurrentfindRouting = " + url);
-
-                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callService_startstop_searchfindRouting_Completed);
+                Debug.WriteLine("URL callplacecurrentfindRouting = " + url);
+                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callplacecurrentfindRouting_Completed);
                 webClient.UploadStringAsync(new Uri(url), myParameters);
             }
             catch (WebException ex)
@@ -317,9 +265,8 @@ namespace BMTA
             }
         }
 
-        private void callService_startstop_searchfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
+        private void callplacecurrentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
         {
-            busStartStoplistbox.Items.Clear();
             searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
             if (results == null)
             {
@@ -331,7 +278,7 @@ namespace BMTA
                 MessageBox.Show("ไม่พบข้อมูล");
                 return;
             }
-            UCStartStop UCStartStop = new UCStartStop();
+            landMarklistbox.Items.Clear();
             foreach (var item in results.data)
             {
                 UCStartStop = new UCStartStop();
@@ -388,21 +335,8 @@ namespace BMTA
                     UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
                 }
 
-                busStartStoplistbox.Items.Add(UCStartStop);
+                landMarklistbox.Items.Add(UCStartStop);
             }
-        }
-
-        private void busStartStoplistbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-            if (busStartStoplistbox.SelectedIndex != -1)
-            {
-                UCStartStop item = (sender as ListBox).SelectedItem as UCStartStop;
-                (Application.Current as App).RountingDataStartStop = (searchfindRoutingItem_data)item.DataContext;
-
-                this.NavigationService.Navigate(new Uri("/BMTA_BusStartStopDetailMap.xaml?TextFrom=" + busStartStopFrom_search.Text + "&TextTo=" + busStartStopTo_search.Text, UriKind.Relative));
-            }
-            busStartStoplistbox.SelectedIndex = -1;
         }
     }
 }

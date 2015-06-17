@@ -28,6 +28,7 @@ using System.Diagnostics;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using BMTA.Item;
+using Coding4Fun.Toolkit.Controls;
 
 namespace BMTA
 {
@@ -49,7 +50,7 @@ namespace BMTA
         Boolean alreadyEnd = false;
         Boolean alreadyBusStop = false;
         Boolean alreadyLandMark = false;
-
+        String currentBtn = "btn1";
         private searchStartStopDetailItem itemstart, itemend;
         private searchlandmarkAndBusstopdetailItem itemLandMark, itemBusStop;
         public String CurrentGroup = "1";
@@ -109,6 +110,7 @@ namespace BMTA
             List<buslineItem> retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + CurrentGroup + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
             buslines = new ObservableCollection<buslineItem>(retrievedTasks);
             (Application.Current as App).DataBuslinehList = retrievedTasks;
+          
             buslinelistbox.ItemsSource = buslines;
             HideProgressIndicator();
             this.buslinelistbox.Visibility = System.Windows.Visibility.Visible;
@@ -184,7 +186,7 @@ namespace BMTA
                 foreach (var items in selected)
                 {
                     (Application.Current as App).DataBusstopDetail = items;
-                    NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
+                    NavigationService.Navigate(new Uri("/BMTA_BusStop_Map.xaml", UriKind.Relative));
                 }
             }
 
@@ -425,7 +427,7 @@ namespace BMTA
 
         private void BtnNumber_Click(object sender, RoutedEventArgs e)
         {
-            Button btn = (Button)sender;
+            RoundToggleButton btn = (RoundToggleButton)sender;
 
             ShowProgressIndicator("Loading..");
             //articles.Clear();
@@ -617,7 +619,7 @@ namespace BMTA
                 HideProgressIndicator();
                 alreadyStart = false;
             }
-           
+
         }
 
         public void callServicegetAutocompleteend()
@@ -821,8 +823,71 @@ namespace BMTA
 
         private void StreetsandLandmarks_search_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            itemLandMark = (sender as AutoCompleteBox).SelectedItem as searchlandmarkAndBusstopdetailItem;
+            searchlandmarkAndBusstopdetailItem item = (sender as AutoCompleteBox).SelectedItem as searchlandmarkAndBusstopdetailItem;
+            if (item != null)
+            {
+                itemLandMark = item;
+            }
         }
+
+        private void StreetsandLandmarks_search_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (string.IsNullOrWhiteSpace(StreetsandLandmarks_search.Text))
+                {
+                    MessageBox.Show("กรุณาใส่ป้ายรถเมล์ที่ต้องการ");
+                    return;
+                }
+                callplacecurrentfindRouting();
+            }
+        }
+
+        public void callplacecurrentfindRouting()
+        {
+            webClient = new WebClient();
+            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            String url = "http://202.6.18.31:7777/placecurrentfindRouting";
+            string myParameters;
+            try
+            {
+                if (itemLandMark == null)
+                {
+                    myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&elatlong=" + "0.0-0.0" + "&bus_type=" + "" + "&running_type=" + "" + "&orderby=" + "";
+                }
+                else
+                {
+                    myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&elatlong=" + itemLandMark.lattitude + "-" + itemLandMark.longtitude + "&bus_type=" + "" + "&running_type=" + "" + "&orderby=" + "";
+                }
+
+                Debug.WriteLine("URL callplacecurrentfindRouting = " + url);
+                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callplacecurrentfindRouting_Completed);
+                webClient.UploadStringAsync(new Uri(url), myParameters);
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void callplacecurrentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
+        {
+            searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
+            if (results == null)
+            {
+                MessageBox.Show("ไม่พบข้อมูล");
+                return;
+            }
+            if (results.status == "0")
+            {
+                MessageBox.Show("ไม่พบข้อมูล");
+                return;
+            }
+            (Application.Current as App).DataLandMark = results;
+
+            this.NavigationService.Navigate(new Uri("/BMTA_BusLandMarkDetailBus.xaml?TextFrom=" + StreetsandLandmarks_search.Text, UriKind.Relative));
+        }
+
 
         public void callServicegetAutocompleteBusStop()
         {
@@ -868,7 +933,11 @@ namespace BMTA
 
         private void busstop_search_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            itemBusStop = (sender as AutoCompleteBox).SelectedItem as searchlandmarkAndBusstopdetailItem;
+            searchlandmarkAndBusstopdetailItem item = (sender as AutoCompleteBox).SelectedItem as searchlandmarkAndBusstopdetailItem;
+            if (item != null)
+            {
+                itemBusStop = item;
+            }
         }
 
         public void callService_busstop_currentfindRouting()
@@ -886,6 +955,7 @@ namespace BMTA
                 else
                 {
                     myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&busstop_end_id=" + itemBusStop.id + "&bus_type=&running_type=&orderby=" + "";
+                    //myParameters = "lat=" + "13.741709" + "&long=" + "100.420125" + "&busstop_end_id=" + "4101" + "&bus_type=&running_type=&orderby=" + "";
                 }
 
                 Debug.WriteLine("URL callService_busstop_currentfindRouting = " + url);
@@ -901,7 +971,33 @@ namespace BMTA
 
         private void callService_busstop_currentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
         {
-            MessageBox.Show(e.Result);
+            searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
+            if (results == null)
+            {
+                MessageBox.Show("ไม่พบข้อมูล");
+                return;
+            }
+            if (results.status == "0")
+            {
+                MessageBox.Show("ไม่พบข้อมูล");
+                return;
+            }
+            (Application.Current as App).DataStop = results;
+
+            this.NavigationService.Navigate(new Uri("/BMTA_BusStopDetailBus.xaml?Search=false&TextFrom=" + busstop_search.Text, UriKind.Relative));
+        }
+
+        private void busstop_search_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (string.IsNullOrWhiteSpace(busstop_search.Text))
+                {
+                    MessageBox.Show("กรุณาใส่ป้ายรถเมล์ที่ต้องการ");
+                    return;
+                }
+                callService_busstop_currentfindRouting();
+            }
         }
 
         private void busStartStoplistbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -910,11 +1006,65 @@ namespace BMTA
             if (busStartStoplistbox.SelectedIndex != -1)
             {
                 UCStartStop item = (sender as ListBox).SelectedItem as UCStartStop;
-                (Application.Current as App).RountingData = (searchfindRoutingItem_data)item.DataContext;
-               
-                this.NavigationService.Navigate(new Uri("/BMTA_BusStartStopDetailMap.xaml?TextFrom="+ busStartStopFrom_search.Text + "&TextTo=" + busStartStopTo_search.Text, UriKind.Relative));
+                (Application.Current as App).RountingDataStartStop = (searchfindRoutingItem_data)item.DataContext;
+
+                this.NavigationService.Navigate(new Uri("/BMTA_BusStartStopDetailMap.xaml?TextFrom=" + busStartStopFrom_search.Text + "&TextTo=" + busStartStopTo_search.Text, UriKind.Relative));
             }
             busStartStoplistbox.SelectedIndex = -1;
+        }
+
+        private void btn_Checked(object sender, RoutedEventArgs e)
+        {
+            RoundToggleButton item = (RoundToggleButton)sender;
+            if (item != null)
+            {
+                if (currentBtn == "btn1" && btn1 != null)
+                {
+                    btn1.IsChecked = false;               
+                }
+                else if (currentBtn == "btn2")
+                {
+                    btn2.IsChecked = false;
+                }
+                else if (currentBtn == "btn3")
+                {
+                    btn3.IsChecked = false;
+                }
+                else if (currentBtn == "btn4")
+                {
+                    btn4.IsChecked = false;
+                }
+                else if (currentBtn == "btn5")
+                {
+                    btn5.IsChecked = false;
+                }
+                else if (currentBtn == "btn6")
+                {
+                    btn6.IsChecked = false;
+                }
+                else if (currentBtn == "btn7")
+                {
+                    btn7.IsChecked = false;
+                }
+                else if (currentBtn == "btn8")
+                {
+                    btn8.IsChecked = false;
+                }
+                else if (currentBtn == "btn9")
+                {
+                    btn9.IsChecked = false;
+                }
+                else if (currentBtn == "btn_other")
+                {
+                    btn_other.IsChecked = false;
+                }
+                else if (currentBtn == "btn_van")
+                {
+                    btn_van.IsChecked = false;
+                }
+                currentBtn = item.Name;
+            }
+
         }
     }
 }

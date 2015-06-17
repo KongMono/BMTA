@@ -128,14 +128,11 @@
     <Compile Include="BMTA_BusStop_not.xaml.cs">
       <DependentUpon>BMTA_BusStop_not.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BMTA_BusStop.xaml.cs">
-      <DependentUpon>BMTA_BusStop.xaml</DependentUpon>
+    <Compile Include="BMTA_BusStop_Map.xaml.cs">
+      <DependentUpon>BMTA_BusStop_Map.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BMTA_BusStop_pin.xaml.cs">
-      <DependentUpon>BMTA_BusStop_pin.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BMTA_BusStop_pin_en.xaml.cs">
-      <DependentUpon>BMTA_BusStop_pin_en.xaml</DependentUpon>
+    <Compile Include="BMTA_BusStop_CircleDetail.xaml.cs">
+      <DependentUpon>BMTA_BusStop_CircleDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="BMTA_BusStop_SearchAdvance.xaml.cs">
       <DependentUpon>BMTA_BusStop_SearchAdvance.xaml</DependentUpon>
@@ -230,6 +227,24 @@
     <Compile Include="BMTA_BusStartStopDetailList.xaml.cs">
       <DependentUpon>BMTA_BusStartStopDetailList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BMTA_BusStopDetailBus.xaml.cs">
+      <DependentUpon>BMTA_BusStopDetailBus.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_BusStopDetailMap.xaml.cs">
+      <DependentUpon>BMTA_BusStopDetailMap.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_BusStopDetailList.xaml.cs">
+      <DependentUpon>BMTA_BusStopDetailList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_BusLandMarkDetailBus.xaml.cs">
+      <DependentUpon>BMTA_BusLandMarkDetailBus.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_BusLandMarkDetailMap.xaml.cs">
+      <DependentUpon>BMTA_BusLandMarkDetailMap.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_BusLandMarkDetailList.xaml.cs">
+      <DependentUpon>BMTA_BusLandMarkDetailList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Item\Article.cs" />
     <Compile Include="Item\busline.cs" />
     <Compile Include="Item\buslineItem.cs" />
@@ -258,6 +273,7 @@
     <Compile Include="Usercontrols\UCStartStop.xaml.cs">
       <DependentUpon>UCStartStop.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utillity\AutoCompleteBoxEx.cs" />
     <Compile Include="Utillity\clGetResolution.cs" />
     <Compile Include="Utillity\CoordinateConverter.cs" />
     <Compile Include="Geo\AngleConverter.cs" />
@@ -284,10 +300,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SampleAutoComplete.xaml.cs">
-      <DependentUpon>SampleAutoComplete.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SampleWords.cs" />
     <Compile Include="Usercontrols\UCCostomPushpin.xaml.cs">
       <DependentUpon>UCCostomPushpin.xaml</DependentUpon>
     </Compile>
@@ -347,15 +359,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BMTA_BusStop.xaml">
+    <Page Include="BMTA_BusStop_Map.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BMTA_BusStop_pin.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BMTA_BusStop_pin_en.xaml">
+    <Page Include="BMTA_BusStop_CircleDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -483,9 +491,29 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SampleAutoComplete.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="BMTA_BusStopDetailBus.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BMTA_BusStopDetailMap.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BMTA_BusStopDetailList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BMTA_BusLandMarkDetailBus.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BMTA_BusLandMarkDetailMap.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BMTA_BusLandMarkDetailList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="BMTA_Splashscreen.xaml">
       <Generator>MSBuild:Compile</Generator>

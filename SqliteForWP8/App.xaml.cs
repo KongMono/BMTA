@@ -23,19 +23,23 @@ namespace BMTA
         public string AppVersion = "1.0";
         public string pathAnalytic = "";
         public string Language = "";
-        public string lat_current,lon_current;
+        public string lat_current, lon_current;
         public List<buslineItem> DataSearchList = new List<buslineItem>();
         public List<buslineItem> DataBuslinehList = new List<buslineItem>();
         public dataNearBusStopItem DataBusstopDetail = new dataNearBusStopItem();
+        public searchfindRoutingItem DataLandMark = new searchfindRoutingItem();
+        public searchfindRoutingItem DataStop = new searchfindRoutingItem();
         public searchfindRoutingItem DataStartStop = new searchfindRoutingItem();
-        public searchfindRoutingItem_data RountingData = new searchfindRoutingItem_data();
+        public searchfindRoutingItem_data RountingDataLandMark = new searchfindRoutingItem_data();
+        public searchfindRoutingItem_data RountingDataBusStop = new searchfindRoutingItem_data();
+        public searchfindRoutingItem_data RountingDataStartStop = new searchfindRoutingItem_data();
         public static string DB_PATH = Path.Combine(Path.Combine(ApplicationData.Current.LocalFolder.Path, "bmtadatabase.sqlite"));
-        
+
         /// <summary>
         /// Service
         /// </summary>
         public string getNearBusStop = "http://2f.backend.in.th/bmta/?method=getNearBusStop&";
-        
+
         public void SavePersistantData()
         {
             //if (IsolatedStorageSettings.ApplicationSettings.Contains("DataList"))
@@ -60,7 +64,7 @@ namespace BMTA
         /// <summary>
         /// Provides easy access to the root frame of the Phone Application.
         /// 
-        
+
         /// </summary>
         /// <returns>The root frame of the Phone Application.</returns>
         public static PhoneApplicationFrame RootFrame { get; private set; }
@@ -70,7 +74,7 @@ namespace BMTA
         /// </summary>
         public App()
         {
-           
+
             // Global handler for uncaught exceptions.
             UnhandledException += Application_UnhandledException;
 
@@ -112,7 +116,7 @@ namespace BMTA
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
             LoadPersistantData();
-            CopyDatabase();   
+            CopyDatabase();
         }
 
         private async Task CopyDatabase()
@@ -134,7 +138,7 @@ namespace BMTA
                 StorageFile databaseFile = await Package.Current.InstalledLocation.GetFileAsync("bmtadatabase.sqlite");
                 await databaseFile.CopyAsync(ApplicationData.Current.LocalFolder);
             }
-        } 
+        }
 
         // Code to execute when the application is activated (brought to foreground)
         // This code will not execute when the application is first launched

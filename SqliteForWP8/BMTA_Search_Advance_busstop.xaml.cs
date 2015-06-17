@@ -18,6 +18,7 @@ using Windows.Storage;
 using System.Windows.Input;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using BMTA.Item;
 
 
 namespace BMTA
@@ -185,7 +186,20 @@ namespace BMTA
 
         private void callServicecurrentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
         {
-            MessageBox.Show(e.Result);
+            searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
+            if (results == null)
+            {
+                MessageBox.Show("ไม่พบข้อมูล");
+                return;
+            }
+            if (results.status == "0")
+            {
+                MessageBox.Show("ไม่พบข้อมูล");
+                return;
+            }
+            (Application.Current as App).DataStop = results;
+
+            this.NavigationService.Navigate(new Uri("/BMTA_BusStopDetailBus.xaml?TextFrom=" + textbox.Text, UriKind.Relative));
         }
 
         public void callServicegetAutocomplete()

@@ -41,7 +41,7 @@ using BMTA.Item;
 
 namespace BMTA
 {
-    public partial class BMTA_BusStartStopDetailList : PhoneApplicationPage
+    public partial class BMTA_BusLandMarkDetailList : PhoneApplicationPage
     {
         public String lang = (Application.Current as App).Language;
         public int countExist = 0;
@@ -50,7 +50,8 @@ namespace BMTA
         public List<UCRoutingList> dataExistStatus2 = new List<UCRoutingList>();
         Popup popup = new Popup();
         ListBox listpopup = new ListBox();
-        public BMTA_BusStartStopDetailList()
+
+        public BMTA_BusLandMarkDetailList()
         {
             InitializeComponent();
         }
@@ -59,19 +60,18 @@ namespace BMTA
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
 
-            searchfindRoutingItem_data data = (Application.Current as App).RountingDataStartStop;
+            searchfindRoutingItem_data data = (Application.Current as App).RountingDataLandMark;
 
             if (lang.Equals("th"))
             {
-                titleName.Text = "ต้นทางปลายทาง";
+                titleName.Text = "ถนนและสถานที่สำคัญ";
             }
             else
             {
-                titleName.Text = "Start - End";
+                titleName.Text = "Streets and Landmarks";
             }
 
-            busStartStopFrom_search.Text = this.NavigationContext.QueryString["TextFrom"];
-            busStartStopTo_search.Text = this.NavigationContext.QueryString["TextTo"];
+            busstop_search.Text = this.NavigationContext.QueryString["TextFrom"];
 
             UCRoutingList UCRoutingList = new UCRoutingList();
 
@@ -102,7 +102,7 @@ namespace BMTA
 
                             UCRoutingList.status = busstop.status;
 
-                            busStartStoplistbox.Items.Add(UCRoutingList);
+                            busStoplistbox.Items.Add(UCRoutingList);
 
                             countExist = 0;
                         }
@@ -129,7 +129,7 @@ namespace BMTA
                                     UCRoutingList.textRoute.Text = item.distance + " km.";
                                 }
                                 UCRoutingList.status = busstop.status;
-                                busStartStoplistbox.Items.Add(UCRoutingList);
+                                busStoplistbox.Items.Add(UCRoutingList);
                             }
                             else
                             {
@@ -148,7 +148,7 @@ namespace BMTA
                                         UCRoutingList.textRoute.Text = item.distance + " km.";
                                     }
                                     UCRoutingList.status = busstop.status;
-                                    busStartStoplistbox.Items.Add(UCRoutingList);
+                                    busStoplistbox.Items.Add(UCRoutingList);
                                 }
                                 else
                                 {
@@ -176,9 +176,9 @@ namespace BMTA
 
             if (dataExistStatus2.Count > 0)
             {
-                for (int i = 0; i < busStartStoplistbox.Items.Count; i++)
+                for (int i = 0; i < busStoplistbox.Items.Count; i++)
                 {
-                    UCRoutingList routingList = (UCRoutingList)busStartStoplistbox.Items[i];
+                    UCRoutingList routingList = (UCRoutingList)busStoplistbox.Items[i];
                     if (routingList.status == "2")
                     {
                         routingList.btn_collapsed.Click += btn_collapsed_Click;
@@ -190,9 +190,9 @@ namespace BMTA
             }
             else
             {
-                for (int i = 0; i < busStartStoplistbox.Items.Count; i++)
+                for (int i = 0; i < busStoplistbox.Items.Count; i++)
                 {
-                    UCRoutingList routingList = (UCRoutingList)busStartStoplistbox.Items[i];
+                    UCRoutingList routingList = (UCRoutingList)busStoplistbox.Items[i];
                     if (routingList.status == "2")
                     {
                         routingList.hide = true;

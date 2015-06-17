@@ -1,5 +1,5 @@
 ﻿<phone:PhoneApplicationPage
-    x:Class="BMTA.BMTA_BusStop_pin"
+    x:Class="BMTA.BMTA_BusStop_CircleDetail"
     xmlns:my="clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps"  
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -47,62 +47,58 @@
             </TextBlock>
         </Grid>
         <Grid x:Name="buslineLayoutSearch" Grid.Row="1" Grid.ColumnSpan="3" Width="auto" Background="#FF18359B">
-            <TextBox x:Name="busline_search"  BorderBrush="Transparent" TextWrapping="Wrap" VerticalAlignment="Center" SelectionBackground="{x:Null}" Grid.RowSpan="2"  Style="{StaticResource TextBoxStyle1}" />
+            <TextBox x:Name="busstop_search"  BorderBrush="Transparent" TextWrapping="Wrap" VerticalAlignment="Center" SelectionBackground="{x:Null}" Grid.RowSpan="2"  Style="{StaticResource TextBoxStyle1}" />
         </Grid>
         <Grid x:Name="station" Grid.Row="2" VerticalAlignment="Center" Grid.ColumnSpan="3" Background="#FF01A54E">
             <Grid.RowDefinitions>
                 <RowDefinition Height="80"/>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
-            <TextBlock  HorizontalAlignment="Left" Grid.Row="0" TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="50" Text="บางลำภู"/>
-            <TextBlock  HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="30" Text="สายรถที่ผ่าน"/>
+            <TextBlock x:Name="textName" Width="480"  HorizontalAlignment="Left" Grid.Row="0" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="30" Text="บางลำภู" Margin="20,0,0,0"/>
+            <TextBlock Width="300" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="25" Text="สายรถที่ผ่าน" Margin="20,0,0,0"/>
         </Grid>
         <Grid x:Name="lsline" VerticalAlignment="Center" Grid.Row="3" Grid.ColumnSpan="3" Background="#EBEBEB">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="13*"/>
+                <ColumnDefinition Width="35*"/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
             </Grid.RowDefinitions>
-            <TextBlock  HorizontalAlignment="Left" Foreground="Black" Grid.Row="0" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="30" Text="สายรถที่ผ่าน"/>
+            <TextBlock x:Name="textBuslineGroup" Width="300" HorizontalAlignment="Left" Foreground="Black" Grid.Row="0" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="25" Text="1,2,3,4,5" Margin="20,0,0,0"/>
         </Grid>
-        <Grid x:Name="detail" VerticalAlignment="Center" Grid.Row="4" Grid.ColumnSpan="3" Background="#EBEBEB">
+        <Grid x:Name="detail"  Grid.Row="4" Grid.ColumnSpan="3" Background="#EBEBEB">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="262"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0" Height="302" VerticalAlignment="Bottom" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="262"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-                <Button Content="{Binding buslind}" Grid.Row="0" x:Name="busno_bg" HorizontalAlignment="Center" VerticalAlignment="Top" BorderBrush="{x:Null}" Height="262" Width="262" FontSize="80" Style="{StaticResource ImageButton}">
+            <Grid Grid.Row="0" Height="302" VerticalAlignment="Top" >
+                <Button x:Name="busno_bg" Content="1" Grid.Row="0"  HorizontalAlignment="Center" VerticalAlignment="Top" BorderBrush="{x:Null}" Height="262" Width="262" FontSize="80" Style="{StaticResource ImageButton}">
                     <Button.Background>
                         <ImageBrush Stretch="Fill" ImageSource="/Assets/720x1280/busstop/BMTA_busno_bg.png"/>
                     </Button.Background>
                 </Button>
-                <TextBlock x:Name="lblbusline"  Grid.Row="1" Text="{Binding btcontent}" Foreground="#FF444444" TextWrapping="Wrap" FontSize="20" />
-                <TextBlock x:Name="lblbustype" Grid.Row="2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="รถธรรมดา (ครีม-แดง)" VerticalAlignment="Top" Width="325" Height="38" Foreground="#FF8B8A8A" FontWeight="Bold" FontSize="23" TextAlignment="Center"/>
-                <TextBlock x:Name="lblbustype1" Grid.Row="3" HorizontalAlignment="Left" TextWrapping="Wrap" Text="รถปรับอากาศ (ยูโรทู)" VerticalAlignment="Top" Width="325" Height="38" Foreground="#FF8B8A8A" FontWeight="Bold" FontSize="23" TextAlignment="Center"/>
-                <TextBlock x:Name="lbltime" Grid.Row="4" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="03:30 - 00:00" VerticalAlignment="Top" Width="460" Height="48" Foreground="#FFAEAEAE" FontWeight="Bold" FontSize="30" TextAlignment="Center"/>
-                <TextBlock x:Name="lblstop_name" Grid.Row="5"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="460" Height="69" FontSize="30"/>
             </Grid>
-           
-            
-        </Grid>
-       
 
-        <!--<Button Content="" x:Name="btleft" HorizontalAlignment="Left" Margin="55,398,0,0" Grid.Row="1" VerticalAlignment="Top" BorderBrush="{x:Null}" Height="130" Width="65" Style="{StaticResource ImageButton}" Click="btleft_Click">
+            <TextBlock x:Name="lblbustype" Grid.Row="2" HorizontalAlignment="Center" TextWrapping="Wrap" Text="รถธรรมดา (ครีม-แดง)" VerticalAlignment="Top" Width="325" Height="38" Foreground="#FF8B8A8A" FontWeight="Bold" FontSize="23" TextAlignment="Center"/>
+            <TextBlock x:Name="lblbustype1" Grid.Row="3" HorizontalAlignment="Center" TextWrapping="Wrap" Text="รถปรับอากาศ (ยูโรทู)" VerticalAlignment="Top" Width="325" Height="38" Foreground="#FF8B8A8A" FontWeight="Bold" FontSize="23" TextAlignment="Center"/>
+            <TextBlock x:Name="lbltime" Grid.Row="4" HorizontalAlignment="Center"  TextWrapping="Wrap" Text="03:30 - 00:00" VerticalAlignment="Top" Width="460" Height="48" Foreground="#FFAEAEAE" FontWeight="Bold" FontSize="30" TextAlignment="Center"/>
+        </Grid>
+        <Button Content="" x:Name="btleft" HorizontalAlignment="Left"  Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" BorderBrush="{x:Null}" Height="130" Width="65" Style="{StaticResource ImageButton}" Click="btleft_Click">
             <Button.Background>
                 <ImageBrush Stretch="Fill" ImageSource="/Assets/720x1280/busstop/arrow_line_left.png"/>
             </Button.Background>
         </Button>
 
-        <Button Content="" x:Name="btrigth" HorizontalAlignment="Left" Margin="359,398,0,0" Grid.Row="1" VerticalAlignment="Top" BorderBrush="{x:Null}" Height="130" Width="65" Style="{StaticResource ImageButton}" Click="btrigth_Click">
+        <Button Content="" x:Name="btrigth" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" BorderBrush="{x:Null}" Height="130" Width="65" Style="{StaticResource ImageButton}" Click="btrigth_Click">
             <Button.Background>
                 <ImageBrush Stretch="Fill" ImageSource="/Assets/720x1280/busstop/arrow_line_right.png"/>
             </Button.Background>
-        </Button>-->
-      
+        </Button>
+
     </Grid>
 
 </phone:PhoneApplicationPage>

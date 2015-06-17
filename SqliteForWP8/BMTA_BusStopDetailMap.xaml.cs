@@ -41,7 +41,7 @@ using BMTA.Item;
 
 namespace BMTA
 {
-    public partial class BMTA_BusStartStopDetailMap : PhoneApplicationPage
+    public partial class BMTA_BusStopDetailMap : PhoneApplicationPage
     {
         public String lang = (Application.Current as App).Language;
         UCCustomToolTip _tooltip = new UCCustomToolTip();
@@ -49,27 +49,27 @@ namespace BMTA
         UCCostomPushpin _Pushpin = new UCCostomPushpin();
         private MapPolyline line;
         MapLayer layer;
+        string lat, lon;
         MapLayer mymapLayer = new MapLayer();
         List<GeoCoordinate> MyCoordinates = new List<GeoCoordinate>();
 
-        public BMTA_BusStartStopDetailMap()
+        public BMTA_BusStopDetailMap()
         {
             InitializeComponent();
             ShowMyLocationOnTheMap();
 
-            searchfindRoutingItem_data data = (Application.Current as App).RountingDataStartStop;
+            searchfindRoutingItem_data data = (Application.Current as App).RountingDataBusStop;
 
             if (lang.Equals("th"))
             {
-                titleName.Text = "ต้นทางปลายทาง";
+                titleName.Text = "ป้ายรถเมล์";
                 textRoute.Text = data.total.total_distance + " กม.";
             }
             else
             {
-                titleName.Text = "Start - End";
+                titleName.Text = "Bus Stop";
                 textRoute.Text = data.total.total_distance + " km.";
             }
-
             UCStartStopBusLine UCStartStopBusLine = new UCStartStopBusLine();
 
             UCStartStopBusLine.DataContext = data;
@@ -119,7 +119,6 @@ namespace BMTA
             }
 
             busStartStoplistbox.Items.Add(UCStartStopBusLine);
-
             this.Pushpin(data);
         }
 
@@ -156,8 +155,8 @@ namespace BMTA
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
-            busStartStopFrom_search.Text = this.NavigationContext.QueryString["TextFrom"];
-            busStartStopTo_search.Text = this.NavigationContext.QueryString["TextTo"];
+            busstop_search.Text = this.NavigationContext.QueryString["TextFrom"];
+
         }
 
         private async void Pushpin(searchfindRoutingItem_data bus_stop)
@@ -204,20 +203,14 @@ namespace BMTA
             map.ZoomLevel = 12;
         }
 
-        private void btBusStop_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void btback_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }
 
-
         private void textStart_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            this.NavigationService.Navigate(new Uri("/BMTA_BusStartStopDetailList.xaml?TextFrom=" + busStartStopFrom_search.Text + "&TextTo=" + busStartStopTo_search.Text, UriKind.Relative));
+            this.NavigationService.Navigate(new Uri("/BMTA_BusStopDetailList.xaml?TextFrom=" + busstop_search.Text, UriKind.Relative));
         }
     }
 }
