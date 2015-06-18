@@ -27,8 +27,6 @@ namespace BMTA
             
         }
 
-      
-
         private void btback_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();

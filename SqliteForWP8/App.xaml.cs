@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using BMTA.Item;
+using System.Collections.ObjectModel;
 
 namespace BMTA
 {
@@ -24,6 +25,7 @@ namespace BMTA
         public string pathAnalytic = "";
         public string Language = "";
         public string lat_current, lon_current;
+        public List<datasearchLandMarkByGeoItem> MemLandMarkList = new List<datasearchLandMarkByGeoItem>();
         public List<buslineItem> DataSearchList = new List<buslineItem>();
         public List<buslineItem> DataBuslinehList = new List<buslineItem>();
         public dataNearBusStopItem DataBusstopDetail = new dataNearBusStopItem();
@@ -42,24 +44,24 @@ namespace BMTA
 
         public void SavePersistantData()
         {
-            //if (IsolatedStorageSettings.ApplicationSettings.Contains("DataList"))
-            //{
-            //    IsolatedStorageSettings.ApplicationSettings["DataList"] = DataList;
-            //}
-            //else
-            //{
-            //    IsolatedStorageSettings.ApplicationSettings.Add("DataList", DataList);
-            //}
-            //// make sure data is saved immediatelly
-            //IsolatedStorageSettings.ApplicationSettings.Save();
+            if (IsolatedStorageSettings.ApplicationSettings.Contains("MemLandMarkList"))
+            {
+                IsolatedStorageSettings.ApplicationSettings["MemLandMarkList"] = MemLandMarkList;
+            }
+            else
+            {
+                IsolatedStorageSettings.ApplicationSettings.Add("MemLandMarkList", MemLandMarkList);
+            }
+            // make sure data is saved immediatelly
+            IsolatedStorageSettings.ApplicationSettings.Save();
         }
 
         public void LoadPersistantData()
         {
-            //if (IsolatedStorageSettings.ApplicationSettings.Contains("DataList"))
-            //{
-            //    DataList = (List<busline>)IsolatedStorageSettings.ApplicationSettings["DataList"];
-            //}
+            if (IsolatedStorageSettings.ApplicationSettings.Contains("MemLandMarkList"))
+            {
+                MemLandMarkList = (List<datasearchLandMarkByGeoItem>)IsolatedStorageSettings.ApplicationSettings["MemLandMarkList"];
+            }
         }
         /// <summary>
         /// Provides easy access to the root frame of the Phone Application.

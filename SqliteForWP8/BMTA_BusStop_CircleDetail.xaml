@@ -6,10 +6,10 @@
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:maps="clr-namespace:Microsoft.Phone.Maps.Controls;assembly=Microsoft.Phone.Maps"
-     xmlns:maptk="clr-namespace:Microsoft.Phone.Maps.Toolkit;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:maptk="clr-namespace:Microsoft.Phone.Maps.Toolkit;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-       xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -47,7 +47,15 @@
             </TextBlock>
         </Grid>
         <Grid x:Name="buslineLayoutSearch" Grid.Row="1" Grid.ColumnSpan="3" Width="auto" Background="#FF18359B">
-            <TextBox x:Name="busstop_search"  BorderBrush="Transparent" TextWrapping="Wrap" VerticalAlignment="Center" SelectionBackground="{x:Null}" Grid.RowSpan="2"  Style="{StaticResource TextBoxStyle1}" />
+            <toolkit:AutoCompleteBox x:Name="busstop_search" Grid.RowSpan="2" VerticalAlignment="Center" TextChanged="busstop_search_TextChanged" FilterMode="None" ValueMemberBinding="{Binding stop_name}" SelectionChanged="busstop_search_SelectionChanged" KeyUp="busstop_search_KeyUp">
+                    <toolkit:AutoCompleteBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding stop_name}" FontSize="25" Foreground="Black"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </toolkit:AutoCompleteBox.ItemTemplate>
+                </toolkit:AutoCompleteBox>
         </Grid>
         <Grid x:Name="station" Grid.Row="2" VerticalAlignment="Center" Grid.ColumnSpan="3" Background="#FF01A54E">
             <Grid.RowDefinitions>
@@ -59,8 +67,7 @@
         </Grid>
         <Grid x:Name="lsline" VerticalAlignment="Center" Grid.Row="3" Grid.ColumnSpan="3" Background="#EBEBEB">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="13*"/>
-                <ColumnDefinition Width="35*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
@@ -84,16 +91,16 @@
             </Grid>
 
             <TextBlock x:Name="lblbustype" Grid.Row="2" HorizontalAlignment="Center" TextWrapping="Wrap" Text="รถธรรมดา (ครีม-แดง)" VerticalAlignment="Top" Width="325" Height="38" Foreground="#FF8B8A8A" FontWeight="Bold" FontSize="23" TextAlignment="Center"/>
-            <TextBlock x:Name="lblbustype1" Grid.Row="3" HorizontalAlignment="Center" TextWrapping="Wrap" Text="รถปรับอากาศ (ยูโรทู)" VerticalAlignment="Top" Width="325" Height="38" Foreground="#FF8B8A8A" FontWeight="Bold" FontSize="23" TextAlignment="Center"/>
+            <!--<TextBlock x:Name="lblbustype1" Grid.Row="3" HorizontalAlignment="Center" TextWrapping="Wrap" Text="รถปรับอากาศ (ยูโรทู)" VerticalAlignment="Top" Width="325" Height="38" Foreground="#FF8B8A8A" FontWeight="Bold" FontSize="23" TextAlignment="Center"/>-->
             <TextBlock x:Name="lbltime" Grid.Row="4" HorizontalAlignment="Center"  TextWrapping="Wrap" Text="03:30 - 00:00" VerticalAlignment="Top" Width="460" Height="48" Foreground="#FFAEAEAE" FontWeight="Bold" FontSize="30" TextAlignment="Center"/>
         </Grid>
-        <Button Content="" x:Name="btleft" HorizontalAlignment="Left"  Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" BorderBrush="{x:Null}" Height="130" Width="65" Style="{StaticResource ImageButton}" Click="btleft_Click">
+        <Button Content="" x:Name="btleft" HorizontalAlignment="Left"  Grid.Row="4" Grid.Column="0" VerticalAlignment="Top" BorderBrush="{x:Null}" Height="130" Margin="0,70,0,0" Width="65" Style="{StaticResource ImageButton}" Click="btleft_Click">
             <Button.Background>
                 <ImageBrush Stretch="Fill" ImageSource="/Assets/720x1280/busstop/arrow_line_left.png"/>
             </Button.Background>
         </Button>
 
-        <Button Content="" x:Name="btrigth" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" BorderBrush="{x:Null}" Height="130" Width="65" Style="{StaticResource ImageButton}" Click="btrigth_Click">
+        <Button Content="" x:Name="btrigth" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2" VerticalAlignment="Top" BorderBrush="{x:Null}" Height="130" Margin="0,70,0,0" Width="65" Style="{StaticResource ImageButton}" Click="btrigth_Click">
             <Button.Background>
                 <ImageBrush Stretch="Fill" ImageSource="/Assets/720x1280/busstop/arrow_line_right.png"/>
             </Button.Background>

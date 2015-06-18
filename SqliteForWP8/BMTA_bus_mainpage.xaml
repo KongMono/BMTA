@@ -68,7 +68,7 @@
             </Button>
         </Grid>
 
-        <Grid x:Name="buslineLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Visible">
+        <Grid x:Name="buslineLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="75"/>
@@ -212,7 +212,7 @@
                 <ListBox x:Name="busStartStoplistbox" SelectionChanged="busStartStoplistbox_SelectionChanged"/>
             </Grid>
         </Grid>
-        <Grid x:Name="StreetsandLandmarksLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Collapsed">
+        <Grid x:Name="StreetsandLandmarksLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="50"/>
@@ -238,7 +238,7 @@
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="latlonbtn_search" BorderBrush="Transparent" Width="50" Height="50"  HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource ImageButton}">
+                <Button x:Name="latlonbtn_search" BorderBrush="Transparent" Width="50" Height="50" Click="latlonbtn_search_Click"  HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource ImageButton}">
                     <Button.Background>
                         <ImageBrush Stretch="Fill" ImageSource="/Assets/720x1280/BMTA_search_icon.png"/>
                     </Button.Background>
@@ -257,7 +257,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid  Grid.Row="0" Background="#D9D4D4D4">
-                        <TextBlock Text="ผลการค้นหาล่าสุด" TextWrapping="Wrap" Foreground="Black" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                        <TextBlock x:Name="textHeaderLandMark" Text="ผลการค้นหาล่าสุด" TextWrapping="Wrap" Foreground="Black" VerticalAlignment="Center" Margin="20,0,0,0"/>
                     </Grid>
                     <ListBox x:Name="LandmarksHistorylistbox" Grid.Row="1"/>
                 </Grid>
@@ -266,8 +266,8 @@
                         <RowDefinition Height="50"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Grid  Grid.Row="0" Background="#D9D4D4D4">
-                        <TextBlock Text="ผลการค้นหา" TextWrapping="Wrap" Foreground="Black" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                    <Grid  Grid.Row="0" Background="#D9D4D4D4" Visibility="Collapsed">
+                        <TextBlock x:Name="textHeaderLandMarkSearch" Text="ผลการค้นหา" TextWrapping="Wrap" Foreground="Black" VerticalAlignment="Center" Margin="20,0,0,0"/>
                     </Grid>
                     <ListBox x:Name="LandmarksDatalistbox" Grid.Row="1"/>
                 </Grid>

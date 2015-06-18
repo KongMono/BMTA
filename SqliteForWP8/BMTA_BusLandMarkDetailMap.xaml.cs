@@ -197,7 +197,6 @@ namespace BMTA
               
                 // Map Polyline
                 map.MapElements.Add(line);
-             
             }
 
             map.ZoomLevel = 12;

@@ -29,14 +29,11 @@ namespace BMTA
             ShakeGesturesHelper.Instance.MinimumRequiredMovesForShake = 6;
             ShakeGesturesHelper.Instance.Active = true;
             InitializeComponent();
-    
+
         }
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
-            rightmenu.Visibility = System.Windows.Visibility.Collapsed;
-            rightmenux.Visibility = System.Windows.Visibility.Collapsed;
-            close.Visibility = System.Windows.Visibility.Collapsed;
 
             if (!HasNetwork())
             {
@@ -85,38 +82,12 @@ namespace BMTA
 
                 txtnumber.Text = "";
                 txtnumber.Focus();
-           }
-        }
-
-        private bool HasInternet()
-        {
-            if (!NetworkInterface.GetIsNetworkAvailable())
-            {
-                MessageBox.Show("No internet connection is available. Try again later.");
-                return false;
             }
-            return true;
-        }
-
-        private bool HasNetwork()
-        {
-            if (!DeviceNetworkInformation.IsNetworkAvailable)
-            {
-                MessageBox.Show("No network is available. Try again later.");
-                return false;
-            }
-            return true;
         }
 
         // Set the data context of the TextBlock to the answer.
         void Instance_ShakeGesture(object sender, ShakeGestureEventArgs e)
         {
-            //if (txtnumber.Text.Length < 7)
-            //{
-            //    MessageBox.Show("กรุณาใส่จำนวนตัวเลขให้ครบ 7หลัก");
-            //    txtnumber.Focus();
-            //    return;
-            //}
             // Use BeginInvoke to write to the UI thread.
             txtnumber.Dispatcher.BeginInvoke(() =>
             {
@@ -139,14 +110,10 @@ namespace BMTA
                     string spintext = sum.ToString();
                     int result = 0;
                     result = Convert.ToInt32(spintext[1].ToString());
-                    NavigationService.Navigate(new Uri("/BMTA_Slot_Result.xaml?parameter=" + result, UriKind.Relative)); 
+                    NavigationService.Navigate(new Uri("/BMTA_Slot_Result.xaml?parameter=" + result, UriKind.Relative));
                 }
             });
-            textBlock1.Dispatcher.BeginInvoke(() =>
-            {
-               // textBlock1.DataContext = GetAnswer();
-                //(Application.Current.RootVisual as PhoneApplicationFrame).Navigate(new Uri("/BMTA_Slot_Result.xaml", UriKind.RelativeOrAbsolute)); 
-            });
+
         }
 
         void checkInput(int length)
@@ -160,20 +127,16 @@ namespace BMTA
                 int len = txtnumber.Text.Length;
                 int sum = 0;
                 string pasteText = txtnumber.Text;
-        for (int i = 0; i < pasteText.Length; i++)
-        {
-            if (char.IsDigit(pasteText[i]))
-                sum += Convert.ToInt32(pasteText[i].ToString());
-        }
-        string spintext = sum.ToString();
-        int result = 0;
-       // for (int x = 0; x < spintext.Length; x++)
-       // {
-            result = Convert.ToInt32(spintext[1].ToString());
-      //  }
-       
-       // (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(new Uri("/BMTA_Slot_Result.xaml?parameter="+result, UriKind.RelativeOrAbsolute));
-        NavigationService.Navigate(new Uri("/BMTA_Slot_Result.xaml?parameter=" + result, UriKind.Relative)); 
+                for (int i = 0; i < pasteText.Length; i++)
+                {
+                    if (char.IsDigit(pasteText[i]))
+                        sum += Convert.ToInt32(pasteText[i].ToString());
+                }
+                string spintext = sum.ToString();
+                int result = 0;
+                result = Convert.ToInt32(spintext[1].ToString());
+
+                NavigationService.Navigate(new Uri("/BMTA_Slot_Result.xaml?parameter=" + result, UriKind.Relative));
 
             }
         }
@@ -214,83 +177,12 @@ namespace BMTA
 
         private void txtnumber_TextChanged(object sender, TextChangedEventArgs e)
         {
-           // checkInput(txtnumber.Text.Length);
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusCoordinates.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_3(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml", UriKind.Relative));
+            
         }
 
         private void btback_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }
-
-        private void close_Click(object sender, RoutedEventArgs e)
-        {
-            rightmenu.Visibility = System.Windows.Visibility.Collapsed;
-            rightmenux.Visibility = System.Windows.Visibility.Collapsed;
-            close.Visibility = System.Windows.Visibility.Collapsed;
-        }
-
-        private void btTopMenu_Click(object sender, RoutedEventArgs e)
-        {
-            rightmenux.Visibility = Visibility;
-            rightmenu.Visibility = Visibility;
-            close.Visibility = Visibility;
-        }
-
-        private void rhome_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_AppTh.xaml", UriKind.Relative));
-        }
-
-        private void rbusline_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml", UriKind.Relative));
-        }
-
-        private void rbusstop_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
-        }
-
-        private void rcoor_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusCoordinates.xaml", UriKind.Relative));
-        }
-
-        private void rbusstartstop_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml", UriKind.Relative));
-        }
-
-        private void rbusspeed_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_Speed_history.xaml", UriKind.Relative));
-        }
-
-        private void rbusnew_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_EventNew.xaml", UriKind.Relative));
-        }
-
-
     }
 }

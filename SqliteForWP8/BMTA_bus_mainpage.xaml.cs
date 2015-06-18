@@ -65,6 +65,7 @@ namespace BMTA
         UCToolTip _stooltip = new UCToolTip();
         MapLayer mymapLayer = new MapLayer();
         NearBusStopItem NearBusStopResults = new NearBusStopItem();
+        UCLandMarkDialog dialog = new UCLandMarkDialog();
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
@@ -110,7 +111,7 @@ namespace BMTA
             List<buslineItem> retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + CurrentGroup + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
             buslines = new ObservableCollection<buslineItem>(retrievedTasks);
             (Application.Current as App).DataBuslinehList = retrievedTasks;
-          
+
             buslinelistbox.ItemsSource = buslines;
             HideProgressIndicator();
             this.buslinelistbox.Visibility = System.Windows.Visibility.Visible;
@@ -276,12 +277,21 @@ namespace BMTA
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 
-
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
             rightmenu.Visibility = System.Windows.Visibility.Collapsed;
             rightmenux.Visibility = System.Windows.Visibility.Collapsed;
             close.Visibility = System.Windows.Visibility.Collapsed;
+
+
+            List<datasearchLandMarkByGeoItem> listHistory = (Application.Current as App).MemLandMarkList;
+
+            foreach (datasearchLandMarkByGeoItem item in listHistory)
+            {
+                UCLandMarkItem i = new UCLandMarkItem();
+                i.TextLandMark.Text = item.keyword;
+                LandmarksHistorylistbox.Items.Add(item);
+            }
         }
 
         private void setViewBusline()
@@ -348,10 +358,14 @@ namespace BMTA
             if (lang.Equals("th"))
             {
                 titleName.Text = "ถนนและสถานที่สำคัญ";
+                textHeaderLandMark.Text = "ผลการค้นหาล่าสุด";
+                textHeaderLandMarkSearch.Text = "ผลการค้นหา";
             }
             else
             {
                 titleName.Text = "Streets and Landmarks";
+                textHeaderLandMark.Text = "Recent";
+                textHeaderLandMarkSearch.Text = "Result";
             }
         }
 
@@ -870,6 +884,48 @@ namespace BMTA
             }
         }
 
+        public void callplacecurrentfindRouting_Memo(String lat, String lon)
+        {
+            webClient = new WebClient();
+            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            String url = "http://202.6.18.31:7777/placecurrentfindRouting";
+            string myParameters;
+            try
+            {
+                myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&elatlong=" + lat + "-" + lon + "&bus_type=" + "" + "&running_type=" + "" + "&orderby=" + "";
+
+                Debug.WriteLine("URL callplacecurrentfindRouting_Memo = " + url);
+                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callplacecurrentfindRouting_Memo_Completed);
+                webClient.UploadStringAsync(new Uri(url), myParameters);
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void callplacecurrentfindRouting_Memo_Completed(object sender, UploadStringCompletedEventArgs e)
+        {
+            searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
+            if (results == null)
+            {
+                MessageBox.Show("ไม่พบข้อมูล");
+                return;
+            }
+            if (results.status == "0")
+            {
+                MessageBox.Show("ไม่พบข้อมูล");
+                return;
+            }
+            datasearchLandMarkByGeoItem dataSearchDialog = new datasearchLandMarkByGeoItem();
+            dataSearchDialog.keyword = dialog.Textbox1.Text;
+            dataSearchDialog.data = results;
+            (Application.Current as App).MemLandMarkList.Add(dataSearchDialog);
+            (Application.Current as App).DataLandMark = results;
+
+            this.NavigationService.Navigate(new Uri("/BMTA_BusLandMarkDetailBus.xaml?TextFrom=" + StreetsandLandmarks_search.Text, UriKind.Relative));
+        }
+
         private void callplacecurrentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
         {
             searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
@@ -1020,7 +1076,7 @@ namespace BMTA
             {
                 if (currentBtn == "btn1" && btn1 != null)
                 {
-                    btn1.IsChecked = false;               
+                    btn1.IsChecked = false;
                 }
                 else if (currentBtn == "btn2")
                 {
@@ -1065,6 +1121,41 @@ namespace BMTA
                 currentBtn = item.Name;
             }
 
+        }
+
+        private void latlonbtn_search_Click(object sender, RoutedEventArgs e)
+        {
+            dialog = new UCLandMarkDialog();
+            CustomMessageBox cmb = new CustomMessageBox();
+            cmb.Content = dialog;
+            cmb.Opacity = 0.7;
+            if (lang.Equals("th"))
+            {
+                cmb.LeftButtonContent = "ค้นหา";
+                cmb.RightButtonContent = "ยกเลิก";
+            }
+            else
+            {
+                cmb.LeftButtonContent = "search";
+                cmb.RightButtonContent = "cancel";
+            }
+
+            cmb.Show();
+            cmb.Dismissed += (dismissSender, dismissedEvent) =>
+            {
+                switch (dismissedEvent.Result)
+                {
+                    case CustomMessageBoxResult.LeftButton:
+                        
+                        String lat = dialog.Textbox2.Text.Split(',').First();
+                        String lon = dialog.Textbox2.Text.Split(',').Last();
+                        callplacecurrentfindRouting_Memo(lat, lon);
+                        break;
+                    case CustomMessageBoxResult.RightButton:
+                        
+                        break;
+                }
+            };
         }
     }
 }

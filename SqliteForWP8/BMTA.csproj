@@ -248,6 +248,7 @@
     <Compile Include="Item\Article.cs" />
     <Compile Include="Item\busline.cs" />
     <Compile Include="Item\buslineItem.cs" />
+    <Compile Include="Item\datasearchLandMarkByGeoItem.cs" />
     <Compile Include="Item\searchfindRoutingItem_routing_busstop.cs" />
     <Compile Include="Item\searchfindRoutingItem_routing.cs" />
     <Compile Include="Item\searchfindRoutingItem_total.cs" />
@@ -264,6 +265,12 @@
     <Compile Include="Item\NearBusStopItem.cs" />
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteAsync.cs" />
+    <Compile Include="Usercontrols\UCLandMarkItem.xaml.cs">
+      <DependentUpon>UCLandMarkItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Usercontrols\UCLandMarkDialog.xaml.cs">
+      <DependentUpon>UCLandMarkDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Usercontrols\UCStartStopBusLine.xaml.cs">
       <DependentUpon>UCStartStopBusLine.xaml</DependentUpon>
     </Compile>
@@ -520,6 +527,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Style\CustomStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Usercontrols\UCLandMarkItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Usercontrols\UCLandMarkDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Usercontrols\UCStartStopBusLine.xaml">
