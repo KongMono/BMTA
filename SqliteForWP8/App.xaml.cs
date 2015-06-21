@@ -25,6 +25,7 @@ namespace BMTA
         public string pathAnalytic = "";
         public string Language = "";
         public string lat_current, lon_current;
+        public List<SlotItem> MemSlotList = new List<SlotItem>();
         public List<datasearchLandMarkByGeoItem> MemLandMarkList = new List<datasearchLandMarkByGeoItem>();
         public List<buslineItem> DataSearchList = new List<buslineItem>();
         public List<buslineItem> DataBuslinehList = new List<buslineItem>();
@@ -53,6 +54,16 @@ namespace BMTA
                 IsolatedStorageSettings.ApplicationSettings.Add("MemLandMarkList", MemLandMarkList);
             }
             // make sure data is saved immediatelly
+
+            if (IsolatedStorageSettings.ApplicationSettings.Contains("MemSlotList"))
+            {
+                IsolatedStorageSettings.ApplicationSettings["MemSlotList"] = MemSlotList;
+            }
+            else
+            {
+                IsolatedStorageSettings.ApplicationSettings.Add("MemSlotList", MemSlotList);
+            }
+
             IsolatedStorageSettings.ApplicationSettings.Save();
         }
 
@@ -61,6 +72,11 @@ namespace BMTA
             if (IsolatedStorageSettings.ApplicationSettings.Contains("MemLandMarkList"))
             {
                 MemLandMarkList = (List<datasearchLandMarkByGeoItem>)IsolatedStorageSettings.ApplicationSettings["MemLandMarkList"];
+            }
+
+            if (IsolatedStorageSettings.ApplicationSettings.Contains("MemSlotList"))
+            {
+                MemSlotList = (List<SlotItem>)IsolatedStorageSettings.ApplicationSettings["MemSlotList"];
             }
         }
         /// <summary>

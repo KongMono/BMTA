@@ -18,275 +18,143 @@ using System.Xml.Linq;
 using SQLite;
 using Windows.Storage;
 using System.Windows.Input;
+using BMTA.Item;
+using System.Diagnostics;
+using System.Xml;
+using News;
+using BMTA.Usercontrols;
 
 
 namespace BMTA
 {
     public partial class BMTA_News : PhoneApplicationPage
     {
-        // Constructor
-        public static string DB_PATH = Path.Combine(Path.Combine(ApplicationData.Current.LocalFolder.Path, "bmtadatabase.sqlite"));
-        private SQLiteConnection dbConn;
-
+        public String lang = (Application.Current as App).Language;
+        public FeedItem items = new FeedItem();
+        public List<FeedItemDescription> desclist = new List<FeedItemDescription>();
+        static WebClient webClient;
+        UCFeedList ls = new UCFeedList();
+        public BMTA_News()
+        {
+            InitializeComponent();
+        }
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            dbConn = new SQLiteConnection(DB_PATH);
+
             base.OnNavigatedTo(e);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            if (dbConn != null)
-            {
-                /// Close the database connection.
-                dbConn.Close();
-            }
+
         }
 
 
-        public class itemsnews
-        {
-            public string title { get; set; }
-            public string imgtmp { get; set; }
-            public string description { get; set; }
-            public string image { get; set; }
-            public string subject { get; set; }
-            public string links { get; set; }
-        }
-        public static List<itemsnews> items = new List<itemsnews>();
-
-        public BMTA_News()
-        {
-            InitializeComponent();
-       
-        }
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
-
-            rightmenu.Visibility = System.Windows.Visibility.Collapsed;
-            rightmenux.Visibility = System.Windows.Visibility.Collapsed;
-            close.Visibility = System.Windows.Visibility.Collapsed;
-
-            if (!HasNetwork())
+            if (lang.Equals("th"))
             {
-
-                Application.Current.Terminate();
-            }
-            else if (!HasInternet())
-            {
-                Application.Current.Terminate();
+                titleName.Text = "ข่าวสาร";
             }
             else
             {
-                ContentPanel.Visibility = Visibility;
-                loadData();
-                string x = BMTA.clGetResolution.Width.ToString();
-                string y = BMTA.clGetResolution.Height.ToString();
-                string xy = x + "x" + y;
-                if (x == "480")
+                titleName.Text = "News";
+            }
+            loadData();
+        }
+        private void loadData()
+        {
+
+            webClient = new WebClient();
+            String url;
+            try
+            {
+                if (lang.Equals("th"))
                 {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/480x852/BMTA_new.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
-                }
-                else if (x == "720")
-                {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/720x1280/BMTA_new.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
+                    url = "http://www.bmta.co.th/?q=th/feed/news";
                 }
                 else
                 {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/768x1280/BMTA_new.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
+                    url = "http://www.bmta.co.th/?q=en/feed/news";
                 }
-                ContentPanel.Visibility = System.Windows.Visibility.Collapsed;
-            }
-        }
 
-        private bool HasInternet()
-        {
-            if (!NetworkInterface.GetIsNetworkAvailable())
+                Debug.WriteLine("URL url_TopChannel = " + url);
+                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(FeedData_DownloadStringCompleted);
+                webClient.DownloadStringAsync(new Uri(url));
+
+            }
+            catch (WebException ex)
             {
-                MessageBox.Show("No internet connection is available. Try again later.");
-                return false;
+                MessageBox.Show(ex.Message);
             }
-            return true;
         }
 
-        private bool HasNetwork()
+        private void FeedData_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
-            if (!DeviceNetworkInformation.IsNetworkAvailable)
-            {
-                MessageBox.Show("No network is available. Try again later.");
-                return false;
-            }
-            return true;
-        }
 
-        private void loadData()
-        {
-           // WebClient client = new WebClient();
-          //  client.OpenReadCompleted += client_OpenReadCompleted;
-          //  client.OpenReadAsync(new Uri("http://www.bmta.co.th/?q=th/feed/news", UriKind.Absolute));
-
-            SQLiteCommand sqlComm = new SQLiteCommand(dbConn);
-            sqlComm.CommandText = "SELECT * FROM news";
-            List<itemsnews> retrievedTasks = sqlComm.ExecuteQuery<itemsnews>();
-            foreach (var t in retrievedTasks)
-            {
-               // lblbustype.Text = t.bus_name;
-               // lblbustype1.Text = t.bus_discription;
-               // lbltime.Text = t.bus_startstop_time;
-                itemsnews c = new itemsnews();
-                c.title = t.title;
-                c.imgtmp = t.image;
-                c.subject = t.description;
-                c.links = t.links;
-                // c.likes = Convert.ToInt32(item.Element("voting").Value);
-                items.Add(c);
-            }
-            listbox1.ItemsSource = items;
-        }
-
-        void client_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
-        {
             if (e.Error != null)
+            {
                 return;
-            Stream str = e.Result;
+            }
+            var o = XDocument.Parse(e.Result);
             try
             {
-                String eve = "item";
-                XDocument loadedData = XDocument.Load(str);
-                foreach (var item in loadedData.Descendants(eve))
+                items.title = XmlValueParser.ParseString(o.Root.Element("channel").Element("title"));
+                items.description = XmlValueParser.ParseString(o.Root.Element("channel").Element("description"));
+                FeedItemDescription desc = new FeedItemDescription();
+                foreach (var v in o.Descendants("item"))
                 {
+                    desc = new FeedItemDescription();
 
-                    try
-                    {
-                        itemsnews c = new itemsnews();
-                        c.title = item.Element("title").Value;
-                        c.imgtmp = item.Element("enclosure").Value;
-                        c.subject = item.Element("description").Value;
-                        c.links = item.Element("link").Value;
-                       // c.likes = Convert.ToInt32(item.Element("voting").Value);
-                        items.Add(c);
-                    }
-                    catch (Exception ex)
-                    {
-                        //GoogleAnalytics.EasyTracker.GetTracker().SendException(ex.Message, false);
-                    }
+                    desc.title = v.Element("title").Value;
+                    desc.description = v.Element("description").Value;
+                    desc.link = v.Element("link").Value;
+                    desc.author = v.Element("author").Value;
+                    desc.enclosure = v.Element("enclosure").Value;
+                    desc.pubdate = v.Element("pubDate").Value;
+
+                    desclist.Add(desc);
                 }
-                listbox1.ItemsSource = items;
+                items.item = desclist;
             }
-            catch (System.Xml.XmlException ex)
+            catch (XmlException ex)
             {
                 MessageBox.Show("limited connectivity or invalid data.\nplease try again");
             }
-        }
 
+            foreach (var v in items.item.AsEnumerable().Reverse())
+            {
+                ls = new UCFeedList();
 
-        private void btnew_Click(object sender, RoutedEventArgs e)
-        {
-            //  MessageBox.Show();
-            Button _button = (Button)sender;
-            string subject = _button.Content.ToString();
-            string img = _button.CommandParameter.ToString();
-           
-            // NavigationService.Navigate(new System.Uri(_button.Tag.ToString()));
-            NavigationService.Navigate(new Uri("/BMTA_News_details.xaml?key=" + _button.Tag.ToString() + "&subject=" + subject.ToString() + "&img=" + img.ToString(), UriKind.Relative));
+                ls.path_img = v.enclosure;
+                ls.texttitle_name.Text = HtmlRemoval.StripTagsRegexCompiled(v.title);
+                ls.textDescription.Text = HtmlRemoval.StripTagsRegexCompiled(v.description);
 
+                ls.texttitle_name.Text = ls.texttitle_name.Text.Replace("&quot;", "");
+                ls.textDescription.Text = ls.textDescription.Text.Replace("&quot;", "");
+
+                ls.texttitle_name.Text = ls.texttitle_name.Text.Replace("&nbsp;", "");
+                ls.textDescription.Text= ls.textDescription.Text.Replace("&nbsp;", "");
+
+                feedlistbox.Items.Add(ls);
+            }
         }
 
         private void btback_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+
+        private void feedlistbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml", UriKind.Relative));
+            UCFeedList item = (sender as ListBox).SelectedItem as UCFeedList;
+            if (feedlistbox.SelectedIndex != -1)
+            {
+                this.NavigationService.Navigate(new Uri("/BMTA_News_details.xaml?image=" + item.path_img + "&title=" + item.texttitle_name.Text + "&desc=" + item.textDescription.Text, UriKind.Relative));
+            }
+            feedlistbox.SelectedIndex = -1;
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_3(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusCoordinates.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_4(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml", UriKind.Relative));
-        }
-
-        private void close_Click(object sender, RoutedEventArgs e)
-        {
-            rightmenu.Visibility = System.Windows.Visibility.Collapsed;
-            rightmenux.Visibility = System.Windows.Visibility.Collapsed;
-            close.Visibility = System.Windows.Visibility.Collapsed;
-        }
-
-        private void btTopMenu_Click(object sender, RoutedEventArgs e)
-        {
-            rightmenux.Visibility = Visibility;
-            rightmenu.Visibility = Visibility;
-            close.Visibility = Visibility;
-        }
-
-        private void rhome_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_AppTh.xaml", UriKind.Relative));
-        }
-
-        private void rbusline_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml", UriKind.Relative));
-        }
-
-        private void rbusstop_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
-        }
-
-        private void rcoor_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusCoordinates.xaml", UriKind.Relative));
-        }
-
-        private void rbusstartstop_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml", UriKind.Relative));
-        }
-
-        private void rbusspeed_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_Speed_history.xaml", UriKind.Relative));
-        }
-
-        private void rbusnew_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_EventNew.xaml", UriKind.Relative));
-        }
-
-        private void HyperlinkButton_TextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
-        {
-
-        }
 
     }
 }

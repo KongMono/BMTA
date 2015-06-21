@@ -37,7 +37,6 @@
                     </Grid.RowDefinitions>
                     <TextBlock Text="{Binding bus_line}"  Width="auto" Height="auto" Margin="0,40,0,0" FontSize="60" Foreground="Black" TextTrimming="WordEllipsis" TextAlignment="Center" HorizontalAlignment="Center"/>
                 </Grid>
-
                 <TextBlock Text="{Binding bus_start}" Width="200" Foreground="Black" TextAlignment="Center"/>
                 <Image Source="Assets/arrow.png" Height="20" Width="80" CacheMode="BitmapCache" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <TextBlock Text="{Binding bus_end}" Width="200" Foreground="Black" TextAlignment="Center"/>
@@ -212,6 +211,7 @@
                 <ListBox x:Name="busStartStoplistbox" SelectionChanged="busStartStoplistbox_SelectionChanged"/>
             </Grid>
         </Grid>
+        
         <Grid x:Name="StreetsandLandmarksLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"/>
@@ -274,6 +274,7 @@
 
             </Grid>
         </Grid>
+        
         <Grid x:Name="HeaderCate" Grid.Row="2" Width="auto" VerticalAlignment="Bottom">
             <Grid.Background>
                 <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/BMTA_bg_footer.png"/>

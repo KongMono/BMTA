@@ -16,6 +16,7 @@ namespace BMTA
 {
     public partial class BMTA_EventNew : PhoneApplicationPage
     {
+        public String lang = (Application.Current as App).Language;
         public BMTA_EventNew()
         {
             InitializeComponent();
@@ -24,7 +25,14 @@ namespace BMTA
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
-            
+            if (lang.Equals("th"))
+            {
+                titleName.Text = "ข่าวสาร และกิจกรรม";
+            }
+            else
+            {
+                titleName.Text = "News & Events";
+            }
         }
 
         private void btback_Click(object sender, RoutedEventArgs e)
@@ -45,17 +53,18 @@ namespace BMTA
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            NavigationService.Navigate(new Uri("/BMTA_News.xaml", UriKind.Relative));
 
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-
+            NavigationService.Navigate(new Uri("/BMTA_Slot.xaml", UriKind.Relative));
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-
+            NavigationService.Navigate(new Uri("/BMTA_Abouts.xaml", UriKind.Relative));
         }
     }
 }

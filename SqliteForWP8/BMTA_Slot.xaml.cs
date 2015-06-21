@@ -16,13 +16,13 @@ using ShakeGestures;
 using System.IO;
 using System.Windows.Threading;
 using Microsoft.Phone.Net.NetworkInformation;
-//using System.Windows.Markup.XamlParseException;
 using Microsoft.Xna.Framework;
 
 namespace BMTA
 {
     public partial class BMTA_Slot : PhoneApplicationPage
     {
+        public String lang = (Application.Current as App).Language;
         public BMTA_Slot()
         {
             ShakeGesturesHelper.Instance.ShakeGesture += new EventHandler<ShakeGestureEventArgs>(Instance_ShakeGesture);
@@ -35,54 +35,21 @@ namespace BMTA
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
 
-            if (!HasNetwork())
+            if (lang.Equals("th"))
             {
-
-                Application.Current.Terminate();
-            }
-            else if (!HasInternet())
-            {
-                Application.Current.Terminate();
+                titleName.Text = "กิจกรรม";
+                headslot.Text = "ตั๋วทำนายดวง";
+                headslotdetail.Text = "บวกเลขทั้งหมด ลงท้ายด้วยเลขอะไร";
+                headslotshake.Text = "กรุณาเขย่าเพื่อทำนายดวง";
             }
             else
             {
-                string x = BMTA.clGetResolution.Width.ToString();
-                string y = BMTA.clGetResolution.Height.ToString();
-                string xy = x + "x" + y;
-                if (x == "480")
-                {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/480x852/BMTA_main_bg.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
-                }
-                else if (x == "720")
-                {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/720x1280/BMTA_slot_bg.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
-                }
-                else
-                {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/768x1280/BMTA_main_bg.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
-                }
-
-                txtnumber.Text = "";
-                txtnumber.Focus();
+                titleName.Text = "Events";
+                headslot.Text = "Ticket Fortune";
+                headslotdetail.Text = "What is the last number of your ticket no.summation?";
+                headslotshake.Text = "Please input your ticket number!";
             }
+
         }
 
         // Set the data context of the TextBlock to the answer.
@@ -93,7 +60,15 @@ namespace BMTA
             {
                 if (txtnumber.Text.Length < 7)
                 {
-                    MessageBox.Show("กรุณาใส่จำนวนตัวเลขให้ครบ 7หลัก");
+                    if (lang.Equals("th"))
+                    {
+                        MessageBox.Show("กรุณาใส่จำนวนตัวเลขให้ครบ 7หลัก");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please check your ticket number!");
+                    }
+
                     txtnumber.Focus();
                     return;
                 }
@@ -108,76 +83,16 @@ namespace BMTA
                             sum += Convert.ToInt32(pasteText[i].ToString());
                     }
                     string spintext = sum.ToString();
-                    int result = 0;
-                    result = Convert.ToInt32(spintext[1].ToString());
-                    NavigationService.Navigate(new Uri("/BMTA_Slot_Result.xaml?parameter=" + result, UriKind.Relative));
+                    string output = spintext.Substring(spintext.Length - 1, 1);
+                    NavigationService.Navigate(new Uri("/BMTA_Slot_Result.xaml?parameter=" + output, UriKind.Relative));
                 }
             });
 
         }
 
-        void checkInput(int length)
-        {
-            if (length < 7)
-            {
-                return;
-            }
-            else
-            {
-                int len = txtnumber.Text.Length;
-                int sum = 0;
-                string pasteText = txtnumber.Text;
-                for (int i = 0; i < pasteText.Length; i++)
-                {
-                    if (char.IsDigit(pasteText[i]))
-                        sum += Convert.ToInt32(pasteText[i].ToString());
-                }
-                string spintext = sum.ToString();
-                int result = 0;
-                result = Convert.ToInt32(spintext[1].ToString());
-
-                NavigationService.Navigate(new Uri("/BMTA_Slot_Result.xaml?parameter=" + result, UriKind.Relative));
-
-            }
-        }
-
-        private string GetAnswer()
-        {
-            Random random = new Random();
-            int randomNumber = random.Next(Answers.Count);
-            return Answers[randomNumber];
-        }
-
-        // List of answers.
-        private List<string> answersValue;
-        public List<string> Answers
-        {
-            get
-            {
-                if (answersValue == null)
-                    LoadAnswers();
-
-                return answersValue;
-            }
-        }
-
-        // Load the answers from the text file.
-        private void LoadAnswers()
-        {
-            answersValue = new List<string>();
-
-            using (StreamReader reader =
-                new StreamReader(Application.GetResourceStream(new Uri("answers.txt", UriKind.Relative)).Stream))
-            {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                    answersValue.Add(line);
-            }
-        }
-
         private void txtnumber_TextChanged(object sender, TextChangedEventArgs e)
         {
-            
+
         }
 
         private void btback_Click(object sender, RoutedEventArgs e)

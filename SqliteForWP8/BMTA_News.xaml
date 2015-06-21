@@ -6,52 +6,35 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="clr-namespace:Additional.WindowsPhone.Controls"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
-    mc:Ignorable="d"
-     Loaded="PhoneApplicationPage_Loaded">
+    d:DesignWidth="480" d:DesignHeight="728"
+    mc:Ignorable="d" 
+    shell:SystemTray.IsVisible="false"
+    Loaded="PhoneApplicationPage_Loaded"
+    Style="{StaticResource TransitionPageStyle}">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" CacheMode="BitmapCache">
-        <Grid.Background>
-            <ImageBrush Stretch="Fill" ImageSource="/Assets/720x1280/BMTA_new.png"/>
-        </Grid.Background>
+    <Grid x:Name="LayoutRoot">
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="78"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Button x:Name="btback" HorizontalAlignment="Left" Margin="-11,3,0,0" Grid.Row="1" VerticalAlignment="Top" Height="75" Width="93" BorderBrush="{x:Null}" Style="{StaticResource ButtonStyle5}" Click="btback_Click">
-            <Button.Background>
-                <ImageBrush Stretch="Fill" ImageSource="/Assets/arrowleft.png"/>
-            </Button.Background>
-        </Button>
-
-        <ListBox x:Name="listbox1" Margin="10,78,8,85" ItemsSource="{Binding}" Grid.Row="2"  >
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Button  Content="{Binding subject}"  x:Name="bgt" Tag="{Binding title}" CommandParameter="{Binding imgtmp}" Foreground="{x:Null}" Width="160" Height="120" Click="btnew_Click" >
-                            <Button.Background >
-                                <ImageBrush Stretch="Fill" ImageSource="{Binding imgtmp}"/>
-                            </Button.Background>
-                        </Button>
-                        <TextBlock FontFamily="Courier New" Width="400" FontSize="20" FontWeight="Bold" Text="" Foreground="Blue">
-                          <LineBreak/>
-                          <Run Foreground="#FF1D36A4" x:Name="lblsubject" FontFamily="Courier New" FontSize="20" Text="{Binding title}"/>
-                          <LineBreak/>
-                          <Run Foreground="Black" FontFamily="Courier New" FontSize="16" FontStyle="Italic" Text="{Binding subject}" />
-                        </TextBlock>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <controls:ProgressRing Width="70" IsActive="True" Height="70" Foreground="#FF00A54E"/>
+        <Grid x:Name="Header" Grid.Row="0" Width="auto" Background="#FF01A54E" Visibility="Visible">
+            <Button x:Name="btBack" BorderBrush="Transparent" Width="75" Height="75" VerticalAlignment="Center" HorizontalAlignment="Left" Click="btback_Click" Style="{StaticResource ImageButton}">
+                <Button.Background>
+                    <ImageBrush Stretch="Uniform" ImageSource="/Assets/arrowleft.png"/>
+                </Button.Background>
+            </Button>
+            <TextBlock  x:Name="titleName" Text="" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center">
+            </TextBlock>
+        </Grid>
+        <Grid x:Name="FeedLayoutList" Grid.Row="1"  Background="#FFFFFFFF" >
+            <ListBox x:Name="feedlistbox" SelectionChanged="feedlistbox_SelectionChanged"/>
         </Grid>
     </Grid>
 

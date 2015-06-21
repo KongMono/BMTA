@@ -13,223 +13,181 @@ using Microsoft.Phone.Net.NetworkInformation;
 using System.Windows.Media;
 using System.Windows.Resources;
 using System.Xml.Linq;
+using System.Diagnostics;
+using BMTA.Item;
+using System.Xml;
+using News;
+using System.Text.RegularExpressions;
 
 
 
 namespace BMTA
 {
-    public partial class BMTA_About_details : PhoneApplicationPage
+    public partial class BMTA_Abouts_details : PhoneApplicationPage
     {
-        // Constructor
-        public class itemabout
-        {
-            public string title { get; set; }
-           // public HttpUtility description { get; set; }
-            public string description { get; set; }
-
-        }
-        public static List<itemabout> items = new List<itemabout>();
-
-        public BMTA_About_details()
+        public String lang = (Application.Current as App).Language;
+        WebClient webClient = new WebClient();
+        public FeedItemAbout items = new FeedItemAbout();
+        public String url, page, header;
+        public BMTA_Abouts_details()
         {
             InitializeComponent();
         }
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
-            rightmenu.Visibility = System.Windows.Visibility.Collapsed;
-            rightmenux.Visibility = System.Windows.Visibility.Collapsed;
-            close.Visibility = System.Windows.Visibility.Collapsed;
+            page = this.NavigationContext.QueryString["page"];
+            header = this.NavigationContext.QueryString["Header"];
 
-            if (!HasNetwork())
-            {
 
-                Application.Current.Terminate();
-            }
-            else if (!HasInternet())
+            titleName.Text = header;
+           
+
+            loadData(page);
+        }
+        private void loadData(String page)
+        {
+
+            if (page == "1")
             {
-                Application.Current.Terminate();
-            }
-            else
-            {
-                loadData();
-                string x = BMTA.clGetResolution.Width.ToString();
-                string y = BMTA.clGetResolution.Height.ToString();
-                string xy = x + "x" + y;
-                if (x == "480")
+                if (lang.Equals("th"))
                 {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/480x852/BMTA_abouts.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
-                }
-                else if (x == "720")
-                {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/720x1280/BMTA_abouts.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
+                    url = "http://www.bmta.co.th/?q=th/feed/about-us";
                 }
                 else
                 {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/768x1280/BMTA_abouts.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
+                    url = "http://www.bmta.co.th/?q=en/feed/about-us";
                 }
             }
-        }
+            else if (page == "2")
+            {
+                if (lang.Equals("th"))
+                {
+                    url = "http://www.bmta.co.th/?q=th/feed/vision";
+                }
+                else
+                {
+                    url = "http://www.bmta.co.th/?q=en/feed/vision";
+                }
 
-        private void loadData()
-        {
-            WebClient client = new WebClient();
-            client.OpenReadCompleted += client_OpenReadCompleted;
-            client.OpenReadAsync(new Uri("http://www.bmta.co.th/?q=th/feed/about-us", UriKind.Absolute));
-
-        }
-
-        void client_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
-        {
-            if (e.Error != null)
-                return;
-            Stream str = e.Result;
-            string des = "";
+            }
+            else
+            {
+                if (lang.Equals("th"))
+                {
+                    url = "http://www.bmta.co.th/?q=th/feed/contact";
+                }
+                else
+                {
+                    url = "http://www.bmta.co.th/?q=en/feed/contact";
+                }
+            }
             try
             {
-                String eve = "item";
-                XDocument loadedData = XDocument.Load(str);
-                foreach (var item in loadedData.Descendants(eve))
-                {
+                Debug.WriteLine("URL :" + url);
+                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(FeedData_DownloadStringCompleted);
+                webClient.DownloadStringAsync(new Uri(url));
 
-                    try
-                    {
-                        itemabout c = new itemabout();
-                        c.title = item.Element("title").Value;
-                       // c.description = System.Net.WebUtility.HtmlDecode(item.Element("description").Value);
-                        c.description = HttpUtility.HtmlDecode(item.Element("description").Value);
-                        des = c.description;
-                        items.Add(c);
-                    }
-                    catch (Exception ex)
-                    {
-                        //GoogleAnalytics.EasyTracker.GetTracker().SendException(ex.Message, false);
-                    }
-                }
-                listbox1.ItemsSource = items;
-               // textBox1.Text = des;
             }
-            catch (System.Xml.XmlException ex)
+            catch (WebException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void FeedData_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+
+            if (e.Error != null)
+            {
+                
+                return;
+            }
+
+            var o = XDocument.Parse(e.Result);
+            try
+            {
+                foreach (var v in o.Descendants("item"))
+                {
+                    items.description = v.Element("description").Value;
+
+                }
+            }
+            catch (XmlException ex)
             {
                 MessageBox.Show("limited connectivity or invalid data.\nplease try again");
             }
+
+            descriptionLabel.NavigateToString(items.description);
+           
         }
 
-        private bool HasInternet()
+     
+        public static string StripTagsRegex(string source)
         {
-            if (!NetworkInterface.GetIsNetworkAvailable())
+         
+            String resize_text = ResizeImage.Instance.GetResizeAutoHeight(300);
+            String pre = @"<html><meta name='viewport' content='initial-scale=0,user-scalable=no,width=device-width'><style>body{color:#EFECE9 !important;background-color:black;font-weight:normal !important; font-size: 18px !important;}a,p,span,strong{font-size: 18px !important; color:#EFECE9 !important;}A:link{color:#EFECE9 !important;}
+                         A:visited{color:white !important;}</style><body>";
+            String last = "</body></html>";
+            String center = source;
+         
+
+           
+            foreach (Match i in Regex.Matches(center, @"<iframe.*src=\""(.*?)\"""))
             {
-                MessageBox.Show("No internet connection is available. Try again later.");
-                return false;
+                Match match = Regex.Match(i.Groups[1].Value, @"youtube", RegexOptions.IgnoreCase);
+
+                // Here we check the Match instance.
+                if (match.Success)
+                {
+                    var youtube_url = i.Groups[1].Value;
+                    //var p = i.Groups[1].Value;
+                    var index = youtube_url.IndexOf('?');
+                    if (index != -1 && index < youtube_url.Length)
+                    {
+                        try
+                        {
+                            var s = Uri.UnescapeDataString(youtube_url.Substring(0, index)).Split('/');
+                            youtube_url = "http://youtube.com/embed/" + s[4];
+                        }
+                        catch { }
+                    }
+
+                    // Finally, we get the Group value and display it.
+                    center = Regex.Replace(source, "<iframe.*></iframe>", "<a href=\"" + youtube_url + "\">คลิกชมวิดีโอจาก Youtube</a>");
+                    //center = Regex.Replace(center, i.Groups[1].Value + "." + i.Groups[2].Value, resize_text + m.Groups[1].Value + "." + m.Groups[2].Value);
+                    Debug.WriteLine("Regex.Matches = " + youtube_url);
+                }
+                else
+                {
+                    center = Regex.Replace(source, "<iframe.*></iframe>", string.Empty);
+                    Debug.WriteLine("Not youtube!!");
+                }
+
+
+                Debug.WriteLine("center = " + center);
             }
-            return true;
+
+
+            center = Regex.Replace(center, @"width=""[^\s]*""", "");
+            center = Regex.Replace(center, @"height=""[^\s]*""", "");
+            //center = Regex.Replace(center, @"height=""[^\s]*""", "height=\"auto\"");
+
+            foreach (Match m in Regex.Matches(center, "src=\"(\\S+?)\\.(jpg|png|bmp)"))
+            {
+                center = Regex.Replace(center, m.Groups[1].Value + "." + m.Groups[2].Value, resize_text + m.Groups[1].Value + "." + m.Groups[2].Value);
+                //Debug.WriteLine("Regex.Matches = " + m.Groups[1].Value + "." + m.Groups[2].Value);
+            }
+            //Debug.WriteLine("center = " + pre + center + last);
+            return pre + center + last;
+
         }
 
-        private bool HasNetwork()
-        {
-            if (!DeviceNetworkInformation.IsNetworkAvailable)
-            {
-                MessageBox.Show("No network is available. Try again later.");
-                return false;
-            }
-            return true;
-        }
 
         private void btback_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_3(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusCoordinates.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_4(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml", UriKind.Relative));
-        }
-
-        private void close_Click(object sender, RoutedEventArgs e)
-        {
-            rightmenu.Visibility = System.Windows.Visibility.Collapsed;
-            rightmenux.Visibility = System.Windows.Visibility.Collapsed;
-            close.Visibility = System.Windows.Visibility.Collapsed;
-        }
-
-        private void btTopMenu_Click(object sender, RoutedEventArgs e)
-        {
-            rightmenux.Visibility = Visibility;
-            rightmenu.Visibility = Visibility;
-            close.Visibility = Visibility;
-        }
-
-        private void rhome_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_AppTh.xaml", UriKind.Relative));
-        }
-
-        private void rbusline_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml", UriKind.Relative));
-        }
-
-        private void rbusstop_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
-        }
-
-        private void rcoor_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusCoordinates.xaml", UriKind.Relative));
-        }
-
-        private void rbusstartstop_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml", UriKind.Relative));
-        }
-
-        private void rbusspeed_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_Speed_history.xaml", UriKind.Relative));
-        }
-
-        private void rbusnew_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_EventNew.xaml", UriKind.Relative));
-        }
-
-        private void bw_Navigating(object sender, NavigatingEventArgs e)
-        {
-
         }
 
     }

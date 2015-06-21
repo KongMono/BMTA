@@ -248,7 +248,11 @@
     <Compile Include="Item\Article.cs" />
     <Compile Include="Item\busline.cs" />
     <Compile Include="Item\buslineItem.cs" />
+    <Compile Include="Item\SlotItem.cs" />
+    <Compile Include="Item\FeedItemAbout.cs" />
+    <Compile Include="Item\FeedItem.cs" />
     <Compile Include="Item\datasearchLandMarkByGeoItem.cs" />
+    <Compile Include="Item\FeedItemDescription.cs" />
     <Compile Include="Item\searchfindRoutingItem_routing_busstop.cs" />
     <Compile Include="Item\searchfindRoutingItem_routing.cs" />
     <Compile Include="Item\searchfindRoutingItem_total.cs" />
@@ -265,6 +269,12 @@
     <Compile Include="Item\NearBusStopItem.cs" />
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteAsync.cs" />
+    <Compile Include="Usercontrols\UCFeedText.xaml.cs">
+      <DependentUpon>UCFeedText.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Usercontrols\UCFeedList.xaml.cs">
+      <DependentUpon>UCFeedList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Usercontrols\UCLandMarkItem.xaml.cs">
       <DependentUpon>UCLandMarkItem.xaml</DependentUpon>
     </Compile>
@@ -281,6 +291,7 @@
       <DependentUpon>UCStartStop.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utillity\AutoCompleteBoxEx.cs" />
+    <Compile Include="Utillity\HtmlRemoval.cs" />
     <Compile Include="Utillity\clGetResolution.cs" />
     <Compile Include="Utillity\CoordinateConverter.cs" />
     <Compile Include="Geo\AngleConverter.cs" />
@@ -316,6 +327,8 @@
     <Compile Include="Usercontrols\UCToolTip.xaml.cs">
       <DependentUpon>UCToolTip.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utillity\ResizeImage.cs" />
+    <Compile Include="Utillity\XmlValueParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -529,6 +542,14 @@
     <Page Include="Style\CustomStyle.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Usercontrols\UCFeedText.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Usercontrols\UCFeedList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Usercontrols\UCLandMarkItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -590,6 +611,7 @@
     <Content Include="Assets\bg_advance_search.png" />
     <Content Include="Assets\bg_numberbus.png" />
     <Content Include="Assets\BMTA_infobox.png" />
+    <Content Include="Assets\BMTA_slotresult_bg_t.png" />
     <Content Include="Assets\btbus.png" />
     <Content Include="Assets\btbus_active.png" />
     <Content Include="Assets\btlandmark.png" />
@@ -646,6 +668,8 @@
     <Content Include="Assets\mrt_icon.png" />
     <Content Include="Assets\Official_Logo_bts.jpg" />
     <Content Include="Assets\pin_blue.png" />
+    <Content Include="Assets\slot_bg.png" />
+    <Content Include="Assets\slot_bg_t.png" />
     <Content Include="Assets\up.png" />
     <Content Include="Assets\walk.png" />
     <Content Include="bmtadatabase.sqlite" />
@@ -774,24 +798,6 @@
     <Content Include="Assets\btn_startend_th.png" />
     <Content Include="Assets\btn_streets_en.png" />
     <Content Include="Assets\btn_streets_th.png" />
-    <Content Include="Assets\bt_main_th\btf_bus.png" />
-    <Content Include="Assets\bt_main_th\btf_busstop.png" />
-    <Content Include="Assets\bt_main_th\btf_place.png" />
-    <Content Include="Assets\bt_main_th\btf_startstop.png" />
-    <Content Include="Assets\bt_main_th\btn_start.png" />
-    <Content Include="Assets\bt_main_th\bt_1en.png" />
-    <Content Include="Assets\bt_main_th\bt_1th.png" />
-    <Content Include="Assets\bt_main_th\bt_2en.png" />
-    <Content Include="Assets\bt_main_th\bt_2th.png" />
-    <Content Include="Assets\bt_main_th\bt_3en.png" />
-    <Content Include="Assets\bt_main_th\bt_3thx.png" />
-    <Content Include="Assets\bt_main_th\bt_4en.png" />
-    <Content Include="Assets\bt_main_th\bt_4th.png" />
-    <Content Include="Assets\bt_main_th\bt_5en.png" />
-    <Content Include="Assets\bt_main_th\bt_5th.png" />
-    <Content Include="Assets\bt_main_th\bt_6en.png" />
-    <Content Include="Assets\bt_main_th\bt_6th.png" />
-    <Content Include="Assets\bt_main_th\bt_pin.png" />
     <Content Include="Assets\bt_pin.png" />
     <Content Include="Assets\cancel.png" />
     <Content Include="Assets\circle.PNG" />

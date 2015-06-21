@@ -21,154 +21,130 @@ using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Media.PhoneExtensions;
 using System.Globalization;
 using System.Threading.Tasks;
+using BMTA.Item;
 
 namespace BMTA
 {
 
     public partial class BMTA_Slot_Result : PhoneApplicationPage
     {
-        /// <summary>
-        /// The database path.
-        /// </summary>
-        public static string DB_PATH = Path.Combine(Path.Combine(ApplicationData.Current.LocalFolder.Path, "bmtadatabase.sqlite"));
-
-        /// <summary>
-        /// The sqlite connection.
-        /// </summary>
-        private SQLiteConnection dbConn;
-
-        int Selected_ContactId = 0;
-
-        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-
-            string parameter = "";
-
-            if (NavigationContext.QueryString.TryGetValue("parameter", out parameter))
-
-                this.label.Text = parameter;
-
-            /// Create the database connection.
-            dbConn = new SQLiteConnection(DB_PATH);
-            /// Create the table Task, if it doesn't exist.
-           // dbConn.DropTable<slot>();
-           // dbConn.DeleteAll<slot>();
-           // dbConn.Query<slot>("delete from slot", "");
-           // dbConn.Query<sqlite_sequence>("delete from sqlite_sequence where name = ?", "your_table_name");
-           // dbConn.DeleteAll<slot>();
-            dbConn.CreateTable<slot>();
-
-            Selected_ContactId = int.Parse(NavigationContext.QueryString["parameter"]);
-
-            SQLiteCommand sqlComm = new SQLiteCommand(dbConn);
-            sqlComm.CommandText = "select * from slot where index_slot =" + Selected_ContactId;
-
-            List<slot> retrievedTasks = sqlComm.ExecuteQuery<slot>();
-            foreach (var t in retrievedTasks)
-            {
-                //TaskListBox.Items.Add(t);
-                lblDetail.Text = t.ToString();
-            }
-        }
-
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            if (dbConn != null)
-            {
-                /// Close the database connection.
-                dbConn.Close();
-            }
-        }
+        public String lang = (Application.Current as App).Language;
+        public String result;
+        public SlotItem item = new SlotItem();
 
         public BMTA_Slot_Result()
         {
             InitializeComponent();
-      
+
         }
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
-            rightmenu.Visibility = System.Windows.Visibility.Collapsed;
-            rightmenux.Visibility = System.Windows.Visibility.Collapsed;
-            close.Visibility = System.Windows.Visibility.Collapsed;
 
-            if (!HasNetwork())
+            if (lang.Equals("th"))
             {
-
-                Application.Current.Terminate();
-            }
-            else if (!HasInternet())
-            {
-                Application.Current.Terminate();
+                titleName.Text = "กิจกรรม";
+                headfortune.Text = "ตัวเลขของคุณคือ";
             }
             else
             {
-                string x = BMTA.clGetResolution.Width.ToString();
-                string y = BMTA.clGetResolution.Height.ToString();
-                string xy = x + "x" + y;
-                if (x == "480")
-                {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/480x852/BMTA_main_bg.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
-                }
-                else if (x == "720")
-                {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/720x1280/BMTA_slotresult_bg.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
-                }
-                else
-                {
-                    ImageBrush brush = new ImageBrush
-                    {
-                        ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/768x1280/BMTA_main_bg.png", UriKind.Relative)),
-                        Opacity = 1d
-                    };
-                    this.LayoutRoot.Background = brush;
-                    brush.Stretch = Stretch.Fill;
-                }
-
-               
+                titleName.Text = "Events";
+                headfortune.Text = "Your ticket No. is";
             }
-        }
 
-        private bool HasInternet()
-        {
-            if (!NetworkInterface.GetIsNetworkAvailable())
+            result = this.NavigationContext.QueryString["parameter"];
+
+            btn_num.Content = result;
+
+            if ((Application.Current as App).MemSlotList.Count < 1)
             {
-                MessageBox.Show("No internet connection is available. Try again later.");
-                return false;
-            }
-            return true;
-        }
+                SlotItem slot = new SlotItem();
+                slot.index_slot = "0";
+                slot.index_detail = "ระหว่างเดินทางระวังทรัพย์สินจะหาย ไม่ควรประมาท ความรักไม่ควรใจร้อนจะผิดหวังได้";
+                slot.index_detail_en = "Aware of losing things while traveling. Should be calmer with your love issues.";
+                (Application.Current as App).MemSlotList.Add(slot);
 
-        private bool HasNetwork()
-        {
-            if (!DeviceNetworkInformation.IsNetworkAvailable)
+                slot = new SlotItem();
+                slot.index_slot = "1";
+                slot.index_detail = "วันนี้จะมีโชคดี เดินทางปลอดภัย การงานราบรื่นไร้ปัญหากังวลใจ";
+                slot.index_detail_en = "It's your lucky day for both traveling and working.";
+                (Application.Current as App).MemSlotList.Add(slot);
+
+                slot = new SlotItem();
+                slot.index_slot = "2";
+                slot.index_detail = "ดวงความรักกำลังพุ่ง เหมาะกับการบอกรักคนที่หมายตา สำหรับคนที่มีคู่แล้ว ความรักจะหวานเป็นพิเศษ";
+                slot.index_detail_en = "Love is in the air. Great time to share your romance for both singles and couples.";
+                (Application.Current as App).MemSlotList.Add(slot);
+
+                slot = new SlotItem();
+                slot.index_slot = "3";
+                slot.index_detail = "ของหายจะได้คืน หรือได้พบคนที่ไม่ได้พบกันนาน บริวารจะเดินทางนำโชคลาภมาให้";
+                slot.index_detail_en = "Found your long lost thing or person. Your crew will bring you good news.";
+                (Application.Current as App).MemSlotList.Add(slot);
+
+                slot = new SlotItem();
+                slot.index_slot = "4";
+                slot.index_detail = "วันนี้จะต้องเดินทางบ่อย มีเกณฑ์จะต้องติดต่อพบปะผู้คนมากหน้าหลายตา คนมีคู่ระวังปัญหาที่เกิดจากความไม่เข้าใจ";
+                slot.index_detail_en = "Many trips to take and many people to meet. Be aware of some misunderstanding between you and with your love one.";
+                (Application.Current as App).MemSlotList.Add(slot);
+
+                slot = new SlotItem();
+                slot.index_slot = "5";
+                slot.index_detail = "มีคนกำลังคิดถึงคุณ มีโชคด้านเงินๆทองๆ แต่ต้องระวังเรื่องสุขภาพ";
+                slot.index_detail_en = "Somebody is missing you. Your luck will be good on financial, but be aware of your health.";
+                (Application.Current as App).MemSlotList.Add(slot);
+
+                slot = new SlotItem();
+                slot.index_slot = "6";
+                slot.index_detail = "มีเกณฑ์จะเจอเนื้อคู่ระหว่างการเดินทาง มีเรื่องน่าตื่นเต้นเข้ามาและคุณจะรู้สึกสนุกไปกับมัน";
+                slot.index_detail_en = "You might meet Mr. or Miss Right while traveling. There will be some amusement and you will enjoy the time.";
+                (Application.Current as App).MemSlotList.Add(slot);
+
+                slot = new SlotItem();
+                slot.index_slot = "7";
+                slot.index_detail = "จะเกิดปัญหาที่ทำให้คุณต้องแก้ปัญหาเฉพาะหน้าแต่คุณจะผ่านมันไปได้ด้วยดีเพราะมีคนคอยช่วยเหลือ";
+                slot.index_detail_en = "There are some troubles to get through, but you will be fine with some helps.";
+                (Application.Current as App).MemSlotList.Add(slot);
+
+                slot = new SlotItem();
+                slot.index_slot = "8";
+                slot.index_detail = "อย่าไว้ใจคนแปลกหน้า หรือคนที่เพิ่งรู้จักกันได้ไม่นาน จะมีโชคจากการเดินทาง";
+                slot.index_detail_en = "Don't trust  the stranger or anybody you just met. Traveling will bring the goods to you.";
+                (Application.Current as App).MemSlotList.Add(slot);
+
+                slot = new SlotItem();
+                slot.index_slot = "9";
+                slot.index_detail = "วันนี้ไม่ควรมีเรื่องกับใครเพราะจะเป็นฝ่ายเสียเปรียบ คนกำลังแอบชอบคุณอยู่จะเปิดเผยให้คุณรู้";
+                slot.index_detail_en = "Shouldn't get into trouble because you will adverse in the game. Somebody has been falling for you, and going to expose it.";
+                (Application.Current as App).MemSlotList.Add(slot);
+            }
+
+            foreach (var i in (Application.Current as App).MemSlotList)
             {
-                MessageBox.Show("No network is available. Try again later.");
-                return false;
+                if (i.index_slot == result)
+                {
+                    if (lang.Equals("th"))
+                    {
+                        lblDetail.Text = i.index_detail;
+                    }
+                    else
+                    {
+                        lblDetail.Text = i.index_detail_en;
+                    }
+                    return;
+                }
+
             }
-            return true;
+
+
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-
+        private void btback_Click(object sender, RoutedEventArgs e)
         {
-            SaveToMediaLibrary(LayoutRoot);
+            NavigationService.GoBack();
         }
 
-        public static void SaveToMediaLibrary(FrameworkElement element)
+        public void SaveToMediaLibrary(FrameworkElement element)
         {
             try
             {
@@ -180,17 +156,13 @@ namespace BMTA
 
                 var lib = new MediaLibrary();
                 var filePath = string.Format(DateTime.Now + "_" + "BMTASlotResult.jpg");
-               // lib.SavePicture(filePath, ms);
 
-               // WriteableBitmap wb = new WriteableBitmap(element, null);
-               // wb = wb.FromStream(ms);
-               // wb = wb.Crop((wb.PixelWidth / 2) - 100, (wb.PixelHeight / 2) - 100, wb.PixelWidth, 700);
 
-                var bmpc = new WriteableBitmap(0, 0).FromStream(ms);//.FromContent("Assets/ApplicationIcon.png");//fromfile
+                var bmpc = new WriteableBitmap(0, 0).FromStream(ms);
                 var croppedBmp = bmpc.Crop(0, 0, bmpc.PixelWidth, 600);
-               // croppedBmp.SaveToMediaLibrary(DateTime.Now + "_" + "BMTASlotResultX.jpg");
 
-                var picture = croppedBmp.SaveToMediaLibrary(DateTime.Now + "_" + "BMTASlotResult.jpg"); //lib.SavePicture(filePath, ms);
+
+                var picture = croppedBmp.SaveToMediaLibrary(DateTime.Now + "_" + "BMTASlotResult.jpg");
 
                 ShareMediaTask shareMediaTask = new ShareMediaTask();
                 shareMediaTask = new ShareMediaTask();
@@ -207,106 +179,14 @@ namespace BMTA
             }
         }
 
+        private void btn_share_Click(object sender, RoutedEventArgs e)
+        {
+            SaveToMediaLibrary(LayoutRoot);
+        }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }
-
-        /// <summary>
-        /// Task class representing the Task table. Each attribute in the class become one attribute in the database.
-        /// </summary>
-        public sealed class slot
-        {
-            /// <summary>
-            /// You can create an integer primary key and let the SQLite control it.
-            /// </summary>
-            [PrimaryKey, AutoIncrement]
-            public int id { get; set; }
-
-            public int index_slot { get; set; }
-
-            public string slot_detail { get; set; }
-
-            public override string ToString()
-            {
-                return slot_detail;
-            }
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_3(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_4(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusCoordinates.xaml", UriKind.Relative));
-        }
-
-        private void Button_Click_5(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml", UriKind.Relative));
-        }
-
-        private void btback_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.GoBack();
-        }
-
-        private void close_Click(object sender, RoutedEventArgs e)
-        {
-            rightmenu.Visibility = System.Windows.Visibility.Collapsed;
-            rightmenux.Visibility = System.Windows.Visibility.Collapsed;
-            close.Visibility = System.Windows.Visibility.Collapsed;
-        }
-
-        private void btTopMenu_Click(object sender, RoutedEventArgs e)
-        {
-            rightmenux.Visibility = Visibility;
-            rightmenu.Visibility = Visibility;
-            close.Visibility = Visibility;
-        }
-
-        private void rhome_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_AppTh.xaml", UriKind.Relative));
-        }
-
-        private void rbusline_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml", UriKind.Relative));
-        }
-
-        private void rbusstop_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
-        }
-
-        private void rcoor_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusCoordinates.xaml", UriKind.Relative));
-        }
-
-        private void rbusstartstop_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml", UriKind.Relative));
-        }
-
-        private void rbusspeed_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_Speed_history.xaml", UriKind.Relative));
-        }
-
-        private void rbusnew_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_EventNew.xaml", UriKind.Relative));
-        }
-
     }
 }
