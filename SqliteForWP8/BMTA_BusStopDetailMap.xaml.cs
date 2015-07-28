@@ -49,7 +49,7 @@ namespace BMTA
         UCCostomPushpin _Pushpin = new UCCostomPushpin();
         private MapPolyline line;
         MapLayer layer;
-        string lat, lon;
+        string currStatus;
         MapLayer mymapLayer = new MapLayer();
         List<GeoCoordinate> MyCoordinates = new List<GeoCoordinate>();
 
@@ -131,7 +131,7 @@ namespace BMTA
             GeoCoordinate myGeoCoordinate = CoordinateConverter.ConvertGeocoordinate(myGeocoordinate);
 
             this.map.Center = myGeoCoordinate;
-            this.map.ZoomLevel = 18;
+            this.map.ZoomLevel = 11;
 
             // Create a small circle to mark the current location.
             Ellipse myCircle = new Ellipse();
@@ -171,16 +171,21 @@ namespace BMTA
 
                 foreach (var busstop in item.busstop)
                 {
-                    Pushpin pushpin = new Pushpin();
-                    pushpin.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(busstop.latitude), Convert.ToDouble(busstop.longitude));
-                    var uriString = @"Assets/btn_bus.png";
-                    pushpin.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriString, UriKind.Relative)) };
-                    pushpin.Width = 35;
-                    pushpin.Height = 31;
-                    MapOverlay overlay = new MapOverlay();
-                    overlay.Content = pushpin;
-                    overlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(busstop.latitude), Convert.ToDouble(busstop.longitude));
-                    layer.Add(overlay);
+                    if (currStatus != busstop.status)
+                    {
+                        Pushpin pushpin = new Pushpin();
+                        pushpin.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(busstop.latitude), Convert.ToDouble(busstop.longitude));
+                        var uriString = @"Assets/btn_bus.png";
+                        pushpin.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriString, UriKind.Relative)) };
+                        pushpin.Width = 35;
+                        pushpin.Height = 31;
+                        MapOverlay overlay = new MapOverlay();
+                        overlay.Content = pushpin;
+                        overlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(busstop.latitude), Convert.ToDouble(busstop.longitude));
+                        layer.Add(overlay);
+                    }
+
+                    currStatus = busstop.status;
                 }
                 // Map Layer
                 map.Center = new GeoCoordinate(Convert.ToDouble(item.busstop[0].latitude), Convert.ToDouble(item.busstop[0].longitude));

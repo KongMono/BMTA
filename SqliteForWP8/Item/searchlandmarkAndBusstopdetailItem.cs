@@ -8,17 +8,17 @@ namespace BMTA
 {
     public class searchlandmarkAndBusstopdetailItem
     {
-        public string status { get; set; }
-        
         public string id { get; set; }
-
-        public string stop_name { get; set; }
-
-        public string stop_name_en { get; set; }
 
         public string name { get; set; }
 
         public string name_en { get; set; }
+
+        public string ref_name { get; set; }
+
+        public string stop_name { get; set; }
+
+        public string stop_name_en { get; set; }
 
         public string lattitude { get; set; }
 

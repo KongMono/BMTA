@@ -37,9 +37,9 @@
                     </Grid.RowDefinitions>
                     <TextBlock Text="{Binding bus_line}"  Width="auto" Height="auto" Margin="0,40,0,0" FontSize="60" Foreground="Black" TextTrimming="WordEllipsis" TextAlignment="Center" HorizontalAlignment="Center"/>
                 </Grid>
-                <TextBlock Text="{Binding bus_start}" Width="200" Foreground="Black" TextAlignment="Center"/>
+                <TextBlock Text="{Binding bus_start_final}" Width="200" Foreground="Black" TextAlignment="Center"/>
                 <Image Source="Assets/arrow.png" Height="20" Width="80" CacheMode="BitmapCache" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBlock Text="{Binding bus_end}" Width="200" Foreground="Black" TextAlignment="Center"/>
+                <TextBlock Text="{Binding bus_stop_final}" Width="200" Foreground="Black" TextAlignment="Center"/>
             </StackPanel>
         </DataTemplate>
 
@@ -60,9 +60,9 @@
             <TextBlock  x:Name="titleName" Text="" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center">
             </TextBlock>
 
-            <Button x:Name="btTopMenu" BorderBrush="Transparent" Width="75" Height="75" VerticalAlignment="Center" HorizontalAlignment="Right" Click="btTopMenu_Click" Style="{StaticResource ImageButton}">
+            <Button x:Name="btTopMenu" BorderBrush="Transparent" Width="75" Height="75" VerticalAlignment="Stretch" HorizontalAlignment="Right" Click="btTopMenu_Click" Style="{StaticResource ImageButton}">
                 <Button.Background>
-                    <ImageBrush Stretch="Uniform" ImageSource="/Assets/720x1280/BMTA_top_menu.png"/>
+                    <ImageBrush Stretch="Uniform" ImageSource="/Assets/icon_home.png"/>
                 </Button.Background>
             </Button>
         </Grid>
@@ -97,10 +97,9 @@
                         <c4f:RoundToggleButton x:Name="btn_van" Content="ต" BorderBrush="{x:Null}" FontSize="21" Click="BtnNumber_Click" CheckedBrush="#FF01A54E" Checked="btn_Checked"/>
                     </StackPanel>
                 </ScrollViewer>
-
             </Grid>
 
-            <Grid x:Name="MainList" Grid.Row="2" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FFFFFFFF">
+            <Grid x:Name="MainList" Grid.Row="2" Width="480" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FFFFFFFF">
                 <ListBox x:Name="buslinelistbox"  ItemTemplate="{StaticResource CustomListTemplate}"  VerticalAlignment="Center" SelectionChanged="buslinelistbox_SelectionChanged">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -108,6 +107,7 @@
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                 </ListBox>
+                <ProgressBar IsIndeterminate="true" Foreground="Green" x:Name="progressBar_busline" Visibility="Collapsed"/>
             </Grid>
         </Grid>
 
@@ -116,13 +116,15 @@
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            
 
             <Grid x:Name="busstopSeacrch" Grid.Row="0" Width="auto" Background="#FF18359B">
                 <toolkit:AutoCompleteBox x:Name="busstop_search" Grid.RowSpan="2" VerticalAlignment="Center" TextChanged="busstop_search_TextChanged" FilterMode="None" ValueMemberBinding="{Binding stop_name}" SelectionChanged="busstop_search_SelectionChanged" KeyUp="busstop_search_KeyUp">
                     <toolkit:AutoCompleteBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding stop_name}" FontSize="25" Foreground="Black"/>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{Binding ref_name}" FontSize="25" Padding="5,5,5,5" Foreground="Black"/>
+                                <TextBlock Text="{Binding stop_name}" FontSize="20" Padding="5,5,5,5" Foreground="Gray"/>
                             </StackPanel>
                         </DataTemplate>
                     </toolkit:AutoCompleteBox.ItemTemplate>
@@ -131,19 +133,19 @@
             </Grid>
 
             <Grid x:Name="busstopMainList" Grid.Row="1"  Background="#FFFFFFFF" >
-
                 <maps:Map  PedestrianFeaturesEnabled="True" LandmarksEnabled="True" x:Name="map" ZoomLevel="14" Height="auto" Width="auto">
-
                 </maps:Map>
+                <ProgressBar IsIndeterminate="true" Foreground="Green" x:Name="progressBar_busstop" Visibility="Collapsed"/>
                 <Button HorizontalAlignment="Right" VerticalAlignment="Top" Width="70" Height="70" BorderBrush="{x:Null}" Style="{StaticResource ImageButton}">
                     <Button.Background>
                         <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/mylocation.png"/>
                     </Button.Background>
                 </Button>
+              
             </Grid>
         </Grid>
 
-        <Grid x:Name="busStartStopLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Collapsed">
+        <Grid x:Name="busStartStopLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="75"/>
@@ -209,10 +211,11 @@
             </Grid>
             <Grid x:Name="busStartStopLayoutList" Grid.Row="2" Grid.ColumnSpan="3" Width="auto" Background="#FFFFFFFF" >
                 <ListBox x:Name="busStartStoplistbox" SelectionChanged="busStartStoplistbox_SelectionChanged"/>
+                <ProgressBar IsIndeterminate="true" Foreground="Green" x:Name="progressBar_busstartstop" Visibility="Collapsed"/>
             </Grid>
         </Grid>
-        
-        <Grid x:Name="StreetsandLandmarksLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Visible">
+
+        <Grid x:Name="StreetsandLandmarksLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="50"/>
@@ -228,7 +231,6 @@
                         </DataTemplate>
                     </toolkit:AutoCompleteBox.ItemTemplate>
                 </toolkit:AutoCompleteBox>
-                <!--<TextBox x:Name="StreetsandLandmarks_search"  BorderBrush="Transparent" TextWrapping="Wrap" VerticalAlignment="Center" SelectionBackground="{x:Null}" Grid.RowSpan="2" Style="{StaticResource TextBoxStyle1}" />-->
             </Grid>
             <Grid x:Name="latlonSeacrch" Grid.Row="1" Width="auto" Background="#FF18359B">
                 <Grid.RowDefinitions>
@@ -248,7 +250,6 @@
             <Grid Grid.Row="2" Margin="20,20,20,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0">
@@ -259,19 +260,11 @@
                     <Grid  Grid.Row="0" Background="#D9D4D4D4">
                         <TextBlock x:Name="textHeaderLandMark" Text="ผลการค้นหาล่าสุด" TextWrapping="Wrap" Foreground="Black" VerticalAlignment="Center" Margin="20,0,0,0"/>
                     </Grid>
-                    <ListBox x:Name="LandmarksHistorylistbox" Grid.Row="1"/>
-                </Grid>
-                <Grid Grid.Row="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid  Grid.Row="0" Background="#D9D4D4D4" Visibility="Collapsed">
-                        <TextBlock x:Name="textHeaderLandMarkSearch" Text="ผลการค้นหา" TextWrapping="Wrap" Foreground="Black" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                    <Grid  Grid.Row="1">
+                        <ListBox x:Name="LandmarksHistorylistbox" Grid.Row="1"/>
+                        <ProgressBar IsIndeterminate="true" Foreground="Green" x:Name="progressBar_landmark" Visibility="Collapsed"/>
                     </Grid>
-                    <ListBox x:Name="LandmarksDatalistbox" Grid.Row="1"/>
                 </Grid>
-
             </Grid>
         </Grid>
         
@@ -284,52 +277,6 @@
             <Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,130,0" Width="90" Height="85" BorderBrush="{x:Null}" Style="{StaticResource ImageButton}" Click="btn_bottom_3"/>
             <Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0" Width="90" Height="85" BorderBrush="{x:Null}" Style="{StaticResource ImageButton}" Click="btn_bottom_4"/>
         </Grid>
-        <StackPanel x:Name="rightmenux" HorizontalAlignment="Left" Height="auto" Margin="0,0,0,0" Grid.RowSpan="5" VerticalAlignment="Stretch" Width="480" Background="#BF000000" Visibility="Collapsed"/>
-        <ScrollViewer x:Name="rightmenu" Grid.RowSpan="6"  VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
-            <StackPanel HorizontalAlignment="Right" Height="auto" VerticalAlignment="Top" Width="402" Background="#FF00A54E">
-                <Button x:Name="rhome" Width="417" Height="100" BorderBrush="{x:Null}" Margin="-15,0,0,0" Style="{StaticResource ImageButton}" Click="rhome_Click">
-                    <Button.Background>
-                        <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/rightmenu_home.png"/>
-                    </Button.Background>
-                </Button>
-                <Button x:Name="rbusline" Height="150" Margin="-13,-20,-14,0" BorderThickness="0" Style="{StaticResource ImageButton}" Click="rbusline_Click">
-                    <Button.Background>
-                        <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/btn_busline_th.png"/>
-                    </Button.Background>
-                </Button>
-                <Button x:Name="rbusstop" Height="150" Margin="-13,-24,-14,0" BorderThickness="0" Style="{StaticResource ImageButton}" Click="rbusstop_Click">
-                    <Button.Background>
-                        <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/btn_busstop_th.png"/>
-                    </Button.Background>
-                </Button>
-                <Button x:Name="rcoor" Height="150" Margin="-13,-28,-14,0" BorderThickness="0" Style="{StaticResource ImageButton}" Click="rcoor_Click">
-                    <Button.Background>
-                        <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/btn_streets_th.png"/>
-                    </Button.Background>
-                </Button>
-                <Button x:Name="rbusstartstop" Height="150" Margin="-13,-27,-14,0" BorderThickness="0" Style="{StaticResource ImageButton}" Click="rbusstartstop_Click">
-                    <Button.Background>
-                        <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/btn_startend_th.png"/>
-                    </Button.Background>
-                </Button>
-                <Button x:Name="rbusspeed" Height="150" Margin="-13,-28,-14,0" BorderThickness="0" Style="{StaticResource ImageButton}" Click="rbusspeed_Click">
-                    <Button.Background>
-                        <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/btn_speed_th.png"/>
-                    </Button.Background>
-                </Button>
-                <Button x:Name="rbusnew"  Height="150" Margin="-13,-28,-14,0" BorderThickness="0" Style="{StaticResource ImageButton}" Click="rbusnew_Click">
-                    <Button.Background>
-                        <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/btn_news_th.png"/>
-                    </Button.Background>
-                </Button>
-            </StackPanel>
-        </ScrollViewer>
-        <Button x:Name="close" Width="80" Height="80"  BorderBrush="Transparent"  VerticalAlignment="Center"  HorizontalAlignment="Left" Click="close_Click" Grid.RowSpan="1" Visibility="Collapsed">
-            <Button.Background>
-                <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/close.png"/>
-            </Button.Background>
-        </Button>
-
     </Grid>
 </phone:PhoneApplicationPage>
     

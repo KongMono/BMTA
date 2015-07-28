@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using BMTA.Item;
 using System.Collections.ObjectModel;
+using Parse;
+using SQLite;
 
 namespace BMTA
 {
@@ -24,7 +26,9 @@ namespace BMTA
         public string AppVersion = "1.0";
         public string pathAnalytic = "";
         public string Language = "";
+        public string lastUpdate = "";
         public string lat_current, lon_current;
+        public List<SpeedCheckItem> CheckSpeedList = new List<SpeedCheckItem>();
         public List<SlotItem> MemSlotList = new List<SlotItem>();
         public List<datasearchLandMarkByGeoItem> MemLandMarkList = new List<datasearchLandMarkByGeoItem>();
         public List<buslineItem> DataSearchList = new List<buslineItem>();
@@ -37,6 +41,8 @@ namespace BMTA
         public searchfindRoutingItem_data RountingDataBusStop = new searchfindRoutingItem_data();
         public searchfindRoutingItem_data RountingDataStartStop = new searchfindRoutingItem_data();
         public static string DB_PATH = Path.Combine(Path.Combine(ApplicationData.Current.LocalFolder.Path, "bmtadatabase.sqlite"));
+        public static SQLiteAsyncConnection connection;
+        public static bool isDatabaseExisting;
 
         /// <summary>
         /// Service
@@ -64,6 +70,24 @@ namespace BMTA
                 IsolatedStorageSettings.ApplicationSettings.Add("MemSlotList", MemSlotList);
             }
 
+            if (IsolatedStorageSettings.ApplicationSettings.Contains("CheckSpeedList"))
+            {
+                IsolatedStorageSettings.ApplicationSettings["CheckSpeedList"] = CheckSpeedList;
+            }
+            else
+            {
+                IsolatedStorageSettings.ApplicationSettings.Add("CheckSpeedList", CheckSpeedList);
+            }
+
+            if (IsolatedStorageSettings.ApplicationSettings.Contains("lastUpdate"))
+            {
+                IsolatedStorageSettings.ApplicationSettings["lastUpdate"] = lastUpdate;
+            }
+            else
+            {
+                IsolatedStorageSettings.ApplicationSettings.Add("lastUpdate", lastUpdate);
+            }
+
             IsolatedStorageSettings.ApplicationSettings.Save();
         }
 
@@ -77,6 +101,16 @@ namespace BMTA
             if (IsolatedStorageSettings.ApplicationSettings.Contains("MemSlotList"))
             {
                 MemSlotList = (List<SlotItem>)IsolatedStorageSettings.ApplicationSettings["MemSlotList"];
+            }
+
+            if (IsolatedStorageSettings.ApplicationSettings.Contains("CheckSpeedList"))
+            {
+                CheckSpeedList = (List<SpeedCheckItem>)IsolatedStorageSettings.ApplicationSettings["CheckSpeedList"];
+            }
+
+            if (IsolatedStorageSettings.ApplicationSettings.Contains("lastUpdate"))
+            {
+                lastUpdate = IsolatedStorageSettings.ApplicationSettings["lastUpdate"] as string;
             }
         }
         /// <summary>
@@ -92,16 +126,27 @@ namespace BMTA
         /// </summary>
         public App()
         {
+            //ParseClient.Initialize("pd5bpruWPEQBEdPdPRfBRn86rhDkv6EzXlNSV0Bi", "u9UgEQqR7TqCxVnZpnPjG6lltpP8YtBLzrVSBQOe");
+            //this.Startup += async (sender, args) =>
+            //{
+            //    // This optional line tracks statistics around app opens, including push effectiveness:
+            //    ParseAnalytics.TrackAppOpens(RootFrame);
 
+            //    // By convention, the empty string is considered a "Broadcast" channel
+            //    // Note that we had to add "async" to the definition to use the await keyword
+            //    await ParsePush.SubscribeAsync("");
+            //};
+
+            //ParsePush.ToastNotificationReceived += ParsePushOnToastNotificationReceived;
             // Global handler for uncaught exceptions.
             UnhandledException += Application_UnhandledException;
 
             // Standard XAML initialization
             InitializeComponent();
-
+            
             // Phone-specific initialization
             InitializePhoneApplication();
-
+            //SubscribeToParse();
             // Language display initialization
             InitializeLanguage();
 
@@ -124,20 +169,25 @@ namespace BMTA
                 // and consume battery power when the user is not using the phone.
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
-
-
-
         }
+
+        //private void ParsePushOnToastNotificationReceived(object sender, Microsoft.Phone.Notification.NotificationEventArgs e)
+        //{
+           
+        //}
+        //public void SubscribeToParse() { ParsePush.SubscribeAsync(""); }
+       
 
         // Code to execute when the application is launching (eg, from Start)
         // This code will not execute when the application is reactivated
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
             LoadPersistantData();
-            CopyDatabase();
+            //CopyDatabase();
+            ConnectToDB();
         }
 
-        private async Task CopyDatabase()
+        public static async void ConnectToDB()
         {
             bool isDatabaseExisting = false;
 
@@ -146,7 +196,40 @@ namespace BMTA
                 StorageFile storageFile = await ApplicationData.Current.LocalFolder.GetFileAsync("bmtadatabase.sqlite");
                 isDatabaseExisting = true;
             }
-            catch
+            catch (Exception ex)
+            {
+                isDatabaseExisting = false;
+            }
+
+            if (!isDatabaseExisting)
+            {
+                try
+                {
+                    StorageFile databaseFile = await Package.Current.InstalledLocation.GetFileAsync("bmtadatabase.sqlite");
+                    await databaseFile.CopyAsync(ApplicationData.Current.LocalFolder);
+                    isDatabaseExisting = true;
+                }
+                catch (Exception ex)
+                {
+                    isDatabaseExisting = false;
+                }
+            }
+
+            if (isDatabaseExisting)
+            {
+                connection = new SQLiteAsyncConnection(Path.Combine(ApplicationData.Current.LocalFolder.Path, "bmtadatabase.sqlite"), true);
+            }
+        }
+
+        private async Task CopyDatabase()
+        {
+            bool isDatabaseExisting = false;
+            try
+            {
+                StorageFile storageFile = await ApplicationData.Current.LocalFolder.GetFileAsync("bmtadatabase.sqlite");
+                isDatabaseExisting = true;
+            }
+            catch(Exception ex)
             {
                 isDatabaseExisting = false;
             }

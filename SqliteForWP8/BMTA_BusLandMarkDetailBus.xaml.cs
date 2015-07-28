@@ -49,13 +49,18 @@ namespace BMTA
         ProgressIndicator progressIndicator = new ProgressIndicator();
         private searchlandmarkAndBusstopdetailItem itemLandMark;
         UCStartStop UCStartStop = new UCStartStop();
-
+        List<searchfindRoutingItem_data> mylist;
         public BMTA_BusLandMarkDetailBus()
         {
             InitializeComponent();
             landMarklistbox.Items.Clear();
             UCStartStop = new UCStartStop();
-            foreach (var item in (Application.Current as App).DataLandMark.data)
+
+            mylist = (Application.Current as App).DataLandMark.data;
+
+            mylist = mylist.OrderBy(o => Double.Parse(o.total.total_distance)).ToList();
+
+            foreach (var item in mylist)
             {
                 UCStartStop = new UCStartStop();
                 UCStartStop.DataContext = item;
@@ -133,7 +138,8 @@ namespace BMTA
             SystemTray.Opacity = 0;
             progressIndicator.Text = msg;
             progressIndicator.IsVisible = true;
-            progressIndicator.IsIndeterminate = true;
+            progressIndicator.IsIndeterminate = false;
+            SystemTray.SetIsVisible(this, true);
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 
@@ -141,6 +147,7 @@ namespace BMTA
         {
             progressIndicator.IsVisible = false;
             progressIndicator.IsIndeterminate = false;
+            SystemTray.SetIsVisible(this, false);
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 
@@ -169,8 +176,8 @@ namespace BMTA
             if (lang.Equals("th"))
             {
                 titleName.Text = "ถนนและสถานที่สำคัญ";
-                p1.Content = "เรียงตามระยะทาง";
-                p2.Content = "เรียงตามราคา";
+                p1.Content = "ระยะทางใกล้ที่สุด";
+                p2.Content = "ราคาถูกที่สุด";
                 p3.Content = "ต่อรถน้อยที่สุด";
             }
             else
@@ -265,21 +272,10 @@ namespace BMTA
             }
         }
 
-        private void callplacecurrentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
+        private void setData(List<searchfindRoutingItem_data> data)
         {
-            searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
-            if (results == null)
-            {
-                MessageBox.Show("ไม่พบข้อมูล");
-                return;
-            }
-            if (results.status == "0")
-            {
-                MessageBox.Show("ไม่พบข้อมูล");
-                return;
-            }
             landMarklistbox.Items.Clear();
-            foreach (var item in results.data)
+            foreach (var item in data)
             {
                 UCStartStop = new UCStartStop();
                 UCStartStop.DataContext = item;
@@ -336,6 +332,52 @@ namespace BMTA
                 }
 
                 landMarklistbox.Items.Add(UCStartStop);
+            }
+        }
+
+        private void callplacecurrentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
+        {
+            searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
+            if (results == null)
+            {
+                MessageBox.Show("ไม่พบข้อมูล");
+                return;
+            }
+            if (results.status == "0")
+            {
+                MessageBox.Show("ไม่พบข้อมูล");
+                return;
+            }
+
+            mylist = results.data;
+
+            mylist = mylist.OrderBy(o => Double.Parse(o.total.total_distance)).ToList();
+
+            setData(mylist);
+          
+        }
+
+        private void busFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListPickerItem lpi = (sender as ListPicker).SelectedItem as ListPickerItem;
+
+            if (lpi.Content != null)
+            {
+                if (lpi.Content.Equals("ระยะทางใกล้ที่สุด") || lpi.Content.Equals("Sort By Distance"))
+                {
+                    mylist = mylist.OrderBy(o => Double.Parse(o.total.total_distance)).ToList();
+                    setData(mylist);
+                }
+                else if (lpi.Content.Equals("ราคาถูกที่สุด") || lpi.Content.Equals("Sort By Price"))
+                {
+                    mylist = mylist.OrderBy(o => Double.Parse(o.total.total_price)).ToList();
+                    setData(mylist);
+                }
+                else
+                {
+                    mylist = mylist.OrderBy(o => o.routing.Count).ToList();
+                    setData(mylist);
+                }
             }
         }
     }

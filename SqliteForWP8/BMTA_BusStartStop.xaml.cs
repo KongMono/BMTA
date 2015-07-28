@@ -127,7 +127,8 @@ namespace BMTA
             SystemTray.Opacity = 0;
             progressIndicator.Text = msg;
             progressIndicator.IsVisible = true;
-            progressIndicator.IsIndeterminate = true;
+            progressIndicator.IsIndeterminate = false;
+            SystemTray.SetIsVisible(this, true);
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 
@@ -135,9 +136,9 @@ namespace BMTA
         {
             progressIndicator.IsVisible = false;
             progressIndicator.IsIndeterminate = false;
+            SystemTray.SetIsVisible(this, false);
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
-
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {

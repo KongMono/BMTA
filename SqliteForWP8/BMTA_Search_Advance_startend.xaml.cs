@@ -64,8 +64,8 @@ namespace BMTA
                 x2.Content = "รถธรรมดา";
                 x3.Content = "รถปรับอากาศ";
 
-                z1.Content = "เรียงตามระยะทาง";
-                z2.Content = "เรียงตามราคา";
+                z1.Content = "ระยะทางใกล้ที่สุด";
+                z2.Content = "ราคาถูกที่สุด";
                 z3.Content = "ต่อรถน้อยที่สุด";
             }
             else

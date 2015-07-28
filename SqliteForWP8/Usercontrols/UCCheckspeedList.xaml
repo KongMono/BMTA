@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="BMTA.Usercontrols.UCCheckspeedList"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:Toolkit="clr-namespace:Microsoft.Phone.Maps.Toolkit;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    d:DesignWidth="480" d:DesignHeight="180">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="480"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0" Grid.Column="1" Background="#FF18359B"> 
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">
+                <TextBlock x:Name="texttitle_stop_name" Text="สายรถเมล์" Foreground="White" TextTrimming="WordEllipsis" TextWrapping="Wrap" Padding="20,0,0,0" FontSize="25"  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                <TextBlock x:Name="textstop_name" Text="99" Foreground="White" TextTrimming="WordEllipsis" TextWrapping="Wrap" Padding="20,0,0,0" FontSize="30" VerticalAlignment="Center"  HorizontalAlignment="Stretch"/>
+            </StackPanel>
+
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="1" Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="27*"/>
+                <ColumnDefinition Width="133*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock x:Name="textdate" Text="01/11/2015" MaxWidth="300" Foreground="#00A54E" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Padding="20,0,0,0" FontSize="25" Grid.ColumnSpan="2" Margin="0,13" />
+
+            <TextBlock x:Name="texttime" Text="สาย"  MaxWidth="300" Foreground="#00A54E" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" Padding="0,0,20,0" FontSize="25" Grid.Column="1" Margin="0,13" />
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="1" Background="White">
+            <TextBlock x:Name="textRoute" Grid.Row="1" Text="ความเร็วเฉลี่ย" Foreground="#FF18359B" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Padding="20,0,0,0" FontSize="25"/>
+            <TextBlock x:Name="textRouteNumber" Grid.Row="1" Text="0.00 กม/ชม." Foreground="#FF18359B" HorizontalAlignment="Right" TextWrapping="Wrap"  VerticalAlignment="Center" Padding="0,0,20,0" FontSize="25"/>
+        </Grid>
+    </Grid>
+</UserControl>

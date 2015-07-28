@@ -6,27 +6,18 @@
     <Language code="en-US" />
   </Languages>
   <App xmlns="" ProductID="{8a40681d-98fc-4069-bc13-91837a6343ca}" Title="BMTA" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="BMTA author" Description="Sample description" Publisher="BMTA" PublisherID="{86cd5d5d-cfd9-45a6-ad5e-4818e0fc6c7e}">
-    <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
+    <IconPath IsRelative="true" IsResource="false">Assets\icon_bmta.png</IconPath>
     <Capabilities>
-      <Capability Name="ID_CAP_MEDIALIB_AUDIO" />
-      <Capability Name="ID_CAP_MEDIALIB_PLAYBACK" />
       <Capability Name="ID_CAP_SENSORS" />
       <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />
-      <Capability Name="ID_CAP_ISV_CAMERA" />
       <Capability Name="ID_CAP_MAP" />
       <Capability Name="ID_CAP_LOCATION" />
       <Capability Name="ID_CAP_IDENTITY_DEVICE" />
-      <Capability Name="ID_CAP_MEDIALIB_PHOTO" />
       <Capability Name="ID_CAP_PUSH_NOTIFICATION" />
       <Capability Name="ID_CAP_IDENTITY_USER" />
-      <Capability Name="ID_CAP_APPOINTMENTS" />
-      <Capability Name="ID_CAP_CONTACTS" />
-      <Capability Name="ID_CAP_GAMERSERVICES" />
-      <Capability Name="ID_CAP_MICROPHONE" />
       <Capability Name="ID_CAP_PHONEDIALER" />
       <Capability Name="ID_CAP_PROXIMITY" />
       <Capability Name="ID_CAP_REMOVABLE_STORAGE" />
-      <Capability Name="ID_CAP_SPEECH_RECOGNITION" />
       <Capability Name="ID_CAP_NETWORKING" />
     </Capabilities>
     <Tasks>
@@ -35,9 +26,9 @@
     <Tokens>
       <PrimaryToken TokenID="SqliteForWP8Token" TaskName="_default">
         <TemplateFlip>
-          <SmallImageURI IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</SmallImageURI>
+          <SmallImageURI IsRelative="true" IsResource="false">Assets\icon_bmta.png</SmallImageURI>
           <Count>0</Count>
-          <BackgroundImageURI IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</BackgroundImageURI>
+          <BackgroundImageURI IsRelative="true" IsResource="false">Assets\icon_bmta.png</BackgroundImageURI>
           <Title>BMTA</Title>
           <BackContent>
           </BackContent>

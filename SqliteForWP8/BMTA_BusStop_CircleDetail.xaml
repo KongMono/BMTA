@@ -28,7 +28,7 @@
             <RowDefinition Height="78"/>
             <RowDefinition Height="75"/>
             <RowDefinition Height="120"/>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="120"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -48,14 +48,14 @@
         </Grid>
         <Grid x:Name="buslineLayoutSearch" Grid.Row="1" Grid.ColumnSpan="3" Width="auto" Background="#FF18359B">
             <toolkit:AutoCompleteBox x:Name="busstop_search" Grid.RowSpan="2" VerticalAlignment="Center" TextChanged="busstop_search_TextChanged" FilterMode="None" ValueMemberBinding="{Binding stop_name}" SelectionChanged="busstop_search_SelectionChanged" KeyUp="busstop_search_KeyUp">
-                    <toolkit:AutoCompleteBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding stop_name}" FontSize="25" Foreground="Black"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </toolkit:AutoCompleteBox.ItemTemplate>
-                </toolkit:AutoCompleteBox>
+                <toolkit:AutoCompleteBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding stop_name}" FontSize="25" Foreground="Black"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </toolkit:AutoCompleteBox.ItemTemplate>
+            </toolkit:AutoCompleteBox>
         </Grid>
         <Grid x:Name="station" Grid.Row="2" VerticalAlignment="Center" Grid.ColumnSpan="3" Background="#FF01A54E">
             <Grid.RowDefinitions>
@@ -67,12 +67,13 @@
         </Grid>
         <Grid x:Name="lsline" VerticalAlignment="Center" Grid.Row="3" Grid.ColumnSpan="3" Background="#EBEBEB">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="17*"/>
+                <ColumnDefinition Width="143*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="120"/>
             </Grid.RowDefinitions>
-            <TextBlock x:Name="textBuslineGroup" Width="300" HorizontalAlignment="Left" Foreground="Black" Grid.Row="0" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="25" Text="1,2,3,4,5" Margin="20,0,0,0"/>
+            <TextBlock x:Name="textBuslineGroup" Grid.Row="0"  HorizontalAlignment="Left" Foreground="Black"  TextWrapping="Wrap" VerticalAlignment="Center" FontSize="25" Text="1,2,3,4,5" Margin="20,20,0,13" Grid.ColumnSpan="2"/>
         </Grid>
         <Grid x:Name="detail"  Grid.Row="4" Grid.ColumnSpan="3" Background="#EBEBEB">
             <Grid.RowDefinitions>
@@ -91,7 +92,7 @@
             </Grid>
 
             <TextBlock x:Name="lblbustype" Grid.Row="2" HorizontalAlignment="Center" TextWrapping="Wrap" Text="รถธรรมดา (ครีม-แดง)" VerticalAlignment="Top" Width="325" Height="38" Foreground="#FF8B8A8A" FontWeight="Bold" FontSize="23" TextAlignment="Center"/>
-            <!--<TextBlock x:Name="lblbustype1" Grid.Row="3" HorizontalAlignment="Center" TextWrapping="Wrap" Text="รถปรับอากาศ (ยูโรทู)" VerticalAlignment="Top" Width="325" Height="38" Foreground="#FF8B8A8A" FontWeight="Bold" FontSize="23" TextAlignment="Center"/>-->
+    
             <TextBlock x:Name="lbltime" Grid.Row="4" HorizontalAlignment="Center"  TextWrapping="Wrap" Text="03:30 - 00:00" VerticalAlignment="Top" Width="460" Height="48" Foreground="#FFAEAEAE" FontWeight="Bold" FontSize="30" TextAlignment="Center"/>
         </Grid>
         <Button Content="" x:Name="btleft" HorizontalAlignment="Left"  Grid.Row="4" Grid.Column="0" VerticalAlignment="Top" BorderBrush="{x:Null}" Height="130" Margin="0,70,0,0" Width="65" Style="{StaticResource ImageButton}" Click="btleft_Click">

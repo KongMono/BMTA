@@ -49,15 +49,20 @@ namespace BMTA
         ProgressIndicator progressIndicator = new ProgressIndicator();
         private searchlandmarkAndBusstopdetailItem itemBusStop;
         UCStartStop UCStartStop = new UCStartStop();
-        
+        List<searchfindRoutingItem_data> mylist;
         public BMTA_BusStopDetailBus()
         {
             InitializeComponent();
             busStoplistbox.Items.Clear();
             UCStartStop = new UCStartStop();
 
-            foreach (var item in (Application.Current as App).DataStop.data)
+            mylist = (Application.Current as App).DataStop.data;
+
+            mylist = mylist.OrderBy(o => Double.Parse(o.total.total_distance)).ToList();
+
+            foreach (var item in mylist)
             {
+
                 UCStartStop = new UCStartStop();
                 UCStartStop.DataContext = item;
                 if (lang.Equals("th"))
@@ -99,7 +104,6 @@ namespace BMTA
 
                     UCStartStop.text_route3.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
-
                 }
                 else if (item.routing.Count == 3)
                 {
@@ -111,7 +115,6 @@ namespace BMTA
                     UCStartStop.img_cen4.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
                 }
-
                 busStoplistbox.Items.Add(UCStartStop);
             }
         }
@@ -134,7 +137,8 @@ namespace BMTA
             SystemTray.Opacity = 0;
             progressIndicator.Text = msg;
             progressIndicator.IsVisible = true;
-            progressIndicator.IsIndeterminate = true;
+            progressIndicator.IsIndeterminate = false;
+            SystemTray.SetIsVisible(this, true);
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 
@@ -142,6 +146,7 @@ namespace BMTA
         {
             progressIndicator.IsVisible = false;
             progressIndicator.IsIndeterminate = false;
+            SystemTray.SetIsVisible(this, false);
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 
@@ -170,8 +175,9 @@ namespace BMTA
             if (lang.Equals("th"))
             {
                 titleName.Text = "ป้ายรถเมล์";
-                p1.Content = "เรียงตามระยะทาง";
-                p2.Content = "เรียงตามราคา";
+
+                p1.Content = "ระยะทางใกล้ที่สุด";
+                p2.Content = "ราคาถูกที่สุด";
                 p3.Content = "ต่อรถน้อยที่สุด";
             }
             else
@@ -186,15 +192,14 @@ namespace BMTA
         public void callServicegetAutocompleteBusStop()
         {
             webClient = new WebClient();
-            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/getAutocomplete";
+            String url = "http://128.199.232.94/webservice/keyword.php";
             string myParameters;
             try
             {
-                myParameters = "type=" + "busstop" + "&keyword=" + busstop_search.Text + "&lang=" + lang;
-                Debug.WriteLine("URL callServicegetAutocompleteBusStop = " + url);
-                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocompleteBusStop_Completed);
-                webClient.UploadStringAsync(new Uri(url), myParameters);
+                myParameters = url + "?type=" + "busstop" + "&q=" + busstop_search.Text + "&lang=" + lang;
+                Debug.WriteLine("URL callServicegetAutocompleteBusStop = " + myParameters);
+                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(callServicegetAutocompleteBusStop_Completed);
+                webClient.DownloadStringAsync(new Uri(myParameters));
             }
             catch (WebException ex)
             {
@@ -202,7 +207,7 @@ namespace BMTA
             }
         }
 
-        private void callServicegetAutocompleteBusStop_Completed(object sender, UploadStringCompletedEventArgs e)
+        private void callServicegetAutocompleteBusStop_Completed(object sender, DownloadStringCompletedEventArgs e)
         {
             searchbusstopItem results = JsonConvert.DeserializeObject<searchbusstopItem>(e.Result);
 
@@ -279,8 +284,15 @@ namespace BMTA
                 MessageBox.Show("ไม่พบข้อมูล");
                 return;
             }
+
+            mylist = results.data;
+            setData(mylist);
+        }
+
+        private void setData(List<searchfindRoutingItem_data> data)
+        {
             busStoplistbox.Items.Clear();
-            foreach (var item in results.data)
+            foreach (var item in data)
             {
                 UCStartStop = new UCStartStop();
                 UCStartStop.DataContext = item;
@@ -337,6 +349,31 @@ namespace BMTA
                 }
 
                 busStoplistbox.Items.Add(UCStartStop);
+            }
+        }
+
+        private void busFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListPickerItem lpi = (sender as ListPicker).SelectedItem as ListPickerItem;
+            //MessageBox.Show("selected item is : " + lpi.Content);
+
+            if (lpi.Content != null)
+            {
+                if (lpi.Content.Equals("ระยะทางใกล้ที่สุด") || lpi.Content.Equals("Sort By Distance"))
+                {
+                    mylist = mylist.OrderBy(o => Double.Parse(o.total.total_distance)).ToList();
+                    setData(mylist);
+                }
+                else if (lpi.Content.Equals("ราคาถูกที่สุด") || lpi.Content.Equals("Sort By Price"))
+                {
+                    mylist = mylist.OrderBy(o => Double.Parse(o.total.total_price)).ToList();
+                    setData(mylist);
+                }
+                else
+                {
+                    mylist = mylist.OrderBy(o => o.routing.Count).ToList();
+                    setData(mylist);
+                }
             }
         }
     }

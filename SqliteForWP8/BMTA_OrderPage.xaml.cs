@@ -59,11 +59,10 @@ namespace BMTA
             {
                 NavigationService.Navigate(new Uri("/BMTA_bus_mainpage.xaml?busCate=4", UriKind.Relative));
             }
-
         }
         private void button5_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/BMTA_Speed_history_en.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/BMTA_Speed_history.xaml", UriKind.Relative));
         }
         private void button6_Click(object sender, RoutedEventArgs e)
         {
@@ -145,43 +144,43 @@ namespace BMTA
             if (lang.Equals("th"))
             {
                 background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_1th.png", UriKind.Relative));
+                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_1th_atv.png", UriKind.Relative));
                 bt_1.Background = background;
                 background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_2th.png", UriKind.Relative));
+                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_2th_atv.png", UriKind.Relative));
                 bt_2.Background = background;
                 background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_3th.png", UriKind.Relative));
+                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_3th_atv.png", UriKind.Relative));
                 bt_3.Background = background;
                 background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_4th.png", UriKind.Relative));
+                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_4th_atv.png", UriKind.Relative));
                 bt_4.Background = background;
                 background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_5th.png", UriKind.Relative));
+                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_5th_atv.png", UriKind.Relative));
                 bt_5.Background = background;
                 background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_6th.png", UriKind.Relative));
+                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_6th_atv.png", UriKind.Relative));
                 bt_6.Background = background;
             }
             else
             {
                 background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_1en.png", UriKind.Relative));
+                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_1en_atv.png", UriKind.Relative));
                 bt_1.Background = background;
                 background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_2en.png", UriKind.Relative));
+                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_2en_atv.png", UriKind.Relative));
                 bt_2.Background = background;
                 background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_3en.png", UriKind.Relative));
+                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_3en_atv.png", UriKind.Relative));
                 bt_3.Background = background;
                 background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_4en.png", UriKind.Relative));
+                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_4en_atv.png", UriKind.Relative));
                 bt_4.Background = background;
                 background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_5en.png", UriKind.Relative));
+                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_5en_atv.png", UriKind.Relative));
                 bt_5.Background = background;
                 background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_6en.png", UriKind.Relative));
+                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_6en_atv.png", UriKind.Relative));
                 bt_6.Background = background;
             }
             HideProgressIndicator();

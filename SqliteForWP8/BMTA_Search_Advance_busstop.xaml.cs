@@ -60,9 +60,11 @@ namespace BMTA
                 x2.Content = "รถธรรมดา";
                 x3.Content = "รถปรับอากาศ";
 
-                z1.Content = "เรียงตามระยะทาง";
-                z2.Content = "เรียงตามราคา";
+                z1.Content = "ระยะทางใกล้ที่สุด";
+                z2.Content = "ราคาถูกที่สุด";
                 z3.Content = "ต่อรถน้อยที่สุด";
+
+               
             }
             else
             {
@@ -131,7 +133,7 @@ namespace BMTA
 
             var buslinePick = (ListPickerItem)busline.SelectedItem;
             var busRunningPick = (ListPickerItem)bustyperunning.SelectedItem;
-
+            ShowProgressIndicator("Loading..");
             callServicecurrentfindRouting(buslinePick, busRunningPick);
         }
         public void callServicecurrentfindRouting(ListPickerItem buslinePick, ListPickerItem busRunningPick)
@@ -186,43 +188,51 @@ namespace BMTA
 
         private void callServicecurrentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
         {
+
+            HideProgressIndicator();
             searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
             if (results == null)
             {
                 MessageBox.Show("ไม่พบข้อมูล");
                 return;
             }
-            if (results.status == "0")
+           
+            if (results.status != "0")
+            {
+                MessageBoxResult result = MessageBox.Show("ค้นหาสำเร็จ", (Application.Current as App).AppName, MessageBoxButton.OK);
+
+                if (result == MessageBoxResult.OK)
+                {
+                    (Application.Current as App).DataStop = results;
+                    this.NavigationService.Navigate(new Uri("/BMTA_BusStopDetailBus.xaml?TextFrom=" + textbox.Text, UriKind.Relative));
+                }
+            }
+            else
             {
                 MessageBox.Show("ไม่พบข้อมูล");
                 return;
             }
-            (Application.Current as App).DataStop = results;
-
-            this.NavigationService.Navigate(new Uri("/BMTA_BusStopDetailBus.xaml?TextFrom=" + textbox.Text, UriKind.Relative));
         }
 
         public void callServicegetAutocomplete()
         {
             webClient = new WebClient();
-            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/getAutocomplete";
+            String url = "http://128.199.232.94/webservice/keyword.php";
             string myParameters;
             try
             {
-                myParameters = "type=" + "busstop" + "&keyword=" + textbox.Text + "&lang=" + lang;
-                Debug.WriteLine("URL callServicegetAutocomplete = " + url);
-                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocomplete_Completed);
-                webClient.UploadStringAsync(new Uri(url), myParameters);
+                myParameters = url + "?type=" + "busstop" + "&q=" + textbox.Text + "&lang=" + lang;
+                Debug.WriteLine("URL callServicegetAutocompleteBusStop = " + myParameters);
+                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(callServicegetAutocomplete_Completed);
+                webClient.DownloadStringAsync(new Uri(myParameters));
             }
             catch (WebException ex)
             {
                 MessageBox.Show(ex.Message);
             }
-
         }
 
-        private void callServicegetAutocomplete_Completed(object sender, UploadStringCompletedEventArgs e)
+        private void callServicegetAutocomplete_Completed(object sender, DownloadStringCompletedEventArgs e)
         {
             searchbusstopItem results = JsonConvert.DeserializeObject<searchbusstopItem>(e.Result);
 
@@ -242,7 +252,8 @@ namespace BMTA
             SystemTray.Opacity = 0;
             progressIndicator.Text = msg;
             progressIndicator.IsVisible = true;
-            progressIndicator.IsIndeterminate = true;
+            progressIndicator.IsIndeterminate = false;
+            SystemTray.SetIsVisible(this,true);
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 
@@ -250,6 +261,7 @@ namespace BMTA
         {
             progressIndicator.IsVisible = false;
             progressIndicator.IsIndeterminate = false;
+            SystemTray.SetIsVisible(this, false);
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 

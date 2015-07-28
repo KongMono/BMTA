@@ -7,6 +7,8 @@
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="clr-namespace:Additional.WindowsPhone.Controls"
+    xmlns:c4f="clr-namespace:Coding4Fun.Toolkit.Controls;assembly=Coding4Fun.Toolkit.Controls"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -83,6 +85,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
+          
             <Grid  Grid.Row="0" Grid.ColumnSpan="2" Width="400" Height="51" HorizontalAlignment="Center" VerticalAlignment="Center" >
                 <Grid.Background>
                     <ImageBrush Stretch="Fill" ImageSource="/Assets/header_search_tab.jpg" />
@@ -138,9 +141,8 @@
                     </Button.Background>
                 </Button>
             </StackPanel>
-
         </Grid>
     </Grid>
 
-
+  
 </phone:PhoneApplicationPage>

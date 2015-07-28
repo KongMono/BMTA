@@ -67,7 +67,7 @@ namespace BMTA
 
                 lblbusid.Text = retrievedTasks[0].bus_line;
                 lblStart.Text = retrievedTasks[0].bus_start;
-                lblStop.Text = retrievedTasks[0].bus_end;
+                lblStop.Text = retrievedTasks[0].bus_stop;
                 lblbusName.Text = retrievedTasks[0].bus_name;
                 lbltime.Text = retrievedTasks[0].bus_startstop_time;
                 getListDatabusstop(retrievedTasks[0].bus_stop);
@@ -77,7 +77,7 @@ namespace BMTA
                 iscate2 = true;
                 showmap = true;
 
-                this.Pushpin(retrievedTasks[0].bus_stop, retrievedTasks[0].bus_polyline, retrievedTasks[0].important_location, iscate1, iscate2);
+                //this.Pushpin(retrievedTasks[0].bus_stop, retrievedTasks[0].bus_polyline, retrievedTasks[0].important_location, iscate1, iscate2);
             }
             else
             {
@@ -92,7 +92,7 @@ namespace BMTA
 
                     lblbusid.Text = retrievedTasks[index].bus_line;
                     lblStart.Text = retrievedTasks[index].bus_start;
-                    lblStop.Text = retrievedTasks[index].bus_end;
+                    lblStop.Text = retrievedTasks[index].bus_stop;
                     lblbusName.Text = retrievedTasks[index].bus_name;
                     lbltime.Text = retrievedTasks[index].bus_startstop_time;
                     getListDatabusstop(retrievedTasks[index].bus_stop);
@@ -103,7 +103,7 @@ namespace BMTA
                 iscate2 = true;
                 showmap = true;
 
-                this.Pushpin(retrievedTasks[index].bus_stop, retrievedTasks[index].bus_polyline, retrievedTasks[index].important_location, iscate1, iscate2);
+                //this.Pushpin(retrievedTasks[index].bus_stop, retrievedTasks[index].bus_polyline, retrievedTasks[index].important_location, iscate1, iscate2);
             }
             
             base.OnNavigatedTo(e);
@@ -174,7 +174,6 @@ namespace BMTA
                             overlay.GeoCoordinate = new GeoCoordinate(cm.lattitude, cm.longtitude);
                             layer.Add(overlay);
                         }
-
                         map.Center = new GeoCoordinate(results[0].lattitude, results[0].longtitude);
                     }
                 }
@@ -299,12 +298,12 @@ namespace BMTA
 
             retrievedTask = ls[0];
             lblStart.Text = ls[0].bus_start;
-            lblStop.Text = ls[0].bus_end;
+            lblStop.Text = ls[0].bus_stop;
             lblbusName.Text = ls[0].bus_name;
             lbltime.Text = ls[0].bus_startstop_time;
 
             getListDatabusstop(ls[0].bus_stop);
-            this.Pushpin(ls[0].bus_stop, ls[0].bus_polyline, ls[0].important_location, iscate1, iscate2);
+            //this.Pushpin(ls[0].bus_stop, ls[0].bus_polyline, ls[0].important_location, iscate1, iscate2);
 
             isInTwown = true;
         }
@@ -321,12 +320,12 @@ namespace BMTA
 
             retrievedTask = ls[0];
             lblStart.Text = ls[0].bus_start;
-            lblStop.Text = ls[0].bus_end;
+            lblStop.Text = ls[0].bus_stop;
             lblbusName.Text = ls[0].bus_name;
             lbltime.Text = ls[0].bus_startstop_time;
 
             getListDatabusstop(ls[0].bus_stop);
-            this.Pushpin(ls[0].bus_stop, ls[0].bus_polyline, ls[0].important_location, iscate1, iscate2);
+            //this.Pushpin(ls[0].bus_stop, ls[0].bus_polyline, ls[0].important_location, iscate1, iscate2);
 
             isInTwown = false;
         }
@@ -370,12 +369,12 @@ namespace BMTA
                     retrievedTask = ls[0];
                     lblbusid.Text = ls[0].bus_line;
                     lblStart.Text = ls[0].bus_start;
-                    lblStop.Text = ls[0].bus_end;
+                    lblStop.Text = ls[0].bus_stop;
                     lblbusName.Text = ls[0].bus_name;
                     lbltime.Text = ls[0].bus_startstop_time;
 
                     getListDatabusstop(ls[0].bus_stop);
-                    this.Pushpin(ls[0].bus_stop, ls[0].bus_polyline, ls[0].important_location, iscate1, iscate2);
+                    //this.Pushpin(ls[0].bus_stop, ls[0].bus_polyline, ls[0].important_location, iscate1, iscate2);
                 }
             }
             else
@@ -396,12 +395,12 @@ namespace BMTA
                     retrievedTask = ls[0];
                     lblbusid.Text = ls[0].bus_line;
                     lblStart.Text = ls[0].bus_start;
-                    lblStop.Text = ls[0].bus_end;
+                    lblStop.Text = ls[0].bus_stop;
                     lblbusName.Text = ls[0].bus_name;
                     lbltime.Text = ls[0].bus_startstop_time;
 
                     getListDatabusstop(ls[0].bus_stop);
-                    this.Pushpin(ls[0].bus_stop, ls[0].bus_polyline, ls[0].important_location, iscate1, iscate2);
+                    //this.Pushpin(ls[0].bus_stop, ls[0].bus_polyline, ls[0].important_location, iscate1, iscate2);
                 }
             }
         }
@@ -434,12 +433,12 @@ namespace BMTA
                 retrievedTask = ls[0];
                 lblbusid.Text = ls[0].bus_line;
                 lblStart.Text = ls[0].bus_start;
-                lblStop.Text = ls[0].bus_end;
+                lblStop.Text = ls[0].bus_stop;
                 lblbusName.Text = ls[0].bus_name;
                 lbltime.Text = ls[0].bus_startstop_time;
 
                 getListDatabusstop(ls[0].bus_stop);
-                this.Pushpin(ls[0].bus_stop, ls[0].bus_polyline, ls[0].important_location, iscate1, iscate2);
+                //this.Pushpin(ls[0].bus_stop, ls[0].bus_polyline, ls[0].important_location, iscate1, iscate2);
             }
         }
 
@@ -463,7 +462,8 @@ namespace BMTA
             SystemTray.Opacity = 0;
             progressIndicator.Text = msg;
             progressIndicator.IsVisible = true;
-            progressIndicator.IsIndeterminate = true;
+            progressIndicator.IsIndeterminate = false;
+            SystemTray.SetIsVisible(this, true);
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 
@@ -471,6 +471,7 @@ namespace BMTA
         {
             progressIndicator.IsVisible = false;
             progressIndicator.IsIndeterminate = false;
+            SystemTray.SetIsVisible(this, false);
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 
@@ -490,7 +491,7 @@ namespace BMTA
             }
 
 
-            this.Pushpin(retrievedTask.bus_stop, retrievedTask.bus_polyline, retrievedTask.important_location, iscate1, iscate2);
+            //this.Pushpin(retrievedTask.bus_stop, retrievedTask.bus_polyline, retrievedTask.important_location, iscate1, iscate2);
         }
 
         private void btncate2_Click(object sender, RoutedEventArgs e)
@@ -508,7 +509,7 @@ namespace BMTA
                 btncate2.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriStringin, UriKind.Relative)) };
             }
 
-            this.Pushpin(retrievedTask.bus_stop, retrievedTask.bus_polyline, retrievedTask.important_location, iscate1, iscate2);
+            //this.Pushpin(retrievedTask.bus_stop, retrievedTask.bus_polyline, retrievedTask.important_location, iscate1, iscate2);
         }
 
         private void btnfullmap_Click(object sender, RoutedEventArgs e)

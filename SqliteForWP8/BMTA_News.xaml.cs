@@ -37,18 +37,14 @@ namespace BMTA
         public BMTA_News()
         {
             InitializeComponent();
+
+            loadData();
         }
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
 
             base.OnNavigatedTo(e);
         }
-
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-
-        }
-
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
@@ -60,7 +56,6 @@ namespace BMTA
             {
                 titleName.Text = "News";
             }
-            loadData();
         }
         private void loadData()
         {
@@ -134,7 +129,7 @@ namespace BMTA
                 ls.textDescription.Text = ls.textDescription.Text.Replace("&quot;", "");
 
                 ls.texttitle_name.Text = ls.texttitle_name.Text.Replace("&nbsp;", "");
-                ls.textDescription.Text= ls.textDescription.Text.Replace("&nbsp;", "");
+                ls.textDescription.Text = ls.textDescription.Text.Replace("&nbsp;", "");
 
                 feedlistbox.Items.Add(ls);
             }

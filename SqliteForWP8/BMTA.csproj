@@ -98,12 +98,6 @@
     <Compile Include="BMTA_Abouts.xaml.cs">
       <DependentUpon>BMTA_Abouts.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BMTA_Abouts_details_en.xaml.cs">
-      <DependentUpon>BMTA_Abouts_details_en.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BMTA_Abouts_en.xaml.cs">
-      <DependentUpon>BMTA_Abouts_en.xaml</DependentUpon>
-    </Compile>
     <Compile Include="BMTA_Abouts_details.xaml.cs">
       <DependentUpon>BMTA_Abouts_details.xaml</DependentUpon>
     </Compile>
@@ -112,12 +106,6 @@
     </Compile>
     <Compile Include="BMTA_AppTh.xaml.cs">
       <DependentUpon>BMTA_AppTh.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BMTA_BusCoordinates.xaml.cs">
-      <DependentUpon>BMTA_BusCoordinates.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BMTA_BusCoordinates_en.xaml.cs">
-      <DependentUpon>BMTA_BusCoordinates_en.xaml</DependentUpon>
     </Compile>
     <Compile Include="BMTA_BusStartStop.xaml.cs">
       <DependentUpon>BMTA_BusStartStop.xaml</DependentUpon>
@@ -134,26 +122,14 @@
     <Compile Include="BMTA_BusStop_CircleDetail.xaml.cs">
       <DependentUpon>BMTA_BusStop_CircleDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BMTA_BusStop_SearchAdvance.xaml.cs">
-      <DependentUpon>BMTA_BusStop_SearchAdvance.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BMTA_BusStop_SearchAdvance_en.xaml.cs">
-      <DependentUpon>BMTA_BusStop_SearchAdvance_en.xaml</DependentUpon>
-    </Compile>
     <Compile Include="BMTA_bus_mainpage.xaml.cs">
       <DependentUpon>BMTA_bus_mainpage.xaml</DependentUpon>
     </Compile>
     <Compile Include="BMTA_bus_line_details.xaml.cs">
       <DependentUpon>BMTA_bus_line_details.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BMTA_bus_line_en.xaml.cs">
-      <DependentUpon>BMTA_bus_line_en.xaml</DependentUpon>
-    </Compile>
     <Compile Include="BMTA_EventNew.xaml.cs">
       <DependentUpon>BMTA_EventNew.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BMTA_EventNew_en.xaml.cs">
-      <DependentUpon>BMTA_EventNew_en.xaml</DependentUpon>
     </Compile>
     <Compile Include="BMTA_News.xaml.cs">
       <DependentUpon>BMTA_News.xaml</DependentUpon>
@@ -164,14 +140,8 @@
     <Compile Include="BMTA_News_details_en.xaml.cs">
       <DependentUpon>BMTA_News_details_en.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BMTA_News_en.xaml.cs">
-      <DependentUpon>BMTA_News_en.xaml</DependentUpon>
-    </Compile>
     <Compile Include="BMTA_SearchAdvance.xaml.cs">
       <DependentUpon>BMTA_SearchAdvance.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BMTA_SearchAdvance_en.xaml.cs">
-      <DependentUpon>BMTA_SearchAdvance_en.xaml</DependentUpon>
     </Compile>
     <Compile Include="BMTA_Search_Advance_busstop.xaml.cs">
       <DependentUpon>BMTA_Search_Advance_busstop.xaml</DependentUpon>
@@ -185,14 +155,8 @@
     <Compile Include="BMTA_Slot.xaml.cs">
       <DependentUpon>BMTA_Slot.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BMTA_Slot_en.xaml.cs">
-      <DependentUpon>BMTA_Slot_en.xaml</DependentUpon>
-    </Compile>
     <Compile Include="BMTA_Slot_Result.xaml.cs">
       <DependentUpon>BMTA_Slot_Result.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BMTA_Slot_Result_en.xaml.cs">
-      <DependentUpon>BMTA_Slot_Result_en.xaml</DependentUpon>
     </Compile>
     <Compile Include="BMTA_Speed_Check.xaml.cs">
       <DependentUpon>BMTA_Speed_Check.xaml</DependentUpon>
@@ -211,12 +175,6 @@
     </Compile>
     <Compile Include="BMTA_Speed_Result_en.xaml.cs">
       <DependentUpon>BMTA_Speed_Result_en.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BMTA_Vision_details.xaml.cs">
-      <DependentUpon>BMTA_Vision_details.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BMTA_Vision_details_en.xaml.cs">
-      <DependentUpon>BMTA_Vision_details_en.xaml</DependentUpon>
     </Compile>
     <Compile Include="BMTA_Splashscreen.xaml.cs">
       <DependentUpon>BMTA_Splashscreen.xaml</DependentUpon>
@@ -246,8 +204,16 @@
       <DependentUpon>BMTA_BusLandMarkDetailList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Item\Article.cs" />
-    <Compile Include="Item\busline.cs" />
     <Compile Include="Item\buslineItem.cs" />
+    <Compile Include="Item\insert_landmark_detailItem.cs" />
+    <Compile Include="Item\insert_landmarkItem.cs" />
+    <Compile Include="Item\insert_busstop_detailItem.cs" />
+    <Compile Include="Item\insert_busstopItem.cs" />
+    <Compile Include="Item\insert_busline_detailItem.cs" />
+    <Compile Include="Item\insert_buslineItem.cs" />
+    <Compile Include="Item\busline.cs" />
+    <Compile Include="Item\busstop.cs" />
+    <Compile Include="Item\landmark.cs" />
     <Compile Include="Item\SlotItem.cs" />
     <Compile Include="Item\FeedItemAbout.cs" />
     <Compile Include="Item\FeedItem.cs" />
@@ -267,8 +233,13 @@
     <Compile Include="Item\LanguageItem.cs" />
     <Compile Include="Item\dataNearBusStopItem.cs" />
     <Compile Include="Item\NearBusStopItem.cs" />
+    <Compile Include="Item\SpeedCheckItem.cs" />
+    <Compile Include="SoapFormatter.cs" />
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteAsync.cs" />
+    <Compile Include="Usercontrols\UCCheckspeedList.xaml.cs">
+      <DependentUpon>UCCheckspeedList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Usercontrols\UCFeedText.xaml.cs">
       <DependentUpon>UCFeedText.xaml</DependentUpon>
     </Compile>
@@ -339,14 +310,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BMTA_Abouts_details_en.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BMTA_Abouts_en.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="BMTA_Abouts_details.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -358,14 +321,6 @@
     <Page Include="BMTA_AppTh.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="BMTA_BusCoordinates.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BMTA_BusCoordinates_en.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="BMTA_BusStartStop.xaml">
       <SubType>Designer</SubType>
@@ -387,14 +342,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BMTA_BusStop_SearchAdvance.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BMTA_BusStop_SearchAdvance_en.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="BMTA_bus_mainpage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -403,17 +350,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BMTA_bus_line_en.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="BMTA_EventNew.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="BMTA_EventNew_en.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="BMTA_News.xaml">
       <SubType>Designer</SubType>
@@ -427,15 +366,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BMTA_News_en.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="BMTA_SearchAdvance.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BMTA_SearchAdvance_en.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -455,17 +386,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="BMTA_Slot_en.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="BMTA_Slot_Result.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="BMTA_Slot_Result_en.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="BMTA_Speed_Check.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -488,14 +411,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="BMTA_Speed_Result_en.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BMTA_Vision_details.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BMTA_Vision_details_en.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -539,7 +454,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Style\OverrideStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Style\CustomStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Usercontrols\UCCheckspeedList.xaml">
+      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Usercontrols\UCFeedText.xaml">
@@ -607,11 +529,16 @@
     <Content Include="Assets\7.png" />
     <Content Include="Assets\8.png" />
     <Content Include="Assets\9.png" />
+    <Content Include="Assets\alert.png" />
     <Content Include="Assets\arrow_list.png" />
     <Content Include="Assets\bg_advance_search.png" />
     <Content Include="Assets\bg_numberbus.png" />
+    <Content Include="Assets\BMTA_busno_bg.png" />
     <Content Include="Assets\BMTA_infobox.png" />
     <Content Include="Assets\BMTA_slotresult_bg_t.png" />
+    <Content Include="Assets\BMTA_speed_timer_icon.png" />
+    <Content Include="Assets\BMTA_speed_timer_icon_l.png" />
+    <Content Include="Assets\BMTA_speed_timer_icon_r.png" />
     <Content Include="Assets\btbus.png" />
     <Content Include="Assets\btbus_active.png" />
     <Content Include="Assets\btlandmark.png" />
@@ -643,7 +570,10 @@
     <Content Include="Assets\btn_normal5.png" />
     <Content Include="Assets\btn_normal99.png" />
     <Content Include="Assets\btn_park.png" />
+    <Content Include="Assets\btn_pause.png" />
     <Content Include="Assets\btn_port.png" />
+    <Content Include="Assets\btn_resume.png" />
+    <Content Include="Assets\btn_save.png" />
     <Content Include="Assets\btn_school.png" />
     <Content Include="Assets\btn_store.png" />
     <Content Include="Assets\btn_temple.png" />
@@ -661,7 +591,9 @@
     <Content Include="Assets\down.png" />
     <Content Include="Assets\header_search_tab.jpg" />
     <Content Include="Assets\icon_arrow_close.png" />
+    <Content Include="Assets\icon_bmta.png" />
     <Content Include="Assets\icon_bus.png" />
+    <Content Include="Assets\icon_home.png" />
     <Content Include="Assets\icon_stat.png" />
     <Content Include="Assets\languagepage.jpg" />
     <Content Include="Assets\left_infobox.png" />
@@ -672,7 +604,9 @@
     <Content Include="Assets\slot_bg_t.png" />
     <Content Include="Assets\up.png" />
     <Content Include="Assets\walk.png" />
-    <Content Include="bmtadatabase.sqlite" />
+    <None Include="bmtadatabase.sqlite">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -986,8 +920,16 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Phone">
       <HintPath>..\packages\WPToolkitTestFx.4.2012.11.14\lib\wp8\Microsoft.VisualStudio.QualityTools.UnitTesting.Phone.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Parse, Version=1.5.3.0, Culture=neutral, PublicKeyToken=ba48c3a442de616e, processorArchitecture=MSIL">
+      <HintPath>..\packages\parse.1.5.3\lib\wp8\Parse.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Parse.Phone, Version=1.5.3.0, Culture=neutral, PublicKeyToken=ba48c3a442de616e, processorArchitecture=MSIL">
+      <HintPath>..\packages\parse.1.5.3\lib\wp8\Parse.Phone.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ShakeGestures">
@@ -1023,8 +965,8 @@
     <Folder Include="Assets\720x1280\Final BMTA_WindowPhone\Final BMTA_WindowPhone\" />
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="SQLite.WP80, Version=3.8.10.2">
-      <Name>SQLite for Windows Phone</Name>
+    <SDKReference Include="SQLite.WP80, Version=3.8.11">
+      <Name>SQLite for Windows Phone %28SQLite.WP80, Version=3.8.11%29</Name>
     </SDKReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />

@@ -84,7 +84,7 @@ namespace BMTA
                 MyCoordinates.Add(new GeoCoordinate(Convert.ToDouble((Application.Current as App).lat_current), Convert.ToDouble((Application.Current as App).lon_current)));
 
                 this.map.Center = MyCoordinates[0];
-                this.map.ZoomLevel = 18;
+                this.map.ZoomLevel = 13;
 
                 // Create a small circle to mark the current location.
                 Ellipse myCircle = new Ellipse();
@@ -206,7 +206,8 @@ namespace BMTA
             SystemTray.Opacity = 0;
             progressIndicator.Text = msg;
             progressIndicator.IsVisible = true;
-            progressIndicator.IsIndeterminate = true;
+            progressIndicator.IsIndeterminate = false;
+            SystemTray.SetIsVisible(this, true);
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 
@@ -214,6 +215,7 @@ namespace BMTA
         {
             progressIndicator.IsVisible = false;
             progressIndicator.IsIndeterminate = false;
+            SystemTray.SetIsVisible(this, false);
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 
@@ -233,15 +235,14 @@ namespace BMTA
         public void callServicegetAutocompleteBusStop()
         {
             webClient = new WebClient();
-            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/getAutocomplete";
+            String url = "http://128.199.232.94/webservice/keyword.php";
             string myParameters;
             try
             {
-                myParameters = "type=" + "busstop" + "&keyword=" + busstop_search.Text + "&lang=" + lang;
-                Debug.WriteLine("URL StreetsandLandmarks_search_SelectionChanged = " + url);
-                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocompleteBusStop_Completed);
-                webClient.UploadStringAsync(new Uri(url), myParameters);
+                myParameters = url + "?type=" + "busstop" + "&q=" + busstop_search.Text + "&lang=" + lang;
+                Debug.WriteLine("URL callServicegetAutocompleteBusStop = " + myParameters);
+                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(callServicegetAutocompleteBusStop_Completed);
+                webClient.DownloadStringAsync(new Uri(myParameters));
             }
             catch (WebException ex)
             {
@@ -249,7 +250,7 @@ namespace BMTA
             }
         }
 
-        private void callServicegetAutocompleteBusStop_Completed(object sender, UploadStringCompletedEventArgs e)
+        private void callServicegetAutocompleteBusStop_Completed(object sender, DownloadStringCompletedEventArgs e)
         {
             searchbusstopItem results = JsonConvert.DeserializeObject<searchbusstopItem>(e.Result);
 

@@ -60,7 +60,7 @@
             </Grid>
 
             <Grid x:Name="landMarkFilter" Grid.Row="1"  Background="#FF01A54E" VerticalAlignment="Center">
-                <toolkit:ListPicker x:Name ="busFilter" Grid.Row="1" Width="400" Foreground="White">
+                <toolkit:ListPicker x:Name ="busFilter" Grid.Row="1" Width="400" Foreground="White" SelectionChanged="busFilter_SelectionChanged">
                     <toolkit:ListPickerItem x:Name="p1" Tag="" Foreground="Black"/>
                     <toolkit:ListPickerItem x:Name="p2" Tag="1" Foreground="Black"/>
                     <toolkit:ListPickerItem x:Name="p3" Tag="2" Foreground="Black"/>

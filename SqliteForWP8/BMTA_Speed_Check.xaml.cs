@@ -16,267 +16,50 @@ using System.Device.Location;
 using Windows.Devices.Geolocation;
 using Microsoft.Phone.Maps.Controls;
 using System.Diagnostics;
+using System.Text;
+using BMTA.Item;
 namespace BMTA
 {
     public partial class BMTA_Speed_Check : PhoneApplicationPage
     {
+        private DispatcherTimer dispatcherTimer;
+        public enum DistanceType { Miles, Kilometers };
         private GeoCoordinateWatcher _watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
-        private DispatcherTimer _timer = new DispatcherTimer();
-        private long _startTime;
-        private MapPolyline _line;
-
-
-        GeoCoordinateWatcher watcher;
-        Geolocator Locator = new Geolocator();
-        List<GeoCoordinate> Locations;
+        public String lang = (Application.Current as App).Language;
+        private long _previousPositionChangeTick;
+        private double _kilometres;
+        private GeoCoordinate previousPoint = null;
+        GeoCoordinate previous = new GeoCoordinate();
+        DateTime previousTime = DateTime.Now;
+        private static DateTime EndTime { get; set; }
 
         public BMTA_Speed_Check()
         {
             InitializeComponent();
 
-           // _watcher.PositionChanged += Watcher_PositionChanged;
-
-           
-            
-         //   Locator.DesiredAccuracy = PositionAccuracy.High;
-         //   Locator.MovementThreshold = 1;
-         //   Locator.PositionChanged += Locator_PositionChanged;
-
-            _line = new MapPolyline();
-            _line.StrokeColor = Colors.Red;
-            _line.StrokeThickness = 1;
-            Map.MapElements.Add(_line);
-
-            _watcher.PositionChanged += Watcher_PositionChanged;
-
-            _timer.Interval = TimeSpan.FromSeconds(1);
-            _timer.Tick += Timer_Tick;
-
+            _watcher.MovementThreshold = 1;
+            _watcher.StatusChanged += new EventHandler<GeoPositionStatusChangedEventArgs>(watcher_StatusChanged);
+            _watcher.PositionChanged += new EventHandler<GeoPositionChangedEventArgs<GeoCoordinate>>(watcher_PositionChanged);
         }
 
-
-        private void Locator_PositionChanged(Geolocator sender, PositionChangedEventArgs args)
+        protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)
         {
-          var  CurrentLocation = args.Position;
-
-
-          List<GeoCoordinate> locationData = new List<GeoCoordinate>();
-         // locationData.Add(CurrentLocation.Coordinate.Latitude.ToString("Latitude:" + "0.000"));
-        //  locationData.Add(CurrentLocation.Coordinate.Longitude.ToString("Longitude:" + "0.000"));
-        //  locationData.Add(CurrentLocation.Coordinate.Altitude.ToString());
-         // locationData.Add(CurrentLocation.Coordinate.Speed.ToString());
-         
-
-          //  if (GetPositionTime >= 1) // Checks to see if 8 seconds has passed
-           // {
-                Deployment.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    GeoCoordinate cord = new GeoCoordinate(CurrentLocation.Coordinate.Latitude, CurrentLocation.Coordinate.Longitude);
-                    if (locationData.Count > 0)
-                    {
-                        GeoCoordinate PreviousLocation = locationData.Last();
-
-                        // This part will update the stats on the screen as a textbox is bound to
-                        // DistanceMoved
-                        var distance = cord.GetDistanceTo(PreviousLocation);
-                        //var millisPerKilometer = (1000.0 / distance) * (System.Environment.TickCount - _previousPositionChangeTick);
-                        _kilometres += distance / 1000.0;
-                        //var distance = cord.GetDistanceTo(PreviousLocation);
-                        distanceLabel.Text = string.Format("{0:f2} km", _kilometres);
-                    }
-                    locationData.Add(cord);
-                }));
-           // }
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            TimeSpan runTime = TimeSpan.FromMilliseconds(System.Environment.TickCount - _startTime);
-            timeLabel.Text = runTime.ToString(@"hh\:mm\:ss");
+            base.OnNavigatedFrom(e);
         }
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
-            rightmenu.Visibility = System.Windows.Visibility.Collapsed;
-            rightmenux.Visibility = System.Windows.Visibility.Collapsed;
-            close.Visibility = System.Windows.Visibility.Collapsed;
-
-            if (!HasNetwork())
+            if (lang.Equals("th"))
             {
-
-                Application.Current.Terminate();
-            }
-            else if (!HasInternet())
-            {
-                Application.Current.Terminate();
+                titleName.Text = "เช็คความเร็ว";
             }
             else
             {
-            string x = BMTA.clGetResolution.Width.ToString();
-            string y = BMTA.clGetResolution.Height.ToString();
-            string xy = x + "x" + y;
-            if (x == "480")
-            {
-                ImageBrush brush = new ImageBrush
-                {
-                    ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/480x852/BMTA_main_bg.png", UriKind.Relative)),
-                    Opacity = 1d
-                };
-                this.LayoutRoot.Background = brush;
-                brush.Stretch = Stretch.Fill;
-            }
-            else if (x == "720")
-            {
-                ImageBrush brush = new ImageBrush
-                {
-                    ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/720x1280/BMTA_speed_bg.png", UriKind.Relative)),
-                    Opacity = 1d
-                };
-                this.LayoutRoot.Background = brush;
-                brush.Stretch = Stretch.Fill;
-            }
-            else
-            {
-                ImageBrush brush = new ImageBrush
-                {
-                    ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Assets/768x1280/BMTA_main_bg.png", UriKind.Relative)),
-                    Opacity = 1d
-                };
-                this.LayoutRoot.Background = brush;
-                brush.Stretch = Stretch.Fill;
-            }
-            txtbusline.Focus();
+                titleName.Text = "Speed Check";
             }
         }
 
-        private bool HasInternet()
-        {
-            if (!NetworkInterface.GetIsNetworkAvailable())
-            {
-                MessageBox.Show("No internet connection is available. Try again later.");
-                return false;
-            }
-            return true;
-        }
-
-        private bool HasNetwork()
-        {
-            if (!DeviceNetworkInformation.IsNetworkAvailable)
-            {
-                MessageBox.Show("No network is available. Try again later.");
-                return false;
-            }
-            return true;
-        }
-
-        private void button5_Click(object sender, RoutedEventArgs e)
-        {
-            if (_timer.IsEnabled)
-            {
-                _watcher.Stop();
-                _timer.Stop();
-                StartButton.Content = "START";
-
-                string result = "";
-                string timelable = "";
-                result = distanceLabel.Text;
-                timelable = timeLabel.Text;
-                NavigationService.Navigate(new Uri("/BMTA_Speed_Result.xaml?parameter=" + result +"&timex="+ timelable, UriKind.Relative)); 
-
-            }
-            else
-            {
-                _watcher.Start();
-                _timer.Start();
-                _startTime = System.Environment.TickCount;
-                StartButton.Content = "STOP";
-
-             }
-           
-          //  if (_timer.IsEnabled)
-          //  {
-          //      Locator.PositionChanged -= Locator_PositionChanged;
-               // Locator.StatusChanged -= Locator_StatusChanged;
-          //      Locator = null;
-
-               // watcher.Stop();
-               // _watcher.Stop();
-           //     _timer.Stop();
-           //     StartButton.Content = "START";
-           // }
-          //  else
-          //  {
-          //      _timer.Interval = TimeSpan.FromSeconds(1);
-          //      _timer.Tick += Timer_Tick;
-               
-          //      Locator.DesiredAccuracy = PositionAccuracy.High;
-          //      Locator.MovementThreshold = 1;
-              //  Locator.StatusChanged += Locator_StatusChanged;
-          //      Locator.PositionChanged += Locator_PositionChanged;
-
-
-             //   myGeoLocator = new Geolocator();
-             //   myGeoLocator.DesiredAccuracy = PositionAccuracy.Default;
-             //   myGeoLocator.MovementThreshold = 50;
-             //   myGeoLocator.StatusChanged += myGeoLocator_StatusChanged;
-             //   myGeoLocator.PositionChanged += myGeoLocator_PositionChanged;
-
-                //if (watcher == null)
-                //{
-                //    watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default);
-                //    watcher.MovementThreshold = 1;
-                //    watcher.StatusChanged += new EventHandler<GeoPositionStatusChangedEventArgs>(watcher_StatusChanged);
-                //    watcher.PositionChanged += new EventHandler<GeoPositionChangedEventArgs<GeoCoordinate>>(watcher_PositionChanged);
-
-                //}
-               // watcher.Start();
-               // _watcher.Start();
-          //      _timer.Start();
-          //      _startTime = System.Environment.TickCount;
-          //      StartButton.Content = "STOP";
-          //  }
-        }
-
-        //ID_CAP_LOCATION
-        private double _kilometres;
-        private long _previousPositionChangeTick;
-
-        private void Watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
-        {
-            var coord = new GeoCoordinate(e.Position.Location.Latitude, e.Position.Location.Longitude);
-
-            if (_line.Path.Count > 0)
-            {
-                var previousPoint = _line.Path.Last();
-                var distance = coord.GetDistanceTo(previousPoint);
-                var millisPerKilometer = (1000.0 / distance) * (System.Environment.TickCount - _previousPositionChangeTick);
-                _kilometres += distance / 1000.0;
-
-                paceLabel.Text = TimeSpan.FromMilliseconds(millisPerKilometer).ToString(@"mm\:ss");
-                distanceLabel.Text = string.Format("{0:f2}", _kilometres);
-               // caloriesLabel.Text = string.Format("{0:f0}", _kilometres * 65);
-
-                PositionHandler handler = new PositionHandler();
-                var heading = handler.CalculateBearing(new Position(previousPoint), new Position(coord));
-                Map.SetView(coord, Map.ZoomLevel, heading, MapAnimationKind.Parabolic);
-
-              //  ShellTile.ActiveTiles.First().Update(new IconicTileData()
-             //   {
-             //       Title = "WP8Runner",
-              //      WideContent1 = string.Format("{0:f2} km", _kilometres),
-              //      WideContent2 = string.Format("{0:f0} calories", _kilometres * 65),
-             //   });
-            }
-            else
-            {
-                Map.Center = coord;
-            }
-
-            _line.Path.Add(coord);
-            _previousPositionChangeTick = System.Environment.TickCount;
-        }
-
-        void watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
+        public void watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
         {
             switch (e.Status)
             {
@@ -290,16 +73,67 @@ namespace BMTA
             }
         }
 
-        void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
+        public void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
         {
             if (e.Position.Location.IsUnknown)
             {
-               // this.notification.Text = "Please wait while your prosition is determined....";
+                MessageBox.Show(" The Location Service IsUnknown.");
                 return;
             }
+            var coord = new GeoCoordinate(e.Position.Location.Latitude, e.Position.Location.Longitude);
 
-            distanceLabel.Text = e.Position.Location.Speed.ToString("0.00");
+            if (previousPoint != null && previousPoint != coord)
+            {
+                //var distance = coord.GetDistanceTo(previousPoint);
 
+                //// compute pace
+                //var millisPerKilometer = (1000.0 / distance) * (System.Environment.TickCount - _previousPositionChangeTick);
+
+                // compute total distance travelled
+
+
+                _kilometres += Distance(coord, previousPoint, DistanceType.Kilometers);
+
+                double output = Math.Round(_kilometres, 2);
+
+                sumdistanct.Text = output + " km.";
+            }
+
+            previousPoint = coord;
+
+            _previousPositionChangeTick = System.Environment.TickCount;
+
+            if (Double.IsNaN(e.Position.Location.Speed))
+            {
+                sumkm.Text = "0";
+            }
+            else
+            {
+                sumkm.Text = e.Position.Location.Speed.ToString();
+            }
+        }
+        /// <summary>  
+        /// Returns the distance in miles or kilometers of any two  
+        /// latitude / longitude points.  
+        /// </summary>  
+        public double Distance(GeoCoordinate pos1, GeoCoordinate pos2, DistanceType type)
+        {
+            double R = (type == DistanceType.Miles) ? 3960 : 6371;
+            double dLat = this.toRadian(pos2.Latitude - pos1.Latitude);
+            double dLon = this.toRadian(pos2.Longitude - pos1.Longitude);
+            double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                Math.Cos(this.toRadian(pos1.Latitude)) * Math.Cos(this.toRadian(pos2.Latitude)) *
+                Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+            double c = 2 * Math.Asin(Math.Min(1, Math.Sqrt(a)));
+            double d = R * c;
+            return d;
+        }
+        /// <summary>  
+        /// Convert to Radians.  
+        /// </summary>  
+        private double toRadian(double val)
+        {
+            return (Math.PI / 180) * val;
         }
 
         private void btback_Click(object sender, RoutedEventArgs e)
@@ -307,75 +141,91 @@ namespace BMTA
             NavigationService.GoBack();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml", UriKind.Relative));
+            layoutCheck1.Visibility = System.Windows.Visibility.Collapsed;
+            layoutCheck2.Visibility = System.Windows.Visibility.Collapsed;
+            layoutCheck3.Visibility = System.Windows.Visibility.Collapsed;
+
+            layoutResult1.Visibility = System.Windows.Visibility.Visible;
+            layoutResult2.Visibility = System.Windows.Visibility.Visible;
+            layoutResult3.Visibility = System.Windows.Visibility.Visible;
+
+            if (this.dispatcherTimer == null)
+            {
+                this.dispatcherTimer = new DispatcherTimer();
+                this.dispatcherTimer.Interval = TimeSpan.FromMilliseconds(1);
+                this.dispatcherTimer.Tick += new EventHandler(Timer_Tick);
+            }
+
+            if (EndTime == DateTime.MinValue)
+            {
+                EndTime = DateTime.Now + (TimeSpan)this.timeSpan.Value;
+            }
+
+            this.dispatcherTimer.Start();
+            _watcher.Start();
+
+            if (_watcher.Permission == GeoPositionPermission.Denied)
+            {
+                MessageBox.Show("Please enable location services and retry");
+            }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
+            var remaining = DateTime.Now - EndTime;
+            int remainingSeconds = (int)remaining.TotalSeconds;
+            this.timeSpan.Value = TimeSpan.FromSeconds(remainingSeconds);
+
+            if (remaining.TotalSeconds <= 0)
+            {
+                this.dispatcherTimer.Stop();
+            }
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void btn_pause_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/BMTA_BusCoordinates.xaml", UriKind.Relative));
+            if (btn_save.Visibility == System.Windows.Visibility.Collapsed && btn_resume.Visibility == System.Windows.Visibility.Collapsed)
+            {
+                btn_save.Visibility = System.Windows.Visibility.Visible;
+                btn_resume.Visibility = System.Windows.Visibility.Visible;
+                btn_pause.Visibility = System.Windows.Visibility.Collapsed;
+                _watcher.Stop();
+                this.dispatcherTimer.Stop();
+            }
+            else
+            {
+                btn_save.Visibility = System.Windows.Visibility.Collapsed;
+                btn_resume.Visibility = System.Windows.Visibility.Collapsed;
+            }
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void btn_resume_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml", UriKind.Relative));
+            if (btn_save.Visibility == System.Windows.Visibility.Visible && btn_resume.Visibility == System.Windows.Visibility.Visible)
+            {
+                btn_save.Visibility = System.Windows.Visibility.Collapsed;
+                btn_resume.Visibility = System.Windows.Visibility.Collapsed;
+                btn_pause.Visibility = System.Windows.Visibility.Visible;
+
+                this.dispatcherTimer.Start();
+                _watcher.Start();
+            }
         }
 
-        private void close_Click(object sender, RoutedEventArgs e)
+        private void btn_save_Click(object sender, RoutedEventArgs e)
         {
-            rightmenu.Visibility = System.Windows.Visibility.Collapsed;
-            rightmenux.Visibility = System.Windows.Visibility.Collapsed;
-            close.Visibility = System.Windows.Visibility.Collapsed;
-        }
+            SpeedCheckItem item = new SpeedCheckItem();
+            item.line_number = txtbusline.Text;
+            item.speed = sumkm.Text;
+            item.date = DateTime.Now.ToString("MM/dd/yyyy");
+            item.time = this.timeSpan.Value.ToString();
+            item.distance = sumdistanct.Text;
 
-        private void btTopMenu_Click(object sender, RoutedEventArgs e)
-        {
-            rightmenux.Visibility = Visibility;
-            rightmenu.Visibility = Visibility;
-            close.Visibility = Visibility;
-        }
+            (Application.Current as App).CheckSpeedList.Add(item);
 
-        private void rhome_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_AppTh.xaml", UriKind.Relative));
+            NavigationService.GoBack();
         }
-
-        private void rbusline_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_bus_line.xaml", UriKind.Relative));
-        }
-
-        private void rbusstop_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStop.xaml", UriKind.Relative));
-        }
-
-        private void rcoor_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusCoordinates.xaml", UriKind.Relative));
-        }
-
-        private void rbusstartstop_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_BusStartStop.xaml", UriKind.Relative));
-        }
-
-        private void rbusspeed_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_Speed_history.xaml", UriKind.Relative));
-        }
-
-        private void rbusnew_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/BMTA_EventNew.xaml", UriKind.Relative));
-        }
-
-    
     }
-} 
+}

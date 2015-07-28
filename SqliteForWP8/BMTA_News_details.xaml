@@ -17,41 +17,46 @@
     Style="{StaticResource TransitionPageStyle}">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <ScrollViewer>
-        <Grid x:Name="LayoutRoot" Background="White">
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="78"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
+    <Grid x:Name="LayoutRoot" Background="White">
 
-            <Grid x:Name="Header" Grid.Row="0" Width="auto" Background="#FF01A54E" Visibility="Visible">
-                <Button x:Name="btBack" BorderBrush="Transparent" Width="75" Height="75" VerticalAlignment="Center" HorizontalAlignment="Left" Click="btback_Click" Style="{StaticResource ImageButton}">
-                    <Button.Background>
-                        <ImageBrush Stretch="Uniform" ImageSource="/Assets/arrowleft.png"/>
-                    </Button.Background>
-                </Button>
-                <TextBlock  x:Name="titleName" Text="" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center">
-                </TextBlock>
-            </Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="78"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <Grid x:Name="FeedLayoutImage" Grid.Row="1"  Background="#FFFFFFFF" Visibility="Visible">
-                <Image x:Name="img_feed" Stretch="Fill" Source="/Assets/720x1280/BMTA_new_bt.png" />
-            </Grid>
-            <Grid x:Name="FeedLayoutTitle" Grid.Row="2"  Background="#FFFFFFFF">
-                <TextBlock x:Name="TitleNews" Text="Title" Foreground="#FF18359B" TextTrimming="WordEllipsis" TextWrapping="Wrap"  Padding="20,0,0,0" FontSize="30"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            </Grid>
-
-            <Grid x:Name="FeedLayouDescription" Grid.Row="3"  Background="#FFFFFFFF">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="480*"/>
-                </Grid.ColumnDefinitions>
-                <!--<TextBlock  x:Name="DescriptionNews" Foreground="Black" Text="desc" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.ColumnSpan="2">-->
-
-                <TextBlock  x:Name="DescriptionNews" Foreground="Black" Text="desc" TextTrimming="WordEllipsis" TextWrapping="Wrap"  Padding="20,0,0,0" FontSize="30"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            </Grid>
+        <Grid x:Name="Header" Grid.Row="0" Width="auto" Background="#FF01A54E" Visibility="Visible">
+            <Button x:Name="btBack" BorderBrush="Transparent" Width="75" Height="75" VerticalAlignment="Center" HorizontalAlignment="Left" Click="btback_Click" Style="{StaticResource ImageButton}">
+                <Button.Background>
+                    <ImageBrush Stretch="Uniform" ImageSource="/Assets/arrowleft.png"/>
+                </Button.Background>
+            </Button>
+            <TextBlock  x:Name="titleName" Text="" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center">
+            </TextBlock>
         </Grid>
-    </ScrollViewer>
+        <ScrollViewer Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid x:Name="FeedLayoutImage" Grid.Row="0"  Background="#FFFFFFFF" Visibility="Visible">
+                    <Image x:Name="img_feed" Stretch="Fill" Source="/Assets/720x1280/BMTA_new_bt.png" />
+                </Grid>
+                <Grid x:Name="FeedLayoutTitle" Grid.Row="1"  Background="#FFFFFFFF">
+                    <TextBlock x:Name="TitleNews" Text="Title" Foreground="#FF18359B" TextTrimming="WordEllipsis" TextWrapping="Wrap"  Padding="20,0,0,0" FontSize="30"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                </Grid>
+                <Grid x:Name="FeedLayouDescription" Grid.Row="2"  Background="#FFFFFFFF">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="480*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock  x:Name="DescriptionNews" Foreground="Black" Text="desc" TextTrimming="WordEllipsis" TextWrapping="Wrap"  Padding="20,0,0,0" FontSize="30"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+
+
 </phone:PhoneApplicationPage>
