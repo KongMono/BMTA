@@ -3,11 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace BMTA
 {
     public class searchlandmarkAndBusstopdetailItem
     {
+        public string lang = (Application.Current as App).Language;
+
         public string id { get; set; }
 
         public string name { get; set; }
@@ -23,6 +26,25 @@ namespace BMTA
         public string lattitude { get; set; }
 
         public string longtitude { get; set; }
+
+        public string name_final {
+            get
+            {
+                if (lang.Equals("th"))
+                {
+                    return name;
+                }
+                else
+                {
+                    return name_en;
+                }
+
+            }
+            set
+            {
+                this.name_final = value;
+            }
+        }
 
     }
 }

@@ -10,7 +10,7 @@ namespace BMTA
 
     public class busline
     {
-        [SQLite.PrimaryKey, SQLite.AutoIncrement]
+        [SQLite.PrimaryKey]
         public int id { get; set; }
 
         public string bus_name { get; set; }

@@ -61,22 +61,24 @@
                 <TextBlock x:Name="head1" Text="ค้นหาต้นทางปลายทาง" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center"   FontSize="25" />
             </Grid>
             <TextBlock  x:Name="txtstart" Grid.Row="1" Text="ต้นทาง" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="25"/>
-            <toolkit:AutoCompleteBox x:Name="txtboxstart" HorizontalAlignment="Center" Grid.Row="1" Width="225" Grid.Column="2" VerticalAlignment="Top" TextChanged="txtboxstart_TextChanged" FilterMode="None" ValueMemberBinding="{Binding stop_name}" SelectionChanged="txtboxstart_SelectionChanged">
+            <toolkit:AutoCompleteBox x:Name="txtboxstart" HorizontalAlignment="Center" Grid.Row="1" Width="225" Grid.Column="2" VerticalAlignment="Top" TextChanged="txtboxstart_TextChanged" FilterMode="None" ValueMemberBinding="{Binding ref_name}" SelectionChanged="txtboxstart_SelectionChanged">
                 <toolkit:AutoCompleteBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding stop_name}" FontSize="25" Foreground="Black"/>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding ref_name}" FontSize="25" Padding="5,5,5,5" Foreground="Black"/>
+                            <TextBlock Text="{Binding stop_name}" FontSize="20" Padding="5,5,5,5" Foreground="Gray"/>
                         </StackPanel>
                     </DataTemplate>
                 </toolkit:AutoCompleteBox.ItemTemplate>
             </toolkit:AutoCompleteBox>
 
             <TextBlock  x:Name="txtend" Grid.Row="2" Text="ปลายทาง" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="25"/>
-            <toolkit:AutoCompleteBox x:Name="txtboxend" HorizontalAlignment="Center" Grid.Row="2" Width="225" Grid.Column="2" VerticalAlignment="Top" TextChanged="txtboxend_TextChanged" FilterMode="None" ValueMemberBinding="{Binding stop_name}" SelectionChanged="txtboxend_SelectionChanged">
+            <toolkit:AutoCompleteBox x:Name="txtboxend" HorizontalAlignment="Center" Grid.Row="2" Width="225" Grid.Column="2" VerticalAlignment="Top" TextChanged="txtboxend_TextChanged" FilterMode="None" ValueMemberBinding="{Binding ref_name}" SelectionChanged="txtboxend_SelectionChanged">
                 <toolkit:AutoCompleteBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding stop_name}" FontSize="25" Foreground="Black"/>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding ref_name}" FontSize="25" Padding="5,5,5,5" Foreground="Black"/>
+                            <TextBlock Text="{Binding stop_name}" FontSize="20" Padding="5,5,5,5" Foreground="Gray"/>
                         </StackPanel>
                     </DataTemplate>
                 </toolkit:AutoCompleteBox.ItemTemplate>

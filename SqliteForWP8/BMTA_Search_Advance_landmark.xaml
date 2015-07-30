@@ -58,11 +58,11 @@
                 <TextBlock x:Name="head1"  Text="ค้นหาสถานที่สำคัญ" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center"   FontSize="25" />
             </Grid>
             <TextBlock  x:Name="textlandmark" Grid.Row="1" Text="ระบุสถานที่" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="25"/>
-            <toolkit:AutoCompleteBox x:Name="textbox" HorizontalAlignment="Center" Grid.Row="1" Width="225" Grid.Column="2" VerticalAlignment="Top" TextChanged="textbox_TextChanged" FilterMode="None" ValueMemberBinding="{Binding name}" SelectionChanged="textbox_SelectionChanged">
+            <toolkit:AutoCompleteBox x:Name="textbox" HorizontalAlignment="Center" Grid.Row="1" Width="225" Grid.Column="2" VerticalAlignment="Top" TextChanged="textbox_TextChanged" FilterMode="None" ValueMemberBinding="{Binding name_final}" SelectionChanged="textbox_SelectionChanged">
                 <toolkit:AutoCompleteBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding name}" FontSize="25" Foreground="Black"/>
+                            <TextBlock Text="{Binding name_final}" FontSize="25" Foreground="Black"/>
                         </StackPanel>
                     </DataTemplate>
                 </toolkit:AutoCompleteBox.ItemTemplate>

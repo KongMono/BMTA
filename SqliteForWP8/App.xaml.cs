@@ -40,7 +40,7 @@ namespace BMTA
         public searchfindRoutingItem_data RountingDataLandMark = new searchfindRoutingItem_data();
         public searchfindRoutingItem_data RountingDataBusStop = new searchfindRoutingItem_data();
         public searchfindRoutingItem_data RountingDataStartStop = new searchfindRoutingItem_data();
-        public static string DB_PATH = Path.Combine(Path.Combine(ApplicationData.Current.LocalFolder.Path, "bmtadatabase.sqlite"));
+        public static string DB_PATH = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "bmtadatabase.sqlite");
         public static SQLiteAsyncConnection connection;
         public static bool isDatabaseExisting;
 
@@ -183,8 +183,8 @@ namespace BMTA
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
             LoadPersistantData();
-            //CopyDatabase();
-            ConnectToDB();
+            CopyDatabase();
+            //ConnectToDB();
         }
 
         public static async void ConnectToDB()
@@ -240,6 +240,8 @@ namespace BMTA
                 await databaseFile.CopyAsync(ApplicationData.Current.LocalFolder);
             }
         }
+
+
 
         // Code to execute when the application is activated (brought to foreground)
         // This code will not execute when the application is first launched

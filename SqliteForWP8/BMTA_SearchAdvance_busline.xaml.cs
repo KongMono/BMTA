@@ -21,11 +21,11 @@ namespace BMTA
 {
 
 
-    public partial class BMTA_SearchAdvance : PhoneApplicationPage
+    public partial class BMTA_SearchAdvance_busline : PhoneApplicationPage
     {
         public String lang = (Application.Current as App).Language;
         private SQLiteConnection dbConn;
-        public BMTA_SearchAdvance()
+        public BMTA_SearchAdvance_busline()
         {
             InitializeComponent();
         }
@@ -40,20 +40,17 @@ namespace BMTA
             if (dbConn != null)
             {
                 dbConn.Close();
-                // Close the database connection.  
             }
         }
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
-            // Create the database connection.  
             dbConn = new SQLiteConnection(App.DB_PATH);
 
             if (lang.Equals("th"))
             {
                 headbusline.Text = "ค้นหาสายรถเมล์";
                 headbustype.Text = "ค้นหาประเภทรถ";
-                hintbusline.Hint = "กรุณากรอกตัวเลข";
 
                 textbusline.Text = "สายรถเมล์";
                 textbusroute.Text = "เส้นทาง";
@@ -72,7 +69,6 @@ namespace BMTA
             {
                 headbusline.Text = "Search Bus Line";
                 headbustype.Text = "Search Bus Type";
-                hintbusline.Hint = "Bus No.";
 
                 textbusline.Text = "Bus Line";
                 textbusroute.Text = "Route";
@@ -128,7 +124,7 @@ namespace BMTA
                 if (result == MessageBoxResult.OK)
                 {
                     (Application.Current as App).DataSearchList = retrievedTasks;
-                    this.NavigationService.Navigate(new Uri("/BMTA_bus_line_details.xaml?Search=true", UriKind.Relative));
+                    this.NavigationService.Navigate(new Uri("/BMTA_Search_busline_page.xaml", UriKind.Relative));
                 }
             }
             else
@@ -136,7 +132,6 @@ namespace BMTA
                 MessageBox.Show("ไม่พบข้อมูล");
                 return;
             }
-
         }
     }
 }

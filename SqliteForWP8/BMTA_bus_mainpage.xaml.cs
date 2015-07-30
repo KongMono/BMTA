@@ -118,7 +118,9 @@ namespace BMTA
                     buslinelistbox.ItemsSource = buslines;
                     HideProgressIndicator();
                     this.buslinelistbox.Visibility = System.Windows.Visibility.Visible;
-                }catch(Exception ex){
+                }
+                catch (Exception ex)
+                {
                     MessageBox.Show(ex.Message);
                 }
             });
@@ -167,14 +169,23 @@ namespace BMTA
                     var datas = NearBusStopResults.data;
                     foreach (var data in datas)
                     {
-                        String stop_name = data.stop_name;
+                       
+                       
                         Debug.WriteLine(data);
 
                         //add Tooltip
                         MapOverlay mapoverlay = new MapOverlay();
 
                         UCCustomToolTip _tooltip = new UCCustomToolTip();
-                        _tooltip.Description = data.stop_name.ToString() + "\n" + data.busline;
+                        if (lang.Equals("th"))
+                        {
+                            _tooltip.Description = data.stop_name.ToString() + "\n" + data.busline;
+                        }
+                        else
+                        {
+                            _tooltip.Description = data.stop_name_en.ToString() + "\n" + data.busline;
+                        }
+
                         _tooltip.DataContext = data;
                         _tooltip.Lbltext.Tap += _tooltip_TapLbltext;
 
@@ -211,14 +222,12 @@ namespace BMTA
             if (dbConn != null)
             {
                 dbConn.Close();
-                // Close the database connection.  
             }
         }
 
         public BMTA_bus_mainpage()
         {
             InitializeComponent();
-
             ShowMyLocationOnTheMap();
             busStartStopFrom_search.ItemFilter = SearchText;
             busStartStopTo_search.ItemFilter = SearchText;
@@ -238,35 +247,40 @@ namespace BMTA
 
         private async void ShowMyLocationOnTheMap()
         {
-            // Get my current location.
-            Geolocator myGeolocator = new Geolocator();
-            Geoposition myGeoposition = await myGeolocator.GetGeopositionAsync(TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(5));
-            Geocoordinate myGeocoordinate = myGeoposition.Coordinate;
-            GeoCoordinate myGeoCoordinate = CoordinateConverter.ConvertGeocoordinate(myGeocoordinate);
+            try
+            {
+                Geolocator myGeolocator = new Geolocator();
+                Geoposition myGeoposition = await myGeolocator.GetGeopositionAsync(TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(5));
+                Geocoordinate myGeocoordinate = myGeoposition.Coordinate;
+                GeoCoordinate myGeoCoordinate = CoordinateConverter.ConvertGeocoordinate(myGeocoordinate);
 
-            this.callServicegetNearBusStop(Convert.ToString(myGeoCoordinate.Latitude), Convert.ToString(myGeoCoordinate.Longitude));
+                this.callServicegetNearBusStop(Convert.ToString(myGeoCoordinate.Latitude), Convert.ToString(myGeoCoordinate.Longitude));
 
-            this.map.Center = myGeoCoordinate;
-            this.map.ZoomLevel = 13;
+                this.map.Center = myGeoCoordinate;
+                this.map.ZoomLevel = 14;
 
-            // Create a small circle to mark the current location.
-            Ellipse myCircle = new Ellipse();
-            myCircle.Fill = new SolidColorBrush(Colors.Blue);
-            myCircle.Height = 20;
-            myCircle.Width = 20;
-            myCircle.Opacity = 50;
+                // Create a small circle to mark the current location.
+                Ellipse myCircle = new Ellipse();
+                myCircle.Fill = new SolidColorBrush(Colors.Blue);
+                myCircle.Height = 20;
+                myCircle.Width = 20;
+                myCircle.Opacity = 50;
 
-            // Create a MapOverlay to contain the circle.
-            MapOverlay myLocationOverlay = new MapOverlay();
-            myLocationOverlay.Content = myCircle;
-            myLocationOverlay.GeoCoordinate = myGeoCoordinate;
+                // Create a MapOverlay to contain the circle.
+                MapOverlay myLocationOverlay = new MapOverlay();
+                myLocationOverlay.Content = myCircle;
+                myLocationOverlay.GeoCoordinate = myGeoCoordinate;
 
-            // Create a MapLayer to contain the MapOverlay.
-            mymapLayer.Add(myLocationOverlay);
+                // Create a MapLayer to contain the MapOverlay.
+                mymapLayer.Add(myLocationOverlay);
 
-            // Add the MapLayer to the Map.
-            this.map.Layers.Add(mymapLayer);
-
+                // Add the MapLayer to the Map.
+                this.map.Layers.Add(mymapLayer);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void ShowProgressIndicator(String msg)
@@ -294,13 +308,33 @@ namespace BMTA
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
-            List<datasearchLandMarkByGeoItem> listHistory = (Application.Current as App).MemLandMarkList;
-
-            foreach (datasearchLandMarkByGeoItem item in listHistory)
+            try
             {
-                UCLandMarkItem i = new UCLandMarkItem();
-                i.TextLandMark.Text = item.keyword;
-                LandmarksHistorylistbox.Items.Add(item);
+                List<datasearchLandMarkByGeoItem> listHistory = (Application.Current as App).MemLandMarkList;
+
+                foreach (datasearchLandMarkByGeoItem item in listHistory)
+                {
+                    UCLandMarkItem i = new UCLandMarkItem();
+                    i.TextLandMark.Text = item.keyword;
+                    LandmarksHistorylistbox.Items.Add(item);
+                }
+
+                if (lang.Equals("th"))
+                {
+                    btn_other.Content = "อื่นๆ";
+                    btn_van.Content = "ต";
+
+                }
+                else
+                {
+                    btn_other.Content = "Other";
+                    btn_van.Content = "Van";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -369,11 +403,13 @@ namespace BMTA
             {
                 titleName.Text = "ถนนและสถานที่สำคัญ";
                 textHeaderLandMark.Text = "ผลการค้นหาโดยใช้พิกัด";
+                latlon_search.Text = "ค้นหาโดยใช้พิกัด";
             }
             else
             {
                 titleName.Text = "Streets and Landmarks";
                 textHeaderLandMark.Text = "Recent";
+                latlon_search.Text = "Search by Coordinate";
             }
         }
 
@@ -415,7 +451,7 @@ namespace BMTA
         {
             if (CurrentPage == "1")
             {
-                NavigationService.Navigate(new Uri("/BMTA_SearchAdvance.xaml", UriKind.Relative));
+                NavigationService.Navigate(new Uri("/BMTA_SearchAdvance_busline.xaml", UriKind.Relative));
             }
             else if (CurrentPage == "2")
             {
@@ -492,7 +528,7 @@ namespace BMTA
         {
             //load data 
             progressBar_busline.Visibility = System.Windows.Visibility.Visible;
-            //articles.Clear();
+
             List<buslineItem> retrievedTasks = new List<buslineItem>();
             if (busline_search.Text != null || busline_search.Text != "")
             {
@@ -573,23 +609,25 @@ namespace BMTA
         public void callServicegetAutocompletestart()
         {
             webClient = new WebClient();
-            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/getAutocomplete";
+
+            String url = "http://128.199.232.94/webservice/keyword.php";
             string myParameters;
             try
             {
-                myParameters = "type=" + "busstop" + "&keyword=" + busStartStopFrom_search.Text + "&lang=" + lang;
-                Debug.WriteLine("URL callServicegetAutocompletestart = " + url);
-                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocompletestart_Completed);
-                webClient.UploadStringAsync(new Uri(url), myParameters);
+                myParameters = url + "?type=" + "busstop" + "&q=" + busStartStopFrom_search.Text + "&lang=" + lang;
+                Debug.WriteLine("URL callServicegetAutocompletestart = " + myParameters);
+                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(callServicegetAutocompletestart_Completed);
+                webClient.DownloadStringAsync(new Uri(myParameters));
             }
+
+      
             catch (WebException ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
 
-        private void callServicegetAutocompletestart_Completed(object sender, UploadStringCompletedEventArgs e)
+        private void callServicegetAutocompletestart_Completed(object sender, DownloadStringCompletedEventArgs e)
         {
             try
             {
@@ -611,15 +649,15 @@ namespace BMTA
         public void callServicegetAutocompleteend()
         {
             webClient = new WebClient();
-            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/getAutocomplete";
+
+            String url = "http://128.199.232.94/webservice/keyword.php";
             string myParameters;
             try
             {
-                myParameters = "type=" + "busstop" + "&keyword=" + busStartStopTo_search.Text + "&lang=" + lang;
-                Debug.WriteLine("URL callServicegetAutocompleteend = " + url);
-                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocompleteend_Completed);
-                webClient.UploadStringAsync(new Uri(url), myParameters);
+                myParameters = url + "?type=" + "busstop" + "&q=" + busStartStopTo_search.Text + "&lang=" + lang;
+                Debug.WriteLine("URL callServicegetAutocompleteend = " + myParameters);
+                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(callServicegetAutocompleteend_Completed);
+                webClient.DownloadStringAsync(new Uri(myParameters));
             }
             catch (WebException ex)
             {
@@ -628,7 +666,7 @@ namespace BMTA
 
         }
 
-        private void callServicegetAutocompleteend_Completed(object sender, UploadStringCompletedEventArgs e)
+        private void callServicegetAutocompleteend_Completed(object sender, DownloadStringCompletedEventArgs e)
         {
             try
             {
@@ -696,7 +734,7 @@ namespace BMTA
         private void callService_startstop_searchfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
         {
             busStartStoplistbox.Items.Clear();
-          
+
             searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
             if (results == null)
             {
@@ -767,7 +805,7 @@ namespace BMTA
                     UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
                 }
 
-               
+
                 busStartStoplistbox.Items.Add(UCStartStop);
             }
             progressBar_busstartstop.Visibility = System.Windows.Visibility.Collapsed;
@@ -1150,17 +1188,22 @@ namespace BMTA
                 switch (dismissedEvent.Result)
                 {
                     case CustomMessageBoxResult.LeftButton:
-                        
+
                         String lat = dialog.Textbox2.Text.Split(',').First();
                         String lon = dialog.Textbox2.Text.Split(',').Last();
                         callplacecurrentfindRouting_Memo(lat, lon);
                         ShowProgressIndicator("Loading..");
                         break;
                     case CustomMessageBoxResult.RightButton:
-                        
+
                         break;
                 }
             };
+        }
+
+        private void btn_findcurrent_Click(object sender, RoutedEventArgs e)
+        {
+            map.Center = new GeoCoordinate(Double.Parse((Application.Current as App).lat_current) , Double.Parse((Application.Current as App).lon_current));
         }
     }
 }

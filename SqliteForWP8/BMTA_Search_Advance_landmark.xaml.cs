@@ -109,6 +109,8 @@ namespace BMTA
 
         public void callplacecurrentfindRouting(ListPickerItem buslinePick, ListPickerItem busRunningPick)
         {
+            ShowProgressIndicator("Loading..");
+
             webClient = new WebClient();
             webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
             String url = "http://202.6.18.31:7777/placecurrentfindRouting";
@@ -137,7 +139,7 @@ namespace BMTA
 
         private void callplacecurrentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
         {
-           
+            HideProgressIndicator();
             searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
             if (results == null)
             {
@@ -157,15 +159,15 @@ namespace BMTA
         public void callServicegetAutocomplete()
         {
             webClient = new WebClient();
-            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/getAutocomplete";
+            String url = "http://128.199.232.94/webservice/keyword.php";
             string myParameters;
             try
             {
-                myParameters = "type=" + "place" + "&keyword=" + textbox.Text + "&lang=" + lang;
-                Debug.WriteLine("URL callServicegetAutocomplete = " + url);
-                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocomplete_Completed);
-                webClient.UploadStringAsync(new Uri(url), myParameters);
+                myParameters = url + "?type=" + "place" + "&q=" + textbox.Text + "&lang=" + lang;
+                Debug.WriteLine("URL callServicegetAutocompleteLandMark = " + myParameters);
+                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(callServicegetAutocomplete_Completed);
+                webClient.DownloadStringAsync(new Uri(myParameters));
+            
             }
             catch (WebException ex)
             {
@@ -174,7 +176,7 @@ namespace BMTA
 
         }
 
-        private void callServicegetAutocomplete_Completed(object sender, UploadStringCompletedEventArgs e)
+        private void callServicegetAutocomplete_Completed(object sender, DownloadStringCompletedEventArgs e)
         {
             searchlandmarkItem results = JsonConvert.DeserializeObject<searchlandmarkItem>(e.Result);
 
@@ -206,18 +208,17 @@ namespace BMTA
                 }
             }
         }
-
         private void ShowProgressIndicator(String msg)
         {
             if (progressIndicator == null)
             {
                 progressIndicator = new ProgressIndicator();
-                progressIndicator.IsIndeterminate = true;
             }
             SystemTray.Opacity = 0;
             progressIndicator.Text = msg;
             progressIndicator.IsVisible = true;
-            progressIndicator.IsIndeterminate = true;
+            progressIndicator.IsIndeterminate = false;
+            SystemTray.SetIsVisible(this, true);
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 
@@ -225,6 +226,7 @@ namespace BMTA
         {
             progressIndicator.IsVisible = false;
             progressIndicator.IsIndeterminate = false;
+            SystemTray.SetIsVisible(this, false);
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 

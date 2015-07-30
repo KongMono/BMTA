@@ -145,40 +145,44 @@ namespace BMTA
                         }
                         else
                         {
-                            if (countExist < 1)
-                            {
-                            }
-
                             if (busstop.status == "2" && isFirstStatus2)
                             {
                                 isFirstStatus2 = false;
                                 isExist = true;
                                 UCRoutingList = new UCRoutingList();
-                                UCRoutingList.textbusline_name.Text = item.busline_name;
+                               
                                 if (lang.Equals("th"))
                                 {
+                                    UCRoutingList.textbusline_name.Text = "เปลี่ยนสายรถเมล์ที่ป้าย";
+
                                     UCRoutingList.textstop_name.Text = busstop.stop_name;
-                                    if (item.distance == "nan")
-                                    {
-                                        UCRoutingList.textRoute.Text = "0.00 กม.";
-                                    }
-                                    else
-                                    {
-                                        UCRoutingList.textRoute.Text = item.distance + " กม.";
-                                    }
+
+                                    //if (item.distance == "nan")
+                                    //{
+                                    //    UCRoutingList.textRoute.Text = "0.00 กม.";
+                                    //}
+                                    //else
+                                    //{
+                                    //    UCRoutingList.textRoute.Text = item.distance + " กม.";
+                                    //}
+                                    UCRoutingList.textRoute.Text = busstop.stop_name;
                                  
                                 }
                                 else
                                 {
+                                    UCRoutingList.textbusline_name.Text = "transfer to another bus";
+
                                     UCRoutingList.textstop_name.Text = busstop.stop_name_en;
-                                    if (item.distance == "nan")
-                                    {
-                                        UCRoutingList.textRoute.Text = "0.00 km.";
-                                    }
-                                    else
-                                    {
-                                        UCRoutingList.textRoute.Text = item.distance + " km.";
-                                    }
+
+                                    //if (item.distance == "nan")
+                                    //{
+                                    //    UCRoutingList.textRoute.Text = "0.00 km.";
+                                    //}
+                                    //else
+                                    //{
+                                    //    UCRoutingList.textRoute.Text = item.distance + " km.";
+                                    //}
+                                    UCRoutingList.textRoute.Text = "at " + busstop.stop_name_en;
                                 }
                                 UCRoutingList.status = busstop.status;
                                 busStoplistbox.Items.Add(UCRoutingList);
@@ -219,30 +223,36 @@ namespace BMTA
                                 else
                                 {
                                     UCRoutingList = new UCRoutingList();
-                                    UCRoutingList.textbusline_name.Text = item.busline_name;
+                                   
                                     if (lang.Equals("th"))
                                     {
+                                        UCRoutingList.textbusline_name.Text = "เปลี่ยนสายรถเมล์ที่ป้าย";
+
                                         UCRoutingList.textstop_name.Text = busstop.stop_name;
-                                        if (item.distance == "nan")
-                                        {
-                                            UCRoutingList.textRoute.Text = "0.00 กม.";
-                                        }
-                                        else
-                                        {
-                                            UCRoutingList.textRoute.Text = item.distance + " กม.";
-                                        }
+                                        //if (item.distance == "nan")
+                                        //{
+                                        //    UCRoutingList.textRoute.Text = "0.00 กม.";
+                                        //}
+                                        //else
+                                        //{
+                                        //    UCRoutingList.textRoute.Text = item.distance + " กม.";
+                                        //}
+                                        UCRoutingList.textRoute.Text = busstop.stop_name;
                                     }
                                     else
                                     {
+                                        UCRoutingList.textbusline_name.Text = "transfer to another bus";
+
                                         UCRoutingList.textstop_name.Text = busstop.stop_name_en;
-                                        if (item.distance == "nan")
-                                        {
-                                            UCRoutingList.textRoute.Text = "0.00 km.";
-                                        }
-                                        else
-                                        {
-                                            UCRoutingList.textRoute.Text = item.distance + " km.";
-                                        }
+                                        //if (item.distance == "nan")
+                                        //{
+                                        //    UCRoutingList.textRoute.Text = "0.00 km.";
+                                        //}
+                                        //else
+                                        //{
+                                        //    UCRoutingList.textRoute.Text = item.distance + " km.";
+                                        //}
+                                        UCRoutingList.textRoute.Text = "at " + busstop.stop_name_en;
                                     }
                                     UCRoutingList.status = busstop.status;
                                     dataExistStatus2.Add(UCRoutingList);

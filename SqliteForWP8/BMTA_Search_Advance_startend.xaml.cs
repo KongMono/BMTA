@@ -112,7 +112,7 @@ namespace BMTA
                 MessageBox.Show("กรุณากรอกปลายทาง");
                 return;
             }
-
+            ShowProgressIndicator("Loading..");
             var buslinePick = (ListPickerItem)busline.SelectedItem;
             var busRunningPick = (ListPickerItem)bustyperunning.SelectedItem;
 
@@ -191,6 +191,7 @@ namespace BMTA
 
         private void callServicecurrentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
         {
+            HideProgressIndicator();
             searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
             if (results == null)
             {
@@ -208,16 +209,18 @@ namespace BMTA
 
         public void callServicegetAutocompletestart()
         {
+            ShowProgressIndicator("Loading..");
+
             webClient = new WebClient();
-            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/getAutocomplete";
+
+            String url = "http://128.199.232.94/webservice/keyword.php";
             string myParameters;
             try
             {
-                myParameters = "type=" + "busstop" + "&keyword=" + txtboxstart.Text + "&lang=" + lang;
-                Debug.WriteLine("URL callServicegetAutocompletestart = " + url);
-                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocompletestart_Completed);
-                webClient.UploadStringAsync(new Uri(url), myParameters);
+                myParameters = url + "?type=" + "busstop" + "&q=" + txtboxstart.Text + "&lang=" + lang;
+                Debug.WriteLine("URL callServicegetAutocompletestart = " + myParameters);
+                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(callServicegetAutocompletestart_Completed);
+                webClient.DownloadStringAsync(new Uri(myParameters));
             }
             catch (WebException ex)
             {
@@ -226,8 +229,9 @@ namespace BMTA
 
         }
 
-        private void callServicegetAutocompletestart_Completed(object sender, UploadStringCompletedEventArgs e)
+        private void callServicegetAutocompletestart_Completed(object sender, DownloadStringCompletedEventArgs e)
         {
+            HideProgressIndicator();
             searchStartStopItem results = JsonConvert.DeserializeObject<searchStartStopItem>(e.Result);
 
             txtboxstart.ItemsSource = results.data;
@@ -240,24 +244,23 @@ namespace BMTA
         public void callServicegetAutocompleteend()
         {
             webClient = new WebClient();
-            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/getAutocomplete";
+
+            String url = "http://128.199.232.94/webservice/keyword.php";
             string myParameters;
             try
             {
-                myParameters = "type=" + "busstop" + "&keyword=" + txtboxend.Text + "&lang=" + lang;
-                Debug.WriteLine("URL callServicegetAutocompleteend = " + url);
-                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocompleteend_Completed);
-                webClient.UploadStringAsync(new Uri(url), myParameters);
+                myParameters = url + "?type=" + "busstop" + "&q=" + txtboxend.Text + "&lang=" + lang;
+                Debug.WriteLine("URL callServicegetAutocompleteend = " + myParameters);
+                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(callServicegetAutocompleteend_Completed);
+                webClient.DownloadStringAsync(new Uri(myParameters));
             }
             catch (WebException ex)
             {
                 MessageBox.Show(ex.Message);
             }
-
         }
 
-        private void callServicegetAutocompleteend_Completed(object sender, UploadStringCompletedEventArgs e)
+        private void callServicegetAutocompleteend_Completed(object sender, DownloadStringCompletedEventArgs e)
         {
             searchStartStopItem results = JsonConvert.DeserializeObject<searchStartStopItem>(e.Result);
 
@@ -266,18 +269,18 @@ namespace BMTA
             HideProgressIndicator();
             alreadyEnd = false;
         }
-        //
+
         private void ShowProgressIndicator(String msg)
         {
             if (progressIndicator == null)
             {
                 progressIndicator = new ProgressIndicator();
-                progressIndicator.IsIndeterminate = true;
             }
             SystemTray.Opacity = 0;
             progressIndicator.Text = msg;
             progressIndicator.IsVisible = true;
-            progressIndicator.IsIndeterminate = true;
+            progressIndicator.IsIndeterminate = false;
+            SystemTray.SetIsVisible(this, true);
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 
@@ -285,6 +288,7 @@ namespace BMTA
         {
             progressIndicator.IsVisible = false;
             progressIndicator.IsIndeterminate = false;
+            SystemTray.SetIsVisible(this, false);
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 

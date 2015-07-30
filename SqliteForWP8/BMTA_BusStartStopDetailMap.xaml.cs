@@ -133,7 +133,7 @@ namespace BMTA
             GeoCoordinate myGeoCoordinate = CoordinateConverter.ConvertGeocoordinate(myGeocoordinate);
 
             this.map.Center = myGeoCoordinate;
-            this.map.ZoomLevel = 18;
+            this.map.ZoomLevel = 13;
 
             // Create a small circle to mark the current location.
             Ellipse myCircle = new Ellipse();

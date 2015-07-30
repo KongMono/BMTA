@@ -40,8 +40,6 @@ namespace BMTA
             InitializeComponent();
             dbConn = new SQLiteConnection(App.DB_PATH);
 
-         
-
             lastupdate = (Application.Current as App).lastUpdate;
 
             countpage++;
@@ -156,8 +154,17 @@ namespace BMTA
                 {
                     if (item.status == 1)
                     {
+
                         string json_bus_polyline = JsonConvert.SerializeObject(item.bus_polyline);
-                        var db = dbConn.Query<busline>("SELECT * FROM busline WHERE id =" + item.id).FirstOrDefault();
+                        busline db = null;
+                        try
+                        {
+                            db = dbConn.Query<busline>("SELECT * FROM busline WHERE id =" + item.id).FirstOrDefault();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
                         if (db != null)
                         {
                             db.bus_name = item.bus_name;

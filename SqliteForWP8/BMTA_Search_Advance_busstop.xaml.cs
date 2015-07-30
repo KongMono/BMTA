@@ -247,7 +247,6 @@ namespace BMTA
             if (progressIndicator == null)
             {
                 progressIndicator = new ProgressIndicator();
-                progressIndicator.IsIndeterminate = true;
             }
             SystemTray.Opacity = 0;
             progressIndicator.Text = msg;
