@@ -28,10 +28,16 @@ namespace BMTA
             if (lang.Equals("th"))
             {
                 titleName.Text = "ข่าวสาร และกิจกรรม";
+                name1.Text = "ข่าวสาร";
+                name2.Text = "กิจกรรม";
+                name3.Text = "เกี่ยวกับ ขสมก.";
             }
             else
             {
                 titleName.Text = "News & Events";
+                name1.Text = "News";
+                name2.Text = "Events";
+                name3.Text = "About BMTA";
             }
         }
 

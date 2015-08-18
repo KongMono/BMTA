@@ -111,7 +111,12 @@ namespace BMTA
             {
                 try
                 {
-                    List<buslineItem> retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + CurrentGroup + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
+                    List<buslineItem> retrievedTasks = dbConn.Query<buslineItem>(
+                        "SELECT * FROM busline WHERE bus_line LIKE '" + CurrentGroup + "%' "
+                        + " AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%') "
+                        + "AND bus_polyline !='' AND (bus_direction_en = 'inbound' OR bus_direction_en = 'Left Loop')"
+                        + " AND bustype > 0 AND bus_owner > 0 AND bus_running > 0 AND bus_color > 0 AND published = '1' AND busstop_list !=''"
+                        + " ORDER BY CAST(bus_line AS INTEGER) ASC,bus_owner DESC,bustype ASC,bus_direction_en ASC");
                     buslines = new ObservableCollection<buslineItem>(retrievedTasks);
                     (Application.Current as App).DataBuslinehList = retrievedTasks;
 
@@ -169,8 +174,6 @@ namespace BMTA
                     var datas = NearBusStopResults.data;
                     foreach (var data in datas)
                     {
-                       
-                       
                         Debug.WriteLine(data);
 
                         //add Tooltip
@@ -408,7 +411,7 @@ namespace BMTA
             else
             {
                 titleName.Text = "Streets and Landmarks";
-                textHeaderLandMark.Text = "Recent";
+                textHeaderLandMark.Text = "Result By Coordinate";
                 latlon_search.Text = "Search by Coordinate";
             }
         }
@@ -494,15 +497,24 @@ namespace BMTA
             List<buslineItem> retrievedTasks = new List<buslineItem>();
             if (btn.Name == "btn_other")
             {
-                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line GLOB '*[A-Za-z]*' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line GLOB '*[A-Za-z]*' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')"
+                    + " AND bus_polyline !='' AND (bus_direction_en = 'inbound' OR bus_direction_en = 'Left Loop')"
+                    + " AND bustype > 0 AND bus_owner > 0 AND bus_running > 0 AND bus_color > 0 AND published = '1' AND busstop_list !=''"
+                    + " ORDER BY CAST(bus_line AS INTEGER) ASC,bus_owner DESC,bustype ASC,bus_direction_en ASC");
             }
             else if (btn.Name == "btn_van")
             {
-                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_owner = 4 AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')");
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_owner = 4 AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')"
+                    + " AND bus_polyline !='' AND (bus_direction_en = 'inbound' OR bus_direction_en = 'Left Loop')"
+                    + " AND bustype > 0 AND bus_owner > 0 AND bus_running > 0 AND bus_color > 0 AND published = '1' AND busstop_list !=''"
+                    + " ORDER BY CAST(bus_line AS INTEGER) ASC,bus_owner DESC,bustype ASC,bus_direction_en ASC");
             }
             else
             {
-                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + btn.Content + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + btn.Content + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')"
+                    + " AND bus_polyline !='' AND (bus_direction_en = 'inbound' OR bus_direction_en = 'Left Loop')"
+                    + " AND bustype > 0 AND bus_owner > 0 AND bus_running > 0 AND bus_color > 0 AND published = '1' AND busstop_list !=''"
+                    + " ORDER BY CAST(bus_line AS INTEGER) ASC,bus_owner DESC,bustype ASC,bus_direction_en ASC");
             }
 
             (Application.Current as App).DataBuslinehList = retrievedTasks;
@@ -532,11 +544,20 @@ namespace BMTA
             List<buslineItem> retrievedTasks = new List<buslineItem>();
             if (busline_search.Text != null || busline_search.Text != "")
             {
-                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + busline_search.Text + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + busline_search.Text + "%' "
+                        + " AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%') "
+                        + "AND bus_polyline !='' AND (bus_direction_en = 'inbound' OR bus_direction_en = 'Left Loop')"
+                        + " AND bustype > 0 AND bus_owner > 0 AND bus_running > 0 AND bus_color > 0 AND published = '1' AND busstop_list !=''"
+                        + " ORDER BY CAST(bus_line AS INTEGER) ASC,bus_owner DESC,bustype ASC,bus_direction_en ASC");
+
             }
             else
             {
-                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + CurrentGroup + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + CurrentGroup + "%' "
+                        + " AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%') "
+                        + "AND bus_polyline !='' AND (bus_direction_en = 'inbound' OR bus_direction_en = 'Left Loop')"
+                        + " AND bustype > 0 AND bus_owner > 0 AND bus_running > 0 AND bus_color > 0 AND published = '1' AND busstop_list !=''"
+                        + " ORDER BY CAST(bus_line AS INTEGER) ASC,bus_owner DESC,bustype ASC,bus_direction_en ASC");
             }
 
             buslines = new ObservableCollection<buslineItem>(retrievedTasks);
@@ -553,13 +574,23 @@ namespace BMTA
             {
                 ShowProgressIndicator("Loading..");
                 List<buslineItem> retrievedTasks = new List<buslineItem>();
-                if (busline_search.Text != "")
+                if (busline_search.Text != null || busline_search.Text != "")
                 {
-                    retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + busline_search.Text + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
+
+                    retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline   WHERE (bus_line = '"
+                           + busline_search.Text + "' or bus_name = '" + busline_search.Text
+                           + "' or bus_start LIKE '%" + busline_search.Text
+                           + "%' or bus_stop LIKE '%" + busline_search.Text
+                           + "%' or bus_start_en LIKE '%" + busline_search.Text + "%'" + " or bus_stop_en LIKE '%" + busline_search.Text + "%'" + " or bus_name_en LIKE '%" + busline_search.Text + "%'" + ") and bus_line != ''"
+                           + " ORDER BY CAST(bus_line AS INTEGER) ASC,bus_owner DESC,bustype ASC,bus_direction_en ASC");
                 }
                 else
                 {
-                    retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + CurrentGroup + "%' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')");
+                    retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + CurrentGroup + "%' "
+                            + " AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%') "
+                            + "AND bus_polyline !='' AND (bus_direction_en = 'inbound' OR bus_direction_en = 'Left Loop')"
+                            + " AND bustype > 0 AND bus_owner > 0 AND bus_running > 0 AND bus_color > 0 AND published = '1' AND busstop_list !=''"
+                            + " ORDER BY CAST(bus_line AS INTEGER) ASC,bus_owner DESC,bustype ASC,bus_direction_en ASC");
                 }
 
                 (Application.Current as App).DataBuslinehList = retrievedTasks;
@@ -620,7 +651,7 @@ namespace BMTA
                 webClient.DownloadStringAsync(new Uri(myParameters));
             }
 
-      
+
             catch (WebException ex)
             {
                 MessageBox.Show(ex.Message);
@@ -1203,7 +1234,7 @@ namespace BMTA
 
         private void btn_findcurrent_Click(object sender, RoutedEventArgs e)
         {
-            map.Center = new GeoCoordinate(Double.Parse((Application.Current as App).lat_current) , Double.Parse((Application.Current as App).lon_current));
+            map.Center = new GeoCoordinate(Double.Parse((Application.Current as App).lat_current), Double.Parse((Application.Current as App).lon_current));
         }
     }
 }

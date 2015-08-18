@@ -58,7 +58,7 @@
                 </toolkit:AutoCompleteBox>
             </Grid>
 
-            <Grid x:Name="busStopLayoutList" Grid.Row="2" Grid.ColumnSpan="3" Background="#FFFFFFFF" >
+            <Grid x:Name="busStopLayoutList" Margin="0,20,0,0" Grid.Row="2" Grid.ColumnSpan="3" Background="#FFFFFFFF" >
                 <ListBox x:Name="busStoplistbox" />
             </Grid>
         </Grid>

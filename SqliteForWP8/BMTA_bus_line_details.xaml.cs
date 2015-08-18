@@ -53,6 +53,7 @@ namespace BMTA
         Double lat, lon;
         private List<landmark> dataLandMark;
         private Boolean iscate1, iscate2;
+        private ImageBrush img;
         ObservableCollection<listBuslineDetailItem> listBuslineDetailItem = new ObservableCollection<listBuslineDetailItem>();
 
         ProgressIndicator progressIndicator = new ProgressIndicator();
@@ -114,6 +115,28 @@ namespace BMTA
         public BMTA_bus_line_details()
         {
             InitializeComponent();
+
+            if (lang.Equals("th"))
+            {
+                img = new ImageBrush();
+                img.ImageSource = new BitmapImage(new Uri("/Assets/btn_in_atvth.png", UriKind.Relative));
+                btin.Background = img;
+
+
+                img = new ImageBrush();
+                img.ImageSource = new BitmapImage(new Uri("/Assets/btn_out_th.png", UriKind.Relative));
+                btout.Background = img;
+            }
+            else
+            {
+                img = new ImageBrush();
+                img.ImageSource = new BitmapImage(new Uri("/Assets/btn_in_atven.png", UriKind.Relative));
+                btin.Background = img;
+
+                img = new ImageBrush();
+                img.ImageSource = new BitmapImage(new Uri("/Assets/btn_out_en.png", UriKind.Relative));
+                btout.Background = img;
+            }
 
             LoadMap();
         }
@@ -319,8 +342,11 @@ namespace BMTA
             List<listBuslineDetailItem> ls = new List<listBuslineDetailItem>();
 
             int b = 0;
+            int index = 1;
             if (results != null)
             {
+
+
                 foreach (var item in results)
                 {
                     listBuslineDetailItem lsitem = new listBuslineDetailItem();
@@ -328,12 +354,14 @@ namespace BMTA
                     {
                         if (lang.Equals("th"))
                         {
-                            lsitem.stop_name = item.stop_name;
+                            lsitem.stop_name = index + ". " + item.stop_name;
                         }
                         else
                         {
-                            lsitem.stop_name = item.stop_name_en;
+                            lsitem.stop_name = index + ". " +item.stop_name_en;
                         }
+
+                        index++;
 
                         if (b < 1)
                         {
@@ -366,13 +394,29 @@ namespace BMTA
         private void btin_Click(object sender, RoutedEventArgs e)
         {
             ShowProgressIndicator("Loading..");
-            var uriStringin = @"Assets/btn_in_atvth.png";
-            btin.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriStringin, UriKind.Relative)) };
+            if (lang.Equals("th"))
+            {
+                img = new ImageBrush();
+                img.ImageSource = new BitmapImage(new Uri("/Assets/btn_in_atvth.png", UriKind.Relative));
+                btin.Background = img;
 
-            var uriStringout = @"Assets/btn_out_th.png";
-            btout.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriStringout, UriKind.Relative)) };
 
-            List<buslineItem> ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_name,bus_startstop_time,bus_stop,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
+                img = new ImageBrush();
+                img.ImageSource = new BitmapImage(new Uri("/Assets/btn_out_th.png", UriKind.Relative));
+                btout.Background = img;
+            }
+            else
+            {
+                img = new ImageBrush();
+                img.ImageSource = new BitmapImage(new Uri("/Assets/btn_in_atven.png", UriKind.Relative));
+                btin.Background = img;
+
+                img = new ImageBrush();
+                img.ImageSource = new BitmapImage(new Uri("/Assets/btn_out_en.png", UriKind.Relative));
+                btout.Background = img;
+            }
+
+            List<buslineItem> ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
 
             retrievedTask = ls[0];
             lblbusid.Text = ls[0].bus_line;
@@ -399,13 +443,28 @@ namespace BMTA
         private void btout_Click(object sender, RoutedEventArgs e)
         {
             ShowProgressIndicator("Loading..");
-            var uriStringin = @"Assets/btn_in_th.png";
-            btin.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriStringin, UriKind.Relative)) };
+            if (lang.Equals("th"))
+            {
+                img = new ImageBrush();
+                img.ImageSource = new BitmapImage(new Uri("/Assets/btn_in_th.png", UriKind.Relative));
+                btin.Background = img;
 
-            var uriStringout = @"Assets/btn_out_atvth.png";
-            btout.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriStringout, UriKind.Relative)) };
 
-            List<buslineItem> ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_name,bus_startstop_time,bus_stop,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
+                img = new ImageBrush();
+                img.ImageSource = new BitmapImage(new Uri("/Assets/btn_out_atvth.png", UriKind.Relative));
+                btout.Background = img;
+            }
+            else
+            {
+                img = new ImageBrush();
+                img.ImageSource = new BitmapImage(new Uri("/Assets/btn_in_en.png", UriKind.Relative));
+                btin.Background = img;
+
+                img = new ImageBrush();
+                img.ImageSource = new BitmapImage(new Uri("/Assets/btn_out_atven.png", UriKind.Relative));
+                btout.Background = img;
+            }
+            List<buslineItem> ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
 
             retrievedTask = ls[0];
             lblbusid.Text = ls[0].bus_line;
@@ -455,11 +514,11 @@ namespace BMTA
             {
                 if (isInTwown)
                 {
-                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_name,bus_startstop_time,bus_stop,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
+                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
                 }
                 else
                 {
-                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_name,bus_startstop_time,bus_stop,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
+                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
                 }
 
                 if (ls.Count > 0)
@@ -481,11 +540,11 @@ namespace BMTA
 
                 if (isInTwown)
                 {
-                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_name,bus_startstop_time,bus_stop,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
+                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
                 }
                 else
                 {
-                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_name,bus_startstop_time,bus_stop,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
+                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
                 }
 
                 if (ls.Count > 0)

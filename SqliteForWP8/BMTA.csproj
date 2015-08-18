@@ -529,7 +529,6 @@
     <Content Include="Assets\14.png" />
     <Content Include="Assets\15.png" />
     <Content Include="Assets\16.png" />
-    <Content Include="Assets\17.png" />
     <Content Include="Assets\18.png" />
     <Content Include="Assets\19.png" />
     <Content Include="Assets\2.png" />
@@ -549,6 +548,7 @@
     <Content Include="Assets\bg_numberbus.png" />
     <Content Include="Assets\BMTA_busno_bg.png" />
     <Content Include="Assets\BMTA_infobox.png" />
+    <Content Include="Assets\BMTA_intro.png" />
     <Content Include="Assets\BMTA_slotresult_bg_t.png" />
     <Content Include="Assets\BMTA_speed_timer_icon.png" />
     <Content Include="Assets\BMTA_speed_timer_icon_l.png" />
@@ -561,7 +561,6 @@
     <Content Include="Assets\btn_bank.png" />
     <Content Include="Assets\btn_btn.png" />
     <Content Include="Assets\btn_bts.png" />
-    <Content Include="Assets\btn_bus.png" />
     <Content Include="Assets\btn_capital.png" />
     <Content Include="Assets\btn_carpital.png" />
     <Content Include="Assets\btn_church.png" />
@@ -571,6 +570,8 @@
     <Content Include="Assets\btn_home.png" />
     <Content Include="Assets\btn_hospital.png" />
     <Content Include="Assets\btn_hotel.png" />
+    <Content Include="Assets\btn_in_atven.png" />
+    <Content Include="Assets\btn_in_en.png" />
     <Content Include="Assets\btn_ministry.png" />
     <Content Include="Assets\btn_misjid.png" />
     <Content Include="Assets\btn_mrt.png" />
@@ -583,6 +584,8 @@
     <Content Include="Assets\btn_normal4.png" />
     <Content Include="Assets\btn_normal5.png" />
     <Content Include="Assets\btn_normal99.png" />
+    <Content Include="Assets\btn_out_atven.png" />
+    <Content Include="Assets\btn_out_en.png" />
     <Content Include="Assets\btn_park.png" />
     <Content Include="Assets\btn_pause.png" />
     <Content Include="Assets\btn_port.png" />
@@ -611,7 +614,24 @@
     <Content Include="Assets\icon_stat.png" />
     <Content Include="Assets\languagepage.jpg" />
     <Content Include="Assets\left_infobox.png" />
+    <Content Include="Assets\main\bg\BMTA_intro.png" />
+    <Content Include="Assets\main\bg\BMTA_menu_bg.png" />
+    <Content Include="Assets\main\bg\BMTA_slot_bg_en.png" />
+    <Content Include="Assets\main\bg\BMTA_speed_bg.png" />
+    <Content Include="Assets\main\bg\BMTA_speed_bg_en.png" />
+    <Content Include="Assets\main\bg\BMTA_speed_timer_en.png" />
+    <Content Include="Assets\main\menu\btn_2en_off.png" />
+    <Content Include="Assets\main\menu\btn_2th_off.png" />
+    <Content Include="Assets\main\menu\btn_3en_off.png" />
+    <Content Include="Assets\main\menu\btn_3th_off.png" />
+    <Content Include="Assets\main\menu\btn_4en_off.png" />
+    <Content Include="Assets\main\menu\btn_4th_off.png" />
+    <Content Include="Assets\main\menu\btn_5en_off.png" />
+    <Content Include="Assets\main\menu\btn_5th_off.png" />
     <Content Include="Assets\mrt_icon.png" />
+    <Content Include="Assets\new01.png" />
+    <Content Include="Assets\new02.png" />
+    <Content Include="Assets\new03.png" />
     <Content Include="Assets\pin_blue.png" />
     <Content Include="Assets\slot_bg.png" />
     <Content Include="Assets\slot_bg_t.png" />
@@ -631,99 +651,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\720x1280\bgLang.png" />
-    <Content Include="Assets\720x1280\BMTA_11Nov14_720x1280.png" />
-    <Content Include="Assets\720x1280\BMTA_abouts.png" />
-    <Content Include="Assets\720x1280\BMTA_abouts_en.png" />
-    <Content Include="Assets\720x1280\BMTA_about_bt.png" />
-    <Content Include="Assets\720x1280\BMTA_buslinedetails_bg.png" />
-    <Content Include="Assets\720x1280\BMTA_buslinedetails_bg_deails.png" />
-    <Content Include="Assets\720x1280\BMTA_buslinedetails_bg_en.png" />
-    <Content Include="Assets\720x1280\BMTA_buslinedetails_map.png" />
-    <Content Include="Assets\720x1280\BMTA_buslinedetails_map_en.png" />
-    <Content Include="Assets\720x1280\BMTA_busline_bg.png" />
-    <Content Include="Assets\720x1280\BMTA_busline_bg_en.png" />
-    <Content Include="Assets\720x1280\BMTA_busline_search_bg.png" />
-    <Content Include="Assets\720x1280\BMTA_busno_bg.png" />
-    <Content Include="Assets\720x1280\BMTA_BusStart_Stop_bg.png" />
-    <Content Include="Assets\720x1280\BMTA_BusStart_Stop_bg_en.png" />
-    <Content Include="Assets\720x1280\BMTA_BusStart_Stop_map.png" />
-    <Content Include="Assets\720x1280\BMTA_BusStart_Stop_map_en.png" />
-    <Content Include="Assets\720x1280\BMTA_busstop.png" />
-    <Content Include="Assets\720x1280\BMTA_busstop_en.png" />
-    <Content Include="Assets\720x1280\BMTA_busstop_line.png" />
-    <Content Include="Assets\720x1280\BMTA_busstop_line_en.png" />
-    <Content Include="Assets\720x1280\BMTA_busstop_sortby.png" />
-    <Content Include="Assets\720x1280\BMTA_busstop_sortby_en.png" />
-    <Content Include="Assets\720x1280\BMTA_Coordinates_bg.png" />
-    <Content Include="Assets\720x1280\BMTA_Coordinates_bg_en.png" />
-    <Content Include="Assets\720x1280\BMTA_Coordinates_map.png" />
-    <Content Include="Assets\720x1280\BMTA_Coordinates_map_en.png" />
-    <Content Include="Assets\720x1280\BMTA_Coordinates_sortby.png" />
-    <Content Include="Assets\720x1280\BMTA_Coordinates_sortby_en.png" />
-    <Content Include="Assets\720x1280\BMTA_event_bt.png" />
-    <Content Include="Assets\720x1280\BMTA_event_new.png" />
-    <Content Include="Assets\720x1280\BMTA_event_new_en.png" />
-    <Content Include="Assets\720x1280\BMTA_intro.png" />
-    <Content Include="Assets\720x1280\BMTA_menu_bg.png" />
-    <Content Include="Assets\720x1280\BMTA_new.png" />
-    <Content Include="Assets\720x1280\BMTA_new_bt.png" />
-    <Content Include="Assets\720x1280\BMTA_new_en.png" />
-    <Content Include="Assets\720x1280\BMTA_Search_Advance_busline.png" />
-    <Content Include="Assets\720x1280\BMTA_Search_Advance_busline_en.png" />
-    <Content Include="Assets\720x1280\BMTA_Search_Advance_busstop.png" />
-    <Content Include="Assets\720x1280\BMTA_Search_Advance_busstop_en.png" />
-    <Content Include="Assets\720x1280\BMTA_Search_Advance_landmark.png" />
-    <Content Include="Assets\720x1280\BMTA_Search_Advance_landmark_en.png" />
-    <Content Include="Assets\720x1280\BMTA_Search_Advance_start.png" />
-    <Content Include="Assets\720x1280\BMTA_Search_Advance_start_en.png" />
-    <Content Include="Assets\720x1280\BMTA_search_icon.png" />
-    <Content Include="Assets\720x1280\BMTA_slotresult_bg.png" />
-    <Content Include="Assets\720x1280\BMTA_slotresult_bg_en.png" />
-    <Content Include="Assets\720x1280\BMTA_slotresult_reset.png" />
-    <Content Include="Assets\720x1280\BMTA_slotresult_share.png" />
-    <Content Include="Assets\720x1280\BMTA_slot_bg.png" />
-    <Content Include="Assets\720x1280\BMTA_slot_bg_en.png" />
-    <Content Include="Assets\720x1280\BMTA_speed_add_bt.png" />
-    <Content Include="Assets\720x1280\BMTA_speed_bg.png" />
-    <Content Include="Assets\720x1280\BMTA_speed_bg_en.png" />
-    <Content Include="Assets\720x1280\BMTA_speed_history.png" />
-    <Content Include="Assets\720x1280\BMTA_speed_history_en.png" />
-    <Content Include="Assets\720x1280\BMTA_speed_timer.png" />
-    <Content Include="Assets\720x1280\BMTA_speed_timer_en.png" />
-    <Content Include="Assets\720x1280\BMTA_top_menu.png" />
-    <Content Include="Assets\720x1280\btEng.png" />
-    <Content Include="Assets\720x1280\btThai.png" />
-    <Content Include="Assets\720x1280\busline\arrow.png" />
-    <Content Include="Assets\720x1280\busline\arrowleft.png" />
-    <Content Include="Assets\720x1280\busline\arrowright.png" />
-    <Content Include="Assets\720x1280\busline\bg_nomal.png" />
-    <Content Include="Assets\720x1280\busline\bg_nomal1.png" />
-    <Content Include="Assets\720x1280\busline\bg_nomal2.png" />
-    <Content Include="Assets\720x1280\busline\bg_nomal3.png" />
-    <Content Include="Assets\720x1280\busline\bg_nomal4.png" />
-    <Content Include="Assets\720x1280\busline\bg_numberbus.png" />
-    <Content Include="Assets\720x1280\busline\BMTA_buslinedetails_bg_deails.png" />
-    <Content Include="Assets\720x1280\busline\btbus.png" />
-    <Content Include="Assets\720x1280\busline\btbus_active.png" />
-    <Content Include="Assets\720x1280\busline\btlandmark.png" />
-    <Content Include="Assets\720x1280\busline\btlandmark_active.png" />
-    <Content Include="Assets\720x1280\busline\btn_bus.png" />
-    <Content Include="Assets\720x1280\busline\btn_ccw_atvth.png" />
-    <Content Include="Assets\720x1280\busline\btn_ccw_th.png" />
-    <Content Include="Assets\720x1280\busline\btn_cw_atvth.png" />
-    <Content Include="Assets\720x1280\busline\btn_cw_th.png" />
-    <Content Include="Assets\720x1280\busline\btn_in_atvth.png" />
-    <Content Include="Assets\720x1280\busline\btn_in_th.png" />
-    <Content Include="Assets\720x1280\busline\btn_out_atvth.png" />
-    <Content Include="Assets\720x1280\busline\btn_out_th.png" />
-    <Content Include="Assets\720x1280\busline\bt_pin.png" />
-    <Content Include="Assets\720x1280\busstop\arrow_line_left.png" />
-    <Content Include="Assets\720x1280\busstop\arrow_line_right.png" />
-    <Content Include="Assets\720x1280\busstop\BMTA_busno_bg.png" />
-    <Content Include="Assets\720x1280\busstop\BMTA_infobox.png" />
-    <Content Include="Assets\720x1280\busstop\pin_blue.png" />
-    <Content Include="Assets\720x1280\dropdrow.png" />
     <Content Include="Assets\arrow.png" />
     <Content Include="Assets\arrowleft.png" />
     <Content Include="Assets\arrowright.png" />
@@ -772,19 +699,13 @@
     <Content Include="Assets\main\icon_brt.png" />
     <Content Include="Assets\main\icon_bts.png" />
     <Content Include="Assets\main\icon_bus.png" />
-    <Content Include="Assets\main\icon_down.png" />
-    <Content Include="Assets\main\icon_down_en.png" />
     <Content Include="Assets\main\icon_human.png" />
     <Content Include="Assets\main\icon_mrt.png" />
     <Content Include="Assets\main\icon_navicationbar\BMTA_search_icon.png" />
     <Content Include="Assets\main\icon_navicationbar\BMTA_speed_add_bt.png" />
     <Content Include="Assets\main\icon_navicationbar\BMTA_top_menu.png" />
-    <Content Include="Assets\main\icon_plus.png" />
-    <Content Include="Assets\main\icon_plus_en.png" />
     <Content Include="Assets\main\icon_port.png" />
     <Content Include="Assets\main\icon_train.png" />
-    <Content Include="Assets\main\icon_up.png" />
-    <Content Include="Assets\main\icon_up_en.png" />
     <Content Include="Assets\main\intro\bgLang.png" />
     <Content Include="Assets\main\intro\btEng.png" />
     <Content Include="Assets\main\intro\btThai.png" />
@@ -793,7 +714,6 @@
     <Content Include="Assets\main\landmark\btResults_en.png" />
     <Content Include="Assets\main\landmark\btResults_th.png" />
     <Content Include="Assets\main\line_bus.png" />
-    <Content Include="Assets\main\list.png" />
     <Content Include="Assets\main\menu\btn_1en.png" />
     <Content Include="Assets\main\menu\btn_1en_atv.png" />
     <Content Include="Assets\main\menu\btn_1th.png" />
@@ -900,9 +820,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\720x1280\Final BMTA_WindowPhone\Final BMTA_WindowPhone\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <SDKReference Include="SQLite.WP80, Version=3.8.11.1">
       <Name>SQLite for Windows Phone %28SQLite.WP80, Version=3.8.11.1%29</Name>

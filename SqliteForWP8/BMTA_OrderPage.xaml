@@ -18,7 +18,7 @@
 
     <Grid x:Name="LayoutRoot">
         <Grid.Background>
-            <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/720x1280/BMTA_menu_bg.png"/>
+            <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/main/bg/BMTA_menu_bg.png"/>
         </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

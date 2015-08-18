@@ -102,7 +102,7 @@
                     </Button.Background>
                 </Button>
             </Grid>
-            <Grid x:Name="busStartStopLayoutList" Grid.Row="2" Grid.ColumnSpan="3" Background="#FFFFFFFF" >
+            <Grid x:Name="busStartStopLayoutList" Margin="0,20,0,0" Grid.Row="2" Grid.ColumnSpan="3" Background="#FFFFFFFF" >
                 <ListBox x:Name="busStartStoplistbox" />
             </Grid>
         </Grid>

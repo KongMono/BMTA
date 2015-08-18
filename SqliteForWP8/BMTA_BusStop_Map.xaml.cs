@@ -164,13 +164,13 @@ namespace BMTA
             {
                 titleName.Text = "ป้ายหยุดรถประจำทาง";
                 textName.Text = data.stop_name;
-                textRoute.Text = data.distance.Substring(0, 4) + " กม.";
+                textRoute.Text = data.distance.Substring(0, 4) + " ม.";
             }
             else
             {
                 titleName.Text = "Bus Stop";
                 textName.Text = data.stop_name_en;
-                textRoute.Text = data.distance.Substring(0, 4) + " km.";
+                textRoute.Text = data.distance.Substring(0, 4) + " m.";
             }
 
 

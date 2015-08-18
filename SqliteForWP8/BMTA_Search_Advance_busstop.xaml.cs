@@ -35,7 +35,7 @@ namespace BMTA
             InitializeComponent();
             textbox.MinimumPrefixLength = 2;
             textbox.ItemFilter = SearchText;
-            
+
         }
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
@@ -64,7 +64,7 @@ namespace BMTA
                 z2.Content = "ราคาถูกที่สุด";
                 z3.Content = "ต่อรถน้อยที่สุด";
 
-               
+
             }
             else
             {
@@ -121,7 +121,7 @@ namespace BMTA
         private void rhome_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Uri("/BMTA_AppTh.xaml", UriKind.Relative));
-        }    
+        }
 
         private void btsubmit_Click(object sender, RoutedEventArgs e)
         {
@@ -152,7 +152,7 @@ namespace BMTA
                 {
                     myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&busstop_end_id=" + item.id + "&bus_type=" + buslinePick.Tag + "&running_type=" + busRunningPick.Tag + "&orderby=" + "";
                 }
-              
+
                 Debug.WriteLine("URL callServicecurrentfindRouting = " + url);
 
                 webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicecurrentfindRouting_Completed);
@@ -166,7 +166,7 @@ namespace BMTA
 
         private void textbox_TextChanged(object sender, RoutedEventArgs e)
         {
-            if (textbox.Text.Length > 2)
+            if (textbox.Text.Length > 1)
             {
                 if (!already)
                 {
@@ -196,7 +196,7 @@ namespace BMTA
                 MessageBox.Show("ไม่พบข้อมูล");
                 return;
             }
-           
+
             if (results.status != "0")
             {
                 MessageBoxResult result = MessageBox.Show("ค้นหาสำเร็จ", (Application.Current as App).AppName, MessageBoxButton.OK);
@@ -252,7 +252,7 @@ namespace BMTA
             progressIndicator.Text = msg;
             progressIndicator.IsVisible = true;
             progressIndicator.IsIndeterminate = false;
-            SystemTray.SetIsVisible(this,true);
+            SystemTray.SetIsVisible(this, true);
             SystemTray.SetProgressIndicator(this, progressIndicator);
         }
 
@@ -268,6 +268,5 @@ namespace BMTA
         {
             item = (sender as AutoCompleteBox).SelectedItem as searchlandmarkAndBusstopdetailItem;
         }
-
     }
 }

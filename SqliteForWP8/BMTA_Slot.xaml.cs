@@ -58,11 +58,11 @@ namespace BMTA
             // Use BeginInvoke to write to the UI thread.
             txtnumber.Dispatcher.BeginInvoke(() =>
             {
-                if (txtnumber.Text.Length < 7)
+                if (txtnumber.Text.Length == 6 || txtnumber.Text.Length == 7)
                 {
                     if (lang.Equals("th"))
                     {
-                        MessageBox.Show("กรุณาใส่จำนวนตัวเลขให้ครบ 7หลัก");
+                        MessageBox.Show("กรุณาใส่จำนวนตัวเลขให้ครบ 6-7 หลัก");
                     }
                     else
                     {

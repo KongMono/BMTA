@@ -64,11 +64,14 @@
                 <TextBlock x:Name = "headbusstop" Text="ค้นหาป้ายรถเมล์" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center"   FontSize="25" />
             </Grid>
             <TextBlock x:Name = "txtbusstop" Grid.Row="1" Text="ป้ายรถเมล์" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="25"/>
-            <toolkit:AutoCompleteBox x:Name="textbox" HorizontalAlignment="Center" Grid.Row="1" Width="225" Grid.Column="2" VerticalAlignment="Top" TextChanged="textbox_TextChanged" FilterMode="None" ValueMemberBinding="{Binding stop_name}" SelectionChanged="textbox_SelectionChanged">
+            <toolkit:AutoCompleteBox x:Name="textbox" HorizontalAlignment="Center" Grid.Row="1" Width="225" Grid.Column="2" VerticalAlignment="Top" TextChanged="textbox_TextChanged" FilterMode="None" ValueMemberBinding="{Binding ref_name}" SelectionChanged="textbox_SelectionChanged">
                 <toolkit:AutoCompleteBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding stop_name}" FontSize="25" Foreground="Black"/>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{Binding ref_name}" FontSize="25" Padding="5,5,5,5" Foreground="Black"/>
+                                <TextBlock Text="{Binding stop_name}" FontSize="20" Padding="5,5,5,5" Foreground="Gray"/>
+                            </StackPanel>
                         </StackPanel>
                     </DataTemplate>
                 </toolkit:AutoCompleteBox.ItemTemplate>

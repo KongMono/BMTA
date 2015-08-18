@@ -59,16 +59,16 @@ namespace BMTA
             ShowMyLocationOnTheMap();
 
             searchfindRoutingItem_data data = (Application.Current as App).RountingDataBusStop;
-
+            Double dis = Convert.ToDouble(data.total.total_distance) / 1000; 
             if (lang.Equals("th"))
             {
                 titleName.Text = "ป้ายรถเมล์";
-                textRoute.Text = data.total.total_distance + " กม.";
+                textRoute.Text = Convert.ToString(dis) + " ม.";
             }
             else
             {
                 titleName.Text = "Bus Stop";
-                textRoute.Text = data.total.total_distance + " km.";
+                textRoute.Text = Convert.ToString(dis) + " m.";
             }
             UCStartStopBusLine UCStartStopBusLine = new UCStartStopBusLine();
 

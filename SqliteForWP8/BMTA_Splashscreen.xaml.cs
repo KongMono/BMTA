@@ -242,6 +242,7 @@ namespace BMTA
                         if (db != null)
                         {
                             db.id = item.id;
+
                             try
                             {
                                 dbConn.RunInTransaction(() =>
@@ -369,7 +370,7 @@ namespace BMTA
                         var db = dbConn.Query<busstop>("SELECT * FROM busstop WHERE id =" + item.id).FirstOrDefault();
                         if (db != null)
                         {
-                            db.id = item.id;
+                           
                             try
                             {
                                 dbConn.RunInTransaction(() =>

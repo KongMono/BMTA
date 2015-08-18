@@ -52,7 +52,7 @@
 
         <Border BorderBrush="Gray" Grid.Row="0"  CornerRadius="10" Height="120" Width="350"  x:Name="imgborderg"  HorizontalAlignment="Center" Visibility="Collapsed" >
             <Border.Background>
-                <ImageBrush Stretch="Fill" ImageSource="/Assets/720x1280/busstop/BMTA_infobox.png"/>
+                <ImageBrush Stretch="Fill" ImageSource="/Assets/main/busstop/BMTA_infobox.png"/>
             </Border.Background>
             <TextBlock x:Name="Lbltext" Tag="{Binding id}"  FontSize="16"  Foreground="Black" Text="This is Description on ToolTip" TextWrapping="Wrap" TextAlignment="Left" Height="80" FlowDirection="LeftToRight" Width="260" Margin="100,20,0,0" VerticalAlignment="Top" />
         </Border>

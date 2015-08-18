@@ -10,7 +10,7 @@
     mc:Ignorable="d" shell:SystemTray.IsVisible="False">
 
     <Grid x:Name="LayoutRoot" Background="Transparent" Width="auto" Height="auto">
-        <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="/Assets/main/bg/BMTA_intro.png" Width="530" Height="auto"/>
+        <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="/Assets/BMTA_intro.png" Width="530" Height="auto"/>
     </Grid>
 
 </phone:PhoneApplicationPage>

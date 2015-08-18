@@ -38,25 +38,27 @@
         <Button Content="btn1" Grid.Row="1" VerticalAlignment="Top"  BorderBrush="Transparent" ClickMode="Hover" Click="Button_Click_1"  >
             <Button.Template>
                 <ControlTemplate>
-                    <Image  Stretch="Fill" Source="/Assets/720x1280/BMTA_new_bt.png" />
+                    <Image  Stretch="Fill" Source="/Assets/new01.png" />
                 </ControlTemplate>
             </Button.Template>
         </Button>
+        <TextBlock  x:Name="name1" Text="name1" Grid.Row="1" FontSize="25" Padding="10,10,10,10" Foreground="White" VerticalAlignment="Bottom"/>
         <Button Content="btn2" Grid.Row="2" VerticalAlignment="Top"  BorderBrush="Transparent" ClickMode="Hover" Click="Button_Click_2">
             <Button.Template>
                 <ControlTemplate>
-                    <Image  Stretch="Fill"  Source="/Assets/720x1280/BMTA_event_bt.png" />
+                    <Image  Stretch="Fill"  Source="/Assets/new02.png" />
                 </ControlTemplate>
             </Button.Template>
         </Button>
+        <TextBlock  x:Name="name2" Text="name2" Grid.Row="2" FontSize="25" Padding="10,10,10,10" Foreground="White" VerticalAlignment="Bottom"/>
         <Button Content="btn3"  Grid.Row="3" VerticalAlignment="Top"  BorderBrush="Transparent" ClickMode="Hover" Click="Button_Click_3" >
             <Button.Template>
                 <ControlTemplate>
-                    <Image Stretch="Fill"  Source="/Assets/720x1280/BMTA_about_bt.png" />
+                    <Image Stretch="Fill"  Source="/Assets/new03.png" />
                 </ControlTemplate>
             </Button.Template>
         </Button>
-
+        <TextBlock  x:Name="name3" Text="name3" Grid.Row="3" FontSize="25" Padding="10,10,10,10" Foreground="White" VerticalAlignment="Bottom"/>
 
 
     </Grid>

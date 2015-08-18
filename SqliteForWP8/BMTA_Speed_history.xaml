@@ -25,7 +25,7 @@
         <Grid x:Name="Header" Grid.Row="0" Width="auto" Background="#FF01A54E" Visibility="Visible">
             <Button x:Name="btBack" BorderBrush="Transparent" Width="75" Height="75" VerticalAlignment="Center" HorizontalAlignment="Left" Click="btAdd_Click" Style="{StaticResource ImageButton}">
                 <Button.Background>
-                    <ImageBrush Stretch="Uniform" ImageSource="/Assets/720x1280/BMTA_speed_add_bt.png"/>
+                    <ImageBrush Stretch="Uniform" ImageSource="/Assets/main/icon_navicationbar/BMTA_speed_add_bt.png"/>
                 </Button.Background>
             </Button>
             <TextBlock  x:Name="titleName" Text="" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center">

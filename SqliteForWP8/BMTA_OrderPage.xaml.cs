@@ -47,7 +47,14 @@ namespace BMTA
         }
         private void button3_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/BMTA_bus_mainpage.xaml?busCate=3", UriKind.Relative));
+            if (!HasNetwork() || !HasInternet())
+            {
+                MessageBox.Show("No internet connection is available. Try again later.");
+            }
+            else
+            {
+                NavigationService.Navigate(new Uri("/BMTA_bus_mainpage.xaml?busCate=3", UriKind.Relative));
+            }
         }
         private void button4_Click(object sender, RoutedEventArgs e)
         {
@@ -62,7 +69,14 @@ namespace BMTA
         }
         private void button5_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/BMTA_Speed_history.xaml", UriKind.Relative));
+            if (!HasNetwork() || !HasInternet())
+            {
+                MessageBox.Show("No internet connection is available. Try again later.");
+            }
+            else
+            {
+                NavigationService.Navigate(new Uri("/BMTA_Speed_history.xaml", UriKind.Relative));
+            }
         }
         private void button6_Click(object sender, RoutedEventArgs e)
         {
@@ -141,48 +155,98 @@ namespace BMTA
         {
             ShowProgressIndicator("Loading..");
 
-            if (lang.Equals("th"))
+            if (!HasNetwork() || !HasInternet())
             {
-                background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_1th_atv.png", UriKind.Relative));
-                bt_1.Background = background;
-                background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_2th_atv.png", UriKind.Relative));
-                bt_2.Background = background;
-                background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_3th_atv.png", UriKind.Relative));
-                bt_3.Background = background;
-                background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_4th_atv.png", UriKind.Relative));
-                bt_4.Background = background;
-                background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_5th_atv.png", UriKind.Relative));
-                bt_5.Background = background;
-                background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_6th_atv.png", UriKind.Relative));
-                bt_6.Background = background;
+                if (lang.Equals("th"))
+                {
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_1th_atv.png", UriKind.Relative));
+                    bt_1.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_2th_off.png", UriKind.Relative));
+                    bt_2.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_3th_off.png", UriKind.Relative));
+                    bt_3.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_4th_off.png", UriKind.Relative));
+                    bt_4.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_5th_off.png", UriKind.Relative));
+                    bt_5.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_6th_atv.png", UriKind.Relative));
+                    bt_6.Background = background;
+                }
+                else
+                {
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_1en_atv.png", UriKind.Relative));
+                    bt_1.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_2en_off.png", UriKind.Relative));
+                    bt_2.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_3en_off.png", UriKind.Relative));
+                    bt_3.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_4en_off.png", UriKind.Relative));
+                    bt_4.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_5en_off.png", UriKind.Relative));
+                    bt_5.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_6en_atv.png", UriKind.Relative));
+                    bt_6.Background = background;
+                }
             }
             else
             {
-                background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_1en_atv.png", UriKind.Relative));
-                bt_1.Background = background;
-                background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_2en_atv.png", UriKind.Relative));
-                bt_2.Background = background;
-                background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_3en_atv.png", UriKind.Relative));
-                bt_3.Background = background;
-                background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_4en_atv.png", UriKind.Relative));
-                bt_4.Background = background;
-                background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_5en_atv.png", UriKind.Relative));
-                bt_5.Background = background;
-                background = new ImageBrush();
-                background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_6en_atv.png", UriKind.Relative));
-                bt_6.Background = background;
+                if (lang.Equals("th"))
+                {
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_1th_atv.png", UriKind.Relative));
+                    bt_1.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_2th_atv.png", UriKind.Relative));
+                    bt_2.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_3th_atv.png", UriKind.Relative));
+                    bt_3.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_4th_atv.png", UriKind.Relative));
+                    bt_4.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_5th_atv.png", UriKind.Relative));
+                    bt_5.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_6th_atv.png", UriKind.Relative));
+                    bt_6.Background = background;
+                }
+                else
+                {
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_1en_atv.png", UriKind.Relative));
+                    bt_1.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_2en_atv.png", UriKind.Relative));
+                    bt_2.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_3en_atv.png", UriKind.Relative));
+                    bt_3.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_4en_atv.png", UriKind.Relative));
+                    bt_4.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_5en_atv.png", UriKind.Relative));
+                    bt_5.Background = background;
+                    background = new ImageBrush();
+                    background.ImageSource = new BitmapImage(new Uri("/Assets/main/menu/btn_6en_atv.png", UriKind.Relative));
+                    bt_6.Background = background;
+                }
             }
+
+           
             HideProgressIndicator();
 
         }

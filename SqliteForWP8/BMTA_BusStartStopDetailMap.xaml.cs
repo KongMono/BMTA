@@ -63,12 +63,12 @@ namespace BMTA
             if (lang.Equals("th"))
             {
                 titleName.Text = "ต้นทางปลายทาง";
-                textRoute.Text = data.total.total_distance + " กม.";
+                textRoute.Text = data.total.total_distance + " ม.";
             }
             else
             {
                 titleName.Text = "Start - End";
-                textRoute.Text = data.total.total_distance + " km.";
+                textRoute.Text = data.total.total_distance + " m.";
             }
 
             UCStartStopBusLine UCStartStopBusLine = new UCStartStopBusLine();

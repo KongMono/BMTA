@@ -54,7 +54,7 @@
         <Grid x:Name="Header" Grid.Row="0" Width="auto" Background="#FF01A54E" Visibility="Visible">
             <Button x:Name="btSearch" BorderBrush="Transparent" Width="75" Height="75" VerticalAlignment="Stretch" HorizontalAlignment="Left" Click="btSearch_Click" Style="{StaticResource ImageButton}">
                 <Button.Background>
-                    <ImageBrush Stretch="Uniform" ImageSource="/Assets/720x1280/BMTA_search_icon.png"/>
+                    <ImageBrush Stretch="Uniform" ImageSource="/Assets/main/icon_navicationbar/BMTA_search_icon.png"/>
                 </Button.Background>
             </Button>
             <TextBlock  x:Name="titleName" Text="" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -67,7 +67,7 @@
             </Button>
         </Grid>
 
-        <Grid x:Name="buslineLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Visible">
+        <Grid x:Name="buslineLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="75"/>
@@ -111,7 +111,7 @@
             </Grid>
         </Grid>
 
-        <Grid x:Name="busstopLayout" Grid.Row="1" Width="auto" Height="auto" Background="#FFFFFFFF" Visibility="Collapsed">
+        <Grid x:Name="busstopLayout" Grid.Row="1" Width="auto" Height="auto" Background="#FFFFFFFF" Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="*"/>
