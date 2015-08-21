@@ -107,7 +107,7 @@
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                 </ListBox>
-                <ProgressBar IsIndeterminate="true" Foreground="Green" x:Name="progressBar_busline" Visibility="Collapsed"/>
+                <!--<ProgressBar IsIndeterminate="true" Foreground="Green" x:Name="progressBar_busline" Visibility="Collapsed"/>-->
             </Grid>
         </Grid>
 
@@ -135,7 +135,7 @@
             <Grid x:Name="busstopMainList" Grid.Row="1"  Background="#FFFFFFFF" >
                 <maps:Map  PedestrianFeaturesEnabled="True" LandmarksEnabled="True" x:Name="map" ZoomLevel="14" Height="auto" Width="auto">
                 </maps:Map>
-                <ProgressBar IsIndeterminate="true" Foreground="Green" x:Name="progressBar_busstop" Visibility="Collapsed"/>
+                <!--<ProgressBar IsIndeterminate="true" Foreground="Green" x:Name="progressBar_busstop" Visibility="Collapsed"/>-->
                 <Button HorizontalAlignment="Right" x:Name="btn_findcurrent" VerticalAlignment="Top" Width="70" Height="70" BorderBrush="{x:Null}" Style="{StaticResource ImageButton}" Click="btn_findcurrent_Click">
                     <Button.Background>
                         <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/mylocation.png"/>
@@ -207,17 +207,17 @@
                 </Grid.RowDefinitions>
                 <Button x:Name="busStartStopbtn_search" BorderBrush="Transparent" Width="75" Height="75"  HorizontalAlignment="Center" VerticalAlignment="Center" Click="busStartStopbtn_search_Click" Style="{StaticResource ImageButton}">
                     <Button.Background>
-                        <ImageBrush Stretch="Fill" ImageSource="/Assets/720x1280/BMTA_search_icon.png"/>
+                        <ImageBrush Stretch="Fill" ImageSource="/Assets/main/icon_navicationbar/BMTA_search_icon.png"/>
                     </Button.Background>
                 </Button>
             </Grid>
             <Grid x:Name="busStartStopLayoutList" Grid.Row="2" Grid.ColumnSpan="3" Width="auto" Background="#FFFFFFFF" >
                 <ListBox x:Name="busStartStoplistbox" SelectionChanged="busStartStoplistbox_SelectionChanged"/>
-                <ProgressBar IsIndeterminate="true" Foreground="Green" x:Name="progressBar_busstartstop" Visibility="Collapsed"/>
+                <!--<ProgressBar IsIndeterminate="true" Foreground="Green" x:Name="progressBar_busstartstop" Visibility="Collapsed"/>-->
             </Grid>
         </Grid>
 
-        <Grid x:Name="StreetsandLandmarksLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Collapsed">
+        <Grid x:Name="StreetsandLandmarksLayout" Grid.Row="1"  Width="auto" Height="auto"  Background="#FFFFFFFF" Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="50"/>
@@ -244,7 +244,7 @@
                 </Grid.ColumnDefinitions>
                 <Button x:Name="latlonbtn_search" BorderBrush="Transparent" Width="50" Height="50" Click="latlonbtn_search_Click"  HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource ImageButton}">
                     <Button.Background>
-                        <ImageBrush Stretch="Fill" ImageSource="/Assets/720x1280/BMTA_search_icon.png"/>
+                        <ImageBrush Stretch="Fill" ImageSource="/Assets/main/icon_navicationbar/BMTA_search_icon.png"/>
                     </Button.Background>
                 </Button>
                 <TextBlock x:Name="latlon_search" Text="ค้นหาโดยใช้พิกัด" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center"/>
@@ -264,7 +264,7 @@
                     </Grid>
                     <Grid  Grid.Row="1">
                         <ListBox x:Name="LandmarksHistorylistbox" Grid.Row="1"/>
-                        <ProgressBar IsIndeterminate="true" Foreground="Green" x:Name="progressBar_landmark" Visibility="Collapsed"/>
+                        <!--<ProgressBar IsIndeterminate="true" Foreground="Green" x:Name="progressBar_landmark" Visibility="Collapsed"/>-->
                     </Grid>
                 </Grid>
             </Grid>

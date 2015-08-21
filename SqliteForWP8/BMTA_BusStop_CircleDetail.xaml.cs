@@ -86,33 +86,47 @@ namespace BMTA
             textBuslineGroup.Text = data.busline;
             List<string> buslines = data.busline.Split(',').ToList<string>();
 
-            String q = "SELECT * FROM busline WHERE bus_line = ";
+            String q = "SELECT * FROM busline WHERE bus_line in ";
             int count = 0;
+            String last = buslines.Last();
             foreach (string line in buslines)
             {
                 if (count < 1)
                 {
-                    q = q + "'" + line + "'";
+                    q = q + "('" + line + "',";
                 }
                 else
                 {
-                    q = q + " OR bus_line = '" + line + "'";
+                    if (line.Equals(last))
+                    {
+                        q = q + "'" + line + "')";
+                    }
+                    else
+                    {
+                        q = q + "'" + line + "',";
+                    }
                 }
                 count++;
             }
-            q = q + "AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%') Group By bus_line";
+
+            q = q + " AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')"
+                        + " AND bus_polyline !='' AND (bus_direction_en = 'inbound' OR bus_direction_en = 'Left Loop')"
+                        + " AND bustype > 0 AND bus_owner > 0 AND bus_running > 0 AND bus_color > 0 AND published = '1' AND busstop_list !=''"
+                        + " ORDER BY CAST(bus_line AS INTEGER) ASC,bus_owner DESC,bustype ASC,bus_direction_en ASC";
 
             retrievedTasks = dbConn.Query<buslineItem>(q);
 
             if (lang.Equals("th"))
             {
-                titleName.Text = "ป้ายหยุดรถ";
+                titleName.Text = "ป้ายหยุดรถประจำทาง";
                 textName.Text = data.stop_name;
+                textbusline.Text = "สายรถที่ผ่าน";
             }
             else
             {
                 titleName.Text = "Bus Stop";
                 textName.Text = data.stop_name_en;
+                textbusline.Text = "Bus Number";
             }
 
             selectData(indexData);
@@ -122,12 +136,25 @@ namespace BMTA
         {
             if (lang.Equals("th"))
             {
-
-                lblbustype.Text = retrievedTasks[index].bus_name;
+                if (retrievedTasks[index].bustype.Equals("1"))
+                {
+                    lblbustype.Text = "รถธรรมดา";
+                }
+                else if (retrievedTasks[index].bustype.Equals("2"))
+                {
+                    lblbustype.Text = "รถปรับอากาศ";
+                }
             }
             else
             {
-                lblbustype.Text = retrievedTasks[index].bus_name_en;
+                if (retrievedTasks[index].bustype.Equals("1"))
+                {
+                    lblbustype.Text = "Regular Bus";
+                }
+                else if (retrievedTasks[index].bustype.Equals("2"))
+                {
+                    lblbustype.Text = "Air Condition Bus";
+                }
             }
             lbltime.Text = retrievedTasks[index].bus_startstop_time;
             busno_bg.Content = retrievedTasks[index].bus_line;
@@ -175,16 +202,16 @@ namespace BMTA
 
         public void callServicegetAutocompleteBusStop()
         {
+
             webClient = new WebClient();
-            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/getAutocomplete";
+            String url = "http://128.199.232.94/webservice/keyword.php";
             string myParameters;
             try
             {
-                myParameters = "type=" + "busstop" + "&keyword=" + busstop_search.Text + "&lang=" + lang;
-                Debug.WriteLine("URL StreetsandLandmarks_search_SelectionChanged = " + url);
-                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocompleteBusStop_Completed);
-                webClient.UploadStringAsync(new Uri(url), myParameters);
+                myParameters = url + "?type=" + "busstop" + "&q=" + busstop_search.Text + "&lang=" + lang;
+                Debug.WriteLine("URL callServicegetAutocompleteBusStop = " + myParameters);
+                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(callServicegetAutocompleteBusStop_Completed);
+                webClient.DownloadStringAsync(new Uri(myParameters));
             }
             catch (WebException ex)
             {
@@ -192,7 +219,7 @@ namespace BMTA
             }
         }
 
-        private void callServicegetAutocompleteBusStop_Completed(object sender, UploadStringCompletedEventArgs e)
+        private void callServicegetAutocompleteBusStop_Completed(object sender, DownloadStringCompletedEventArgs e)
         {
             searchbusstopItem results = JsonConvert.DeserializeObject<searchbusstopItem>(e.Result);
 
@@ -262,6 +289,9 @@ namespace BMTA
         {
             if (e.Key == Key.Enter)
             {
+                busstop_search.IsEnabled = false;
+                busstop_search.IsEnabled = true;
+
                 if (string.IsNullOrWhiteSpace(busstop_search.Text))
                 {
                     MessageBox.Show("กรุณาใส่ป้ายรถเมล์ที่ต้องการ");

@@ -48,11 +48,12 @@
             </Grid.RowDefinitions>
 
             <Grid x:Name="busstopSeacrch" Grid.Row="0" Width="auto" Background="#FF18359B">
-                <toolkit:AutoCompleteBox x:Name="busstop_search" Grid.RowSpan="2" VerticalAlignment="Center" TextChanged="busstop_search_TextChanged" FilterMode="None" ValueMemberBinding="{Binding stop_name}" SelectionChanged="busstop_search_SelectionChanged" KeyUp="busstop_search_KeyUp">
+                <toolkit:AutoCompleteBox x:Name="busstop_search" Grid.RowSpan="2" VerticalAlignment="Center" TextChanged="busstop_search_TextChanged" FilterMode="None" ValueMemberBinding="{Binding ref_name}" SelectionChanged="busstop_search_SelectionChanged" KeyUp="busstop_search_KeyUp">
                     <toolkit:AutoCompleteBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding stop_name}" FontSize="25" Foreground="Black"/>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{Binding ref_name}" FontSize="25" Padding="5,5,5,5" Foreground="Black"/>
+                                <TextBlock Text="{Binding stop_name}" FontSize="20" Padding="5,5,5,5" Foreground="Gray"/>
                             </StackPanel>
                         </DataTemplate>
                     </toolkit:AutoCompleteBox.ItemTemplate>

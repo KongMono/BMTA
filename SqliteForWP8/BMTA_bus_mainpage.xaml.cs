@@ -133,8 +133,6 @@ namespace BMTA
 
         public void callServicegetNearBusStop(String lat, String lon)
         {
-            progressBar_busstop.Visibility = System.Windows.Visibility.Visible;
-
             webClient = new WebClient();
             webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
             String url = "http://202.6.18.31:7777/getNearBusstop";
@@ -161,7 +159,6 @@ namespace BMTA
             if (e.Error != null)
             {
                 HideProgressIndicator();
-                progressBar_busstop.Visibility = System.Windows.Visibility.Collapsed;
                 return;
             }
             NearBusStopResults = JsonConvert.DeserializeObject<NearBusStopItem>(e.Result);
@@ -200,7 +197,6 @@ namespace BMTA
                 this.map.Layers.Add(layer);
             }
             HideProgressIndicator();
-            progressBar_busstop.Visibility = System.Windows.Visibility.Collapsed;
         }
 
         private void _tooltip_TapLbltext(object sender, System.Windows.Input.GestureEventArgs e)
@@ -369,7 +365,7 @@ namespace BMTA
 
             if (lang.Equals("th"))
             {
-                titleName.Text = "ป้ายรถเมล์";
+                titleName.Text = "ป้ายหยุดรถประจำทาง";
             }
             else
             {
@@ -472,7 +468,8 @@ namespace BMTA
 
         private void buslinelistbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Article item = (sender as ListBox).SelectedItem as Article;
+
+            buslineItem item = (sender as ListBox).SelectedItem as buslineItem;
             if (buslinelistbox.SelectedIndex != -1)
             {
                 this.NavigationService.Navigate(new Uri("/BMTA_bus_line_details.xaml?Search=false&Index=" + buslinelistbox.SelectedIndex.ToString(), UriKind.Relative));
@@ -489,8 +486,6 @@ namespace BMTA
         private void BtnNumber_Click(object sender, RoutedEventArgs e)
         {
             RoundToggleButton btn = (RoundToggleButton)sender;
-            progressBar_busline.Visibility = System.Windows.Visibility.Visible;
-            progressBar_busline.IsIndeterminate = true;
             ShowProgressIndicator("Loading..");
             //articles.Clear();
 
@@ -522,8 +517,6 @@ namespace BMTA
 
             buslinelistbox.ItemsSource = buslines;
             HideProgressIndicator();
-            progressBar_busline.IsIndeterminate = false;
-            progressBar_busline.Visibility = System.Windows.Visibility.Collapsed;
             CurrentGroup = btn.Content.ToString();
         }
 
@@ -539,8 +532,6 @@ namespace BMTA
         private void busline_search_TextChanged(object sender, TextChangedEventArgs e)
         {
             //load data 
-            progressBar_busline.Visibility = System.Windows.Visibility.Visible;
-
             List<buslineItem> retrievedTasks = new List<buslineItem>();
             if (busline_search.Text != null || busline_search.Text != "")
             {
@@ -562,16 +553,22 @@ namespace BMTA
 
             buslines = new ObservableCollection<buslineItem>(retrievedTasks);
             buslinelistbox.ItemsSource = buslines;
-            progressBar_busline.Visibility = System.Windows.Visibility.Collapsed;
             HideProgressIndicator();
         }
 
         private void busline_search_KeyDown(object sender, KeyEventArgs e)
         {
-            progressBar_busline.Visibility = System.Windows.Visibility.Visible;
-
             if (e.Key == Key.Enter)
             {
+                busline_search.IsEnabled = false;
+                busline_search.IsEnabled = true;
+
+                if (string.IsNullOrWhiteSpace(busline_search.Text))
+                {
+                    MessageBox.Show("กรุณาใส่ป้ายหยุดรถประจำทางหรือสถานที่ที่ต้องการ");
+                    return;
+                }
+
                 ShowProgressIndicator("Loading..");
                 List<buslineItem> retrievedTasks = new List<buslineItem>();
                 if (busline_search.Text != null || busline_search.Text != "")
@@ -597,7 +594,7 @@ namespace BMTA
                 buslines = new ObservableCollection<buslineItem>(retrievedTasks);
                 buslinelistbox.ItemsSource = buslines;
                 HideProgressIndicator();
-                progressBar_busline.Visibility = System.Windows.Visibility.Collapsed;
+                
             }
         }
 
@@ -727,14 +724,12 @@ namespace BMTA
                 MessageBox.Show("กรุณากรอกปลายทาง");
                 return;
             }
-            ShowProgressIndicator("Loading..");
             callService_startstop_searchfindRouting();
         }
 
         public void callService_startstop_searchfindRouting()
         {
             ShowProgressIndicator("Loading..");
-            progressBar_busstartstop.Visibility = System.Windows.Visibility.Visible;
 
             webClient = new WebClient();
             webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
@@ -764,19 +759,18 @@ namespace BMTA
 
         private void callService_startstop_searchfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
         {
+            HideProgressIndicator();
             busStartStoplistbox.Items.Clear();
 
             searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
             if (results == null)
             {
                 MessageBox.Show("ไม่พบข้อมูล");
-                progressBar_busstartstop.Visibility = System.Windows.Visibility.Collapsed;
                 return;
             }
             if (results.status == "0")
             {
                 MessageBox.Show("ไม่พบข้อมูล");
-                progressBar_busstartstop.Visibility = System.Windows.Visibility.Collapsed;
                 return;
             }
             UCStartStop UCStartStop = new UCStartStop();
@@ -839,14 +833,12 @@ namespace BMTA
 
                 busStartStoplistbox.Items.Add(UCStartStop);
             }
-            progressBar_busstartstop.Visibility = System.Windows.Visibility.Collapsed;
-            HideProgressIndicator();
+           
         }
 
         public void callServicegetAutocompleteLandMark()
         {
             ShowProgressIndicator("Loading..");
-            progressBar_landmark.Visibility = System.Windows.Visibility.Visible;
 
             webClient = new WebClient();
             String url = "http://128.199.232.94/webservice/keyword.php";
@@ -866,8 +858,7 @@ namespace BMTA
 
         private void callServicegetAutocomplete_Completed(object sender, DownloadStringCompletedEventArgs e)
         {
-            progressBar_landmark.Visibility = System.Windows.Visibility.Collapsed;
-
+          
             searchlandmarkItem results = JsonConvert.DeserializeObject<searchlandmarkItem>(e.Result);
 
             StreetsandLandmarks_search.ItemsSource = results.data;
@@ -902,9 +893,12 @@ namespace BMTA
         {
             if (e.Key == Key.Enter)
             {
+                StreetsandLandmarks_search.IsEnabled = false;
+                StreetsandLandmarks_search.IsEnabled = true;
+
                 if (string.IsNullOrWhiteSpace(StreetsandLandmarks_search.Text))
                 {
-                    MessageBox.Show("กรุณาใส่ป้ายรถเมล์ที่ต้องการ");
+                    MessageBox.Show("กรุณาใส่ป้ายหยุดรถประจำทางที่ต้องการ");
                     return;
                 }
                 callplacecurrentfindRouting();
@@ -914,7 +908,6 @@ namespace BMTA
         public void callplacecurrentfindRouting()
         {
             ShowProgressIndicator("Loading..");
-            progressBar_landmark.Visibility = System.Windows.Visibility.Visible;
 
             webClient = new WebClient();
             webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
@@ -945,6 +938,7 @@ namespace BMTA
         {
             webClient = new WebClient();
             webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+
             String url = "http://202.6.18.31:7777/placecurrentfindRouting";
             string myParameters;
             try
@@ -990,21 +984,17 @@ namespace BMTA
             if (results == null)
             {
                 MessageBox.Show("ไม่พบข้อมูล");
-                progressBar_landmark.Visibility = System.Windows.Visibility.Collapsed;
                 HideProgressIndicator();
                 return;
             }
             if (results.status == "0")
             {
                 MessageBox.Show("ไม่พบข้อมูล");
-                progressBar_landmark.Visibility = System.Windows.Visibility.Collapsed;
                 HideProgressIndicator();
                 return;
             }
             (Application.Current as App).DataLandMark = results;
             HideProgressIndicator();
-            progressBar_landmark.Visibility = System.Windows.Visibility.Collapsed;
-
             this.NavigationService.Navigate(new Uri("/BMTA_BusLandMarkDetailBus.xaml?TextFrom=" + StreetsandLandmarks_search.Text, UriKind.Relative));
         }
 
@@ -1067,8 +1057,6 @@ namespace BMTA
 
         public void callService_busstop_currentfindRouting()
         {
-            progressBar_busstop.Visibility = System.Windows.Visibility.Visible;
-
             webClient = new WebClient();
             webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
             String url = "http://202.6.18.31:7777/currentfindRouting";
@@ -1098,7 +1086,6 @@ namespace BMTA
         private void callService_busstop_currentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
         {
             HideProgressIndicator();
-            progressBar_busstop.Visibility = System.Windows.Visibility.Collapsed;
 
             searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
             if (results == null)
@@ -1120,9 +1107,12 @@ namespace BMTA
         {
             if (e.Key == Key.Enter)
             {
+                busstop_search.IsEnabled = false;
+                busstop_search.IsEnabled = true;
+
                 if (string.IsNullOrWhiteSpace(busstop_search.Text))
                 {
-                    MessageBox.Show("กรุณาใส่ป้ายรถเมล์ที่ต้องการ");
+                    MessageBox.Show("กรุณาใส่ป้ายหยุดรถประจำทางที่ต้องการ");
                     return;
                 }
                 callService_busstop_currentfindRouting();

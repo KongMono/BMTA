@@ -56,14 +56,14 @@
             <Button x:Name="btn_share" HorizontalAlignment="Center" Margin="0,0,180,50" Grid.Row="1" VerticalAlignment="Bottom" Click="btn_share_Click" Width="190" Height="85" Style="{StaticResource ImageButton}">
                 <Button.Template>
                     <ControlTemplate>
-                        <Image Margin="0,0" Source="/Assets/720x1280/BMTA_slotresult_share.png" />
+                        <Image Margin="0,0" Source="/Assets/BMTA_slotresult_share.png" />
                     </ControlTemplate>
                 </Button.Template>
             </Button>
             <Button HorizontalAlignment="Center" Margin="180,0,0,50" Grid.Row="1" VerticalAlignment="Bottom"  Click="Button_Click" Width="190" Height="85" Style="{StaticResource ImageButton}">
                 <Button.Template>
                     <ControlTemplate>
-                        <Image Margin="0,0" Source="/Assets/720x1280/BMTA_slotresult_reset.png" />
+                        <Image Margin="0,0" Source="/Assets/BMTA_slotresult_reset.png" />
                     </ControlTemplate>
                 </Button.Template>
             </Button>

@@ -60,20 +60,7 @@ namespace BMTA
             {
                 if (txtnumber.Text.Length == 6 || txtnumber.Text.Length == 7)
                 {
-                    if (lang.Equals("th"))
-                    {
-                        MessageBox.Show("กรุณาใส่จำนวนตัวเลขให้ครบ 6-7 หลัก");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Please check your ticket number!");
-                    }
 
-                    txtnumber.Focus();
-                    return;
-                }
-                else
-                {
                     int len = txtnumber.Text.Length;
                     int sum = 0;
                     string pasteText = txtnumber.Text;
@@ -85,6 +72,20 @@ namespace BMTA
                     string spintext = sum.ToString();
                     string output = spintext.Substring(spintext.Length - 1, 1);
                     NavigationService.Navigate(new Uri("/BMTA_Slot_Result.xaml?parameter=" + output, UriKind.Relative));
+                }
+                else
+                {
+                    if (lang.Equals("th"))
+                    {
+                        MessageBox.Show("กรุณาใส่จำนวนตัวเลขให้ครบ 6-7 หลัก");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please check your ticket number!");
+                    }
+
+                    txtnumber.Focus();
+                    return;
                 }
             });
 

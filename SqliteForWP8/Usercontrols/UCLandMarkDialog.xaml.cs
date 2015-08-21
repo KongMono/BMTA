@@ -26,9 +26,16 @@ namespace BMTA.Usercontrols
 
         private void UCRoutingList_Loaded(object sender, RoutedEventArgs e)
         {
-            
-        }
-
-     
+            if (lang.Equals("th"))
+            {
+                TextHeader1.Text = "โปรดระบุสถานที่ที่ต้องการบันทึก";
+                TextHeader2.Text = "กรุณากรอกข้อมูลตัวอย่าง";
+            }
+            else
+            {
+                TextHeader1.Text = "Please specify a location to save";
+                TextHeader2.Text = " Please enter sample data";
+            }
+        }     
     }
 }

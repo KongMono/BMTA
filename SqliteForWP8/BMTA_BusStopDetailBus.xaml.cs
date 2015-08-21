@@ -191,6 +191,8 @@ namespace BMTA
 
         public void callServicegetAutocompleteBusStop()
         {
+
+
             webClient = new WebClient();
             String url = "http://128.199.232.94/webservice/keyword.php";
             string myParameters;
@@ -234,6 +236,9 @@ namespace BMTA
         {
             if (e.Key == Key.Enter)
             {
+                busstop_search.IsEnabled = false;
+                busstop_search.IsEnabled = true;
+
                 if (string.IsNullOrWhiteSpace(busstop_search.Text))
                 {
                     MessageBox.Show("กรุณาใส่ป้ายรถเมล์ที่ต้องการ");

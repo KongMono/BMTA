@@ -101,20 +101,47 @@ namespace BMTA
 
             if ((buslinePick.Content == "ทั้งหมด" || buslinePick.Content == "All") && (busRunningPick.Content == "ทั้งหมด" || busRunningPick.Content == "All"))
             {
-                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_name LIKE '%" + hintbusline.Text + "%' AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')");
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line = '" + hintbusline.Text + "'"
+                        + " AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')"
+                        + " AND bus_polyline !='' AND (bus_direction_en = 'inbound' OR bus_direction_en = 'Left Loop')"
+                        + " AND bustype > 0 AND bus_owner > 0 AND bus_running > 0 AND bus_color > 0 AND published = '1' AND busstop_list !=''"
+                        + " ORDER BY CAST(bus_line AS INTEGER) ASC,bus_owner DESC,bustype ASC,bus_direction_en ASC");
+                    
+                   
             }
             else if ((buslinePick.Content == "ทั้งหมด" || buslinePick.Content == "All") && (busRunningPick.Content != "ทั้งหมด" || busRunningPick.Content != "All"))
             {
-                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_name LIKE '%" + hintbusline.Text + "%' AND bus_running LIKE '%" + busRunningPick.Tag + "%' AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')");
+                 retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line = '" + hintbusline.Text + "'"
+                        + " AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')"
+                        + " AND bus_running LIKE '%" + busRunningPick.Tag + "%'"
+                        + " AND bus_polyline !='' AND (bus_direction_en = 'inbound' OR bus_direction_en = 'Left Loop')"
+                        + " AND bustype > 0 AND bus_owner > 0 AND bus_running > 0 AND bus_color > 0 AND published = '1' AND busstop_list !=''"
+                        + " ORDER BY CAST(bus_line AS INTEGER) ASC,bus_owner DESC,bustype ASC,bus_direction_en ASC");
+
+
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_name = '" + hintbusline.Text + "' AND bus_running LIKE '%" + busRunningPick.Tag + "%' AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')");
             }
 
             else if ((buslinePick.Content != "ทั้งหมด" || buslinePick.Content != "All") && (busRunningPick.Content == "ทั้งหมด" || busRunningPick.Content == "All"))
             {
-                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_name LIKE '%" + hintbusline.Text + "%' AND bustype LIKE '%" + buslinePick.Tag + "%' AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')");
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line = '" + hintbusline.Text + "'"
+                     + " AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')"
+                     + " AND bustype LIKE '%" + buslinePick.Tag + "%'"
+                     + " AND bus_polyline !='' AND (bus_direction_en = 'inbound' OR bus_direction_en = 'Left Loop')"
+                     + " AND bustype > 0 AND bus_owner > 0 AND bus_running > 0 AND bus_color > 0 AND published = '1' AND busstop_list !=''"
+                     + " ORDER BY CAST(bus_line AS INTEGER) ASC,bus_owner DESC,bustype ASC,bus_direction_en ASC");
             }
             else
             {
-                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_name LIKE '%" + hintbusline.Text + "%' AND bustype LIKE '%" + buslinePick.Tag + "%' AND bus_running LIKE '%" + busRunningPick.Tag + "%' AND (bus_direction LIKE '%เข้าเมือง%'  OR bus_direction LIKE '%วนซ้าย%')");
+
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line = '" + hintbusline.Text + "'"
+                     + " AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%')"
+                     + " AND bustype LIKE '%" + buslinePick.Tag + "%'"
+                     + " AND bus_running LIKE '%" + busRunningPick.Tag + "%'"
+                     + " AND bus_polyline !='' AND (bus_direction_en = 'inbound' OR bus_direction_en = 'Left Loop')"
+                     + " AND bustype > 0 AND bus_owner > 0 AND bus_running > 0 AND bus_color > 0 AND published = '1' AND busstop_list !=''"
+                     + " ORDER BY CAST(bus_line AS INTEGER) ASC,bus_owner DESC,bustype ASC,bus_direction_en ASC");
+
             }
 
             if (retrievedTasks.Count > 0)

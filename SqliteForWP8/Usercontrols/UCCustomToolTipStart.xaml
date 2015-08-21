@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="BMTA.Usercontrols.UCCustomToolTipStart"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:Toolkit="clr-namespace:Microsoft.Phone.Maps.Toolkit;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    d:DesignHeight="210" d:DesignWidth="350">
+   
+
+    <!--<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Button x:Name="imgborder" Height="164" Width="440" BorderBrush="{x:Null}" Style="{StaticResource btimgorder}" BorderThickness="0">
+            <Button.Background>
+                <ImageBrush Stretch="Fill" ImageSource="/Assets/720x1280/busstop/BMTA_infobox.png"/>
+            </Button.Background>
+            <TextBlock  x:Name="Lbltext" FontSize="20"  Foreground="Black" Text="This is Description on ToolTip" TextWrapping="Wrap" Margin="79,-60,0,-35" TextAlignment="Center" />
+        </Button>-->
+    <!--<Border  CornerRadius="20" Height="135" Width="400"  x:Name="imgborder"  HorizontalAlignment="Center" >
+                <Border.Background>
+                    <ImageBrush Stretch="Fill" ImageSource="/Assets/720x1280/busstop/BMTA_infobox.png"/>
+                </Border.Background>-->
+
+    <!--<TextBlock   x:Name="Lbltext" Margin="97,2,29,0"  FontSize="20"  Text="This is Description on ToolTip" TextAlignment="Center" Foreground="Black">
+  <LineBreak/>
+  <Run Foreground="#FF1D36A4" x:Name="Lblbusline" FontSize="16" Text="{Binding title}"/>
+  <LineBreak/>
+  <Run Foreground="Black" FontFamily="Courier New" FontSize="16" FontStyle="Italic" Text="{Binding subject}" />
+            </TextBlock>-->
+    <!--</Border>-->
+    <!--<Path 
+							Data="M0,0 L0,1 L1,0"
+							Stretch="Fill"
+							Margin="32,0"
+							Height="12"
+							Width="18"
+                            HorizontalAlignment="center" x:Name="imgpath"  />
+        <Image Source="/Assets/pin_blue.png" Stretch="None" x:Name="imgmarker" HorizontalAlignment="center" Tap="imgmarker_Tap"/>
+
+
+
+    </StackPanel>-->
+
+    <Grid HorizontalAlignment="Center"  VerticalAlignment="Top" Width="350" Margin="-160,-140,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="120"/>
+            <RowDefinition Height="12"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <Border BorderBrush="Gray" Grid.Row="0"  CornerRadius="10" Height="120" Width="350"  x:Name="imgborderg"  HorizontalAlignment="Center" Visibility="Collapsed" >
+            <Border.Background>
+                <ImageBrush Stretch="Fill" ImageSource="/Assets/main/busstop/BMTA_infobox.png"/>
+            </Border.Background>
+            <TextBlock x:Name="Lbltext" Tag="{Binding id}"  FontSize="16"  Foreground="Black" Text="This is Description on ToolTip" TextWrapping="Wrap" TextAlignment="Left" Height="80" FlowDirection="LeftToRight" Width="260" Margin="100,20,0,0" VerticalAlignment="Top" />
+        </Border>
+        <Path 
+            Grid.Row ="1"
+			Data="M0,1 L1,1 L1,0"
+			Fill="#FFFFFF"
+			Stretch="Fill"
+			Margin="12,0"
+			Height="12"
+			Width="18"
+            Opacity="0"
+            HorizontalAlignment="Center" x:Name="imgpath" Visibility="Collapsed"  />
+        <Image Source="/Assets/pin_bus_start.png" Width="43"  Height="54" Grid.Row="1" Grid.RowSpan="2" Stretch="Fill" x:Name="imgmarker" Tag="{Binding id}"  HorizontalAlignment="Center" />
+    </Grid>
+
+</UserControl>

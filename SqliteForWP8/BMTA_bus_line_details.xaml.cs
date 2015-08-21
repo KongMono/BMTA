@@ -76,16 +76,16 @@ namespace BMTA
 
                 if (lang.Equals("th"))
                 {
-                    lblStart.Text = retrievedTasks[0].bus_start;
-                    lblStop.Text = retrievedTasks[0].bus_stop;
-                    lblbusName.Text = retrievedTasks[0].bus_name;
+                    lblStart.Text = retrievedTasks[index].bus_start;
+                    lblStop.Text = retrievedTasks[index].bus_stop;
                 }
                 else
                 {
-                    lblStart.Text = retrievedTasks[0].bus_start_en;
-                    lblStop.Text = retrievedTasks[0].bus_stop_en;
-                    lblbusName.Text = retrievedTasks[0].bus_name_en;
+                    lblStart.Text = retrievedTasks[index].bus_start_en;
+                    lblStop.Text = retrievedTasks[index].bus_stop_en;
                 }
+
+                lblbusName.Text = getNameBusType(retrievedTasks[index].bustype);
 
                 lbltime.Text = retrievedTasks[index].bus_startstop_time;
                 getListDatabusstop(retrievedTasks[index].busstop_list);
@@ -140,6 +140,36 @@ namespace BMTA
 
             LoadMap();
         }
+        private string getNameBusType(string bustype){
+
+            String type = null;
+
+            if (lang.Equals("th"))
+            {
+                if (bustype.Equals("1"))
+                {
+                    type = "รถธรรมดา";
+                }
+                else if (bustype.Equals("2"))
+                {
+                    type = "รถปรับอากาศ";
+                }
+            }
+            else
+            {
+                if (bustype.Equals("1"))
+                {
+                    type = "Regular Bus";
+                }
+                else if (bustype.Equals("2"))
+                {
+                    type = "Air Condition Bus";
+                }
+            }
+
+            return type;
+        }
+        
 
         private void LoadMap()
         {
@@ -172,8 +202,8 @@ namespace BMTA
             {
                 if (item != "")
                 {
-                    listBuslineDetailItem retrievedTasks = dbConn.Query<listBuslineDetailItem>("SELECT * FROM busstop WHERE id =" + item).LastOrDefault();
-                    results.Add(retrievedTasks);
+                    listBuslineDetailItem ls = dbConn.Query<listBuslineDetailItem>("SELECT * FROM busstop WHERE id =" + item).LastOrDefault();
+                    results.Add(ls);
                 }
             }
 
@@ -199,7 +229,7 @@ namespace BMTA
                             {
                                 _tooltip.Description = cm.stop_name_en;
                             }
-                           
+
                             _tooltip.DataContext = cm;
                             MapOverlay overlay = new MapOverlay();
                             overlay.Content = _tooltip;
@@ -222,16 +252,14 @@ namespace BMTA
                         if (cm != null)
                         {
                             var coord1 = new GeoCoordinate(cm.latitude, cm.longitude);
+
                             foreach (var itemLandMark in dataLandMark)
                             {
                                 if (itemLandMark.lattitude != null && itemLandMark.longtitude != null)
                                 {
-                                    //if (itemLandMark.lattitude.GetType() == typeof(double) && itemLandMark.longtitude.GetType() == typeof(double))
-                                    //{
                                     try
                                     {
                                         var coord2 = new GeoCoordinate(Double.Parse(itemLandMark.lattitude), Double.Parse(itemLandMark.longtitude));
-                                        //var distance = coord1.GetDistanceTo(coord2);
 
                                         var distance = Distance(coord1.Latitude, coord1.Longitude, coord2.Latitude, coord2.Longitude, DistanceType.Kilometers);
                                         //convert to mater
@@ -239,15 +267,15 @@ namespace BMTA
                                         if (distance < 200)
                                         {
                                             Pushpin pushpin = new Pushpin();
-                                            pushpin.GeoCoordinate = new GeoCoordinate(coord2.Latitude, coord2.Latitude);
+                                            pushpin.GeoCoordinate = new GeoCoordinate(coord2.Latitude, coord2.Longitude);
 
-                                            var uriString = @"Assets/" + cm.type + ".png";
+                                            var uriString = @"Assets/" + itemLandMark.type + ".png";
                                             pushpin.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriString, UriKind.Relative)) };
                                             pushpin.Width = 40;
                                             pushpin.Height = 31;
                                             MapOverlay overlay = new MapOverlay();
                                             overlay.Content = pushpin;
-                                            overlay.GeoCoordinate = new GeoCoordinate(coord2.Longitude, coord2.Longitude);
+                                            overlay.GeoCoordinate = new GeoCoordinate(coord2.Latitude, coord2.Longitude);
                                             layer.Add(overlay);
                                         }
                                     }
@@ -358,7 +386,7 @@ namespace BMTA
                         }
                         else
                         {
-                            lsitem.stop_name = index + ". " +item.stop_name_en;
+                            lsitem.stop_name = index + ". " + item.stop_name_en;
                         }
 
                         index++;
@@ -416,7 +444,7 @@ namespace BMTA
                 btout.Background = img;
             }
 
-            List<buslineItem> ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
+            List<buslineItem> ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline,bustype FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
 
             retrievedTask = ls[0];
             lblbusid.Text = ls[0].bus_line;
@@ -424,16 +452,15 @@ namespace BMTA
             {
                 lblStart.Text = ls[0].bus_start;
                 lblStop.Text = ls[0].bus_stop;
-                lblbusName.Text = ls[0].bus_name;
             }
             else
             {
                 lblStart.Text = ls[0].bus_start_en;
                 lblStop.Text = ls[0].bus_stop_en;
-                lblbusName.Text = ls[0].bus_name_en;
             }
 
             lbltime.Text = ls[0].bus_startstop_time;
+            lblbusName.Text = getNameBusType(ls[0].bustype);
             getListDatabusstop(ls[0].busstop_list);
             this.Pushpin(retrievedTasks[index].busstop_list, retrievedTasks[index].bus_polyline, iscate1, iscate2);
 
@@ -464,7 +491,7 @@ namespace BMTA
                 img.ImageSource = new BitmapImage(new Uri("/Assets/btn_out_atven.png", UriKind.Relative));
                 btout.Background = img;
             }
-            List<buslineItem> ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
+            List<buslineItem> ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline,bustype FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
 
             retrievedTask = ls[0];
             lblbusid.Text = ls[0].bus_line;
@@ -480,7 +507,7 @@ namespace BMTA
                 lblStop.Text = ls[0].bus_stop_en;
                 lblbusName.Text = ls[0].bus_name_en;
             }
-
+            lblbusName.Text = getNameBusType(ls[0].bustype);
             getListDatabusstop(ls[0].busstop_list);
             this.Pushpin(retrievedTasks[index].busstop_list, retrievedTasks[index].bus_polyline, iscate1, iscate2);
 
@@ -514,11 +541,11 @@ namespace BMTA
             {
                 if (isInTwown)
                 {
-                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
+                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline,bustype FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
                 }
                 else
                 {
-                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
+                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline,bustype FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
                 }
 
                 if (ls.Count > 0)
@@ -527,9 +554,9 @@ namespace BMTA
                     lblbusid.Text = ls[0].bus_line;
                     lblStart.Text = ls[0].bus_start;
                     lblStop.Text = ls[0].bus_stop;
-                    lblbusName.Text = ls[0].bus_name;
                     lbltime.Text = ls[0].bus_startstop_time;
 
+                    lblbusName.Text = getNameBusType(ls[0].bustype);
                     getListDatabusstop(ls[0].busstop_list);
                     this.Pushpin(retrievedTasks[index].busstop_list, retrievedTasks[index].bus_polyline, iscate1, iscate2);
                 }
@@ -540,11 +567,11 @@ namespace BMTA
 
                 if (isInTwown)
                 {
-                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
+                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline,bustype FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
                 }
                 else
                 {
-                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
+                    ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_start_en,bus_name,bus_name_en,bus_startstop_time,bus_stop,bus_stop_en,busstop_list,bus_polyline,bustype FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
                 }
 
                 if (ls.Count > 0)
@@ -555,14 +582,13 @@ namespace BMTA
                     {
                         lblStart.Text = ls[0].bus_start;
                         lblStop.Text = ls[0].bus_stop;
-                        lblbusName.Text = ls[0].bus_name;
                     }
                     else
                     {
                         lblStart.Text = ls[0].bus_start_en;
                         lblStop.Text = ls[0].bus_stop_en;
-                        lblbusName.Text = ls[0].bus_name_en;
                     }
+                    lblbusName.Text = getNameBusType(ls[0].bustype);
                     lbltime.Text = ls[0].bus_startstop_time;
 
                     getListDatabusstop(ls[0].busstop_list);
@@ -587,11 +613,11 @@ namespace BMTA
 
             if (isInTwown)
             {
-                ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_name,bus_startstop_time,bus_stop,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
+                ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_name,bus_startstop_time,bus_stop,busstop_list,bus_polyline,bustype FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction like '%เข้าเมือง%' or bus_direction like '%วนขวา%')");
             }
             else
             {
-                ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_name,bus_startstop_time,bus_stop,busstop_list,bus_polyline FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
+                ls = dbConn.Query<buslineItem>("SELECT bus_line,bus_start,bus_name,bus_startstop_time,bus_stop,busstop_list,bus_polyline,bustype FROM busline where bus_line = '" + retrievedTasks[index].bus_line + "' and bustype = '" + retrievedTasks[index].bustype + "' and bus_owner = '" + retrievedTasks[index].bus_owner + "' and (bus_direction not like '%เข้าเมือง%' AND bus_direction not like '%วนซ้าย%' )");
             }
 
             if (ls.Count > 0)
@@ -602,16 +628,14 @@ namespace BMTA
                 {
                     lblStart.Text = ls[0].bus_start;
                     lblStop.Text = ls[0].bus_stop;
-                    lblbusName.Text = ls[0].bus_name;
                 }
                 else
                 {
                     lblStart.Text = ls[0].bus_start_en;
                     lblStop.Text = ls[0].bus_stop_en;
-                    lblbusName.Text = ls[0].bus_name_en;
                 }
                 lbltime.Text = ls[0].bus_startstop_time;
-
+                lblbusName.Text = getNameBusType(ls[0].bustype);
                 getListDatabusstop(ls[0].busstop_list);
                 this.Pushpin(retrievedTasks[index].busstop_list, retrievedTasks[index].bus_polyline, iscate1, iscate2);
             }

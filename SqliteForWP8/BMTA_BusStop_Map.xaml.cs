@@ -160,17 +160,18 @@ namespace BMTA
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
             data = (Application.Current as App).DataBusstopDetail;
+            Double dis = Convert.ToDouble(data.distance.Substring(0, 4)) * 1000; 
             if (lang.Equals("th"))
             {
                 titleName.Text = "ป้ายหยุดรถประจำทาง";
                 textName.Text = data.stop_name;
-                textRoute.Text = data.distance.Substring(0, 4) + " ม.";
+                textRoute.Text = Convert.ToString(dis) + " ม.";
             }
             else
             {
                 titleName.Text = "Bus Stop";
                 textName.Text = data.stop_name_en;
-                textRoute.Text = data.distance.Substring(0, 4) + " m.";
+                textRoute.Text = Convert.ToString(dis) + " m.";
             }
 
 
