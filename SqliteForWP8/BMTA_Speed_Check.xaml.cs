@@ -18,28 +18,28 @@ using Microsoft.Phone.Maps.Controls;
 using System.Diagnostics;
 using System.Text;
 using BMTA.Item;
+using Microsoft.Devices;
 namespace BMTA
 {
     public partial class BMTA_Speed_Check : PhoneApplicationPage
     {
         private DispatcherTimer dispatcherTimer;
         public enum DistanceType { Miles, Kilometers };
-        private GeoCoordinateWatcher _watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
+        private GeoCoordinateWatcher _watcher;
         public String lang = (Application.Current as App).Language;
-        private long _previousPositionChangeTick;
+        private TimeSpan _previousPositionChangeTick;
         private double _kilometres;
         private GeoCoordinate previousPoint = null;
+
         GeoCoordinate previous = new GeoCoordinate();
         DateTime previousTime = DateTime.Now;
-        private static DateTime EndTime { get; set; }
-
+        //private static DateTime EndTime { get; set; }
+        private DateTime EndTime;
+        VibrateController vibrateController;
         public BMTA_Speed_Check()
         {
             InitializeComponent();
-
-            _watcher.MovementThreshold = 1;
-            _watcher.StatusChanged += new EventHandler<GeoPositionStatusChangedEventArgs>(watcher_StatusChanged);
-            _watcher.PositionChanged += new EventHandler<GeoPositionChangedEventArgs<GeoCoordinate>>(watcher_PositionChanged);
+            vibrateController = VibrateController.Default;
         }
 
         protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)
@@ -57,6 +57,10 @@ namespace BMTA
             {
                 titleName.Text = "Speed Check";
             }
+            _watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
+            _watcher.MovementThreshold = 100;
+            _watcher.PositionChanged += new EventHandler<GeoPositionChangedEventArgs<GeoCoordinate>>(this.watcher_PositionChanged);
+            _watcher.StatusChanged += this.watcher_StatusChanged;
         }
 
         public void watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
@@ -64,17 +68,29 @@ namespace BMTA
             switch (e.Status)
             {
                 case GeoPositionStatus.Disabled:
-                    MessageBox.Show("Location Service is not enabled on the device");
-                    break;
+                    MessageBox.Show("the application does not have the right capability or the location master switch is off");
 
+                    break;
+                case GeoPositionStatus.Initializing:
+                    MessageBox.Show("the geolocator started the tracking operation");
+
+                    break;
                 case GeoPositionStatus.NoData:
-                    MessageBox.Show(" The Location Service is working, but it cannot get location data.");
+                    MessageBox.Show("the location service was not able to acquire the location");
+
+                    break;
+                case GeoPositionStatus.Ready:
+                    MessageBox.Show("the location service is generating geopositions as specified by the tracking parameters");
+
                     break;
             }
         }
 
         public void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
         {
+
+            Double distanceValue = 0;
+
             if (e.Position.Location.IsUnknown)
             {
                 MessageBox.Show(" The Location Service IsUnknown.");
@@ -82,55 +98,81 @@ namespace BMTA
             }
             var coord = new GeoCoordinate(e.Position.Location.Latitude, e.Position.Location.Longitude);
 
-            if (previousPoint != null && previousPoint != coord)
+            if (previousPoint != null)
             {
-                //var distance = coord.GetDistanceTo(previousPoint);
-
-                //// compute pace
-                //var millisPerKilometer = (1000.0 / distance) * (System.Environment.TickCount - _previousPositionChangeTick);
-
-                // compute total distance travelled
-
-
-                _kilometres += Distance(coord, previousPoint, DistanceType.Kilometers);
-
+                distanceValue = Distance(previousPoint.Latitude, previousPoint.Longitude, coord.Latitude, coord.Longitude, DistanceType.Kilometers);
+                _kilometres = _kilometres + distanceValue;
                 double output = Math.Round(_kilometres, 2);
+                sumdistanct.Text = Convert.ToString(output) + " km.";
+                previousPoint = coord;
 
-                sumdistanct.Text = output + " km.";
-            }
+                double distanceInKilometres = distanceValue;
 
-            previousPoint = coord;
+                DateTime dt2 = Convert.ToDateTime(_previousPositionChangeTick.ToString().ToString());
+                DateTime dt1 = Convert.ToDateTime(this.timeSpan.Value.ToString());
 
-            _previousPositionChangeTick = System.Environment.TickCount;
+                TimeSpan span = dt1.Subtract(dt2);
 
-            if (Double.IsNaN(e.Position.Location.Speed))
-            {
-                sumkm.Text = "0";
+                double timeInHours = span.TotalHours;
+                double speedInKilometresPerHour = distanceInKilometres / timeInHours;
+
+                _previousPositionChangeTick = (TimeSpan)this.timeSpan.Value;
+
+                if (Double.IsNaN(speedInKilometresPerHour))
+                {
+                    sumkm.Text = "0";
+                }
+                else
+                {
+                    sumkm.Text = Convert.ToString(speedInKilometresPerHour);
+                    if (speedInKilometresPerHour > 60)
+                    {
+                        vibrateController.Start(TimeSpan.FromSeconds(3));
+                    }
+                    else
+                    {
+                        vibrateController.Stop();
+                    }
+                }
             }
             else
             {
-                sumkm.Text = e.Position.Location.Speed.ToString();
+                previousPoint = coord;
+                _previousPositionChangeTick = (TimeSpan)this.timeSpan.Value;
+                double distanceInKilometres = distanceValue;
+                double timeInHours = TimeSpan.Parse(_previousPositionChangeTick.ToString()).TotalHours;
+                double speedInKilometresPerHour = distanceInKilometres / timeInHours;
+
+                sumkm.Text = Convert.ToString(speedInKilometresPerHour);
+
             }
+
+            //if (Double.IsNaN(e.Position.Location.Speed))
+            //{
+            //    sumkm.Text = "0";
+            //}
+            //else
+            //{
+            //    sumkm.Text = e.Position.Location.Speed.ToString();
+            //}
+
+
         }
-        /// <summary>  
-        /// Returns the distance in miles or kilometers of any two  
-        /// latitude / longitude points.  
-        /// </summary>  
-        public double Distance(GeoCoordinate pos1, GeoCoordinate pos2, DistanceType type)
+
+        public double Distance(double Latitude1, double Longitude1, double Latitude2, double Longitude2, DistanceType type)
         {
             double R = (type == DistanceType.Miles) ? 3960 : 6371;
-            double dLat = this.toRadian(pos2.Latitude - pos1.Latitude);
-            double dLon = this.toRadian(pos2.Longitude - pos1.Longitude);
-            double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-                Math.Cos(this.toRadian(pos1.Latitude)) * Math.Cos(this.toRadian(pos2.Latitude)) *
-                Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+            double dLat = this.toRadian(Latitude2 - Latitude1);
+            double dLon = this.toRadian(Longitude2 - Longitude1);
+
+            double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) + Math.Cos(this.toRadian(Latitude1)) * Math.Cos(this.toRadian(Latitude2)) * Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+
             double c = 2 * Math.Asin(Math.Min(1, Math.Sqrt(a)));
             double d = R * c;
+
             return d;
         }
-        /// <summary>  
-        /// Convert to Radians.  
-        /// </summary>  
+
         private double toRadian(double val)
         {
             return (Math.PI / 180) * val;
@@ -151,12 +193,11 @@ namespace BMTA
             layoutResult2.Visibility = System.Windows.Visibility.Visible;
             layoutResult3.Visibility = System.Windows.Visibility.Visible;
 
-            if (this.dispatcherTimer == null)
-            {
-                this.dispatcherTimer = new DispatcherTimer();
-                this.dispatcherTimer.Interval = TimeSpan.FromMilliseconds(1);
-                this.dispatcherTimer.Tick += new EventHandler(Timer_Tick);
-            }
+
+            this.dispatcherTimer = new DispatcherTimer();
+            this.dispatcherTimer.Interval = TimeSpan.FromMilliseconds(1);
+            this.dispatcherTimer.Tick += new EventHandler(Timer_Tick);
+
 
             if (EndTime == DateTime.MinValue)
             {

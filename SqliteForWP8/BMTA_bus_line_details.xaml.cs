@@ -266,17 +266,37 @@ namespace BMTA
                                         distance = distance * 1000;
                                         if (distance < 200)
                                         {
-                                            Pushpin pushpin = new Pushpin();
-                                            pushpin.GeoCoordinate = new GeoCoordinate(coord2.Latitude, coord2.Longitude);
 
-                                            var uriString = @"Assets/" + itemLandMark.type + ".png";
-                                            pushpin.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriString, UriKind.Relative)) };
-                                            pushpin.Width = 40;
-                                            pushpin.Height = 31;
+                                            UCCustomToolTipDetail _tooltip = new UCCustomToolTipDetail();
+                                            if (lang.Equals("th"))
+                                            {
+                                                _tooltip.Description = itemLandMark.name;
+                                            }
+                                            else
+                                            {
+                                                _tooltip.Description = itemLandMark.name_en;
+                                            }
+
+                                            _tooltip.ImagePath = Convert.ToString(itemLandMark.type);
+
+                                            _tooltip.DataContext = itemLandMark;
                                             MapOverlay overlay = new MapOverlay();
-                                            overlay.Content = pushpin;
+                                            overlay.Content = _tooltip;
                                             overlay.GeoCoordinate = new GeoCoordinate(coord2.Latitude, coord2.Longitude);
                                             layer.Add(overlay);
+
+
+                                            //Pushpin pushpin = new Pushpin();
+                                            //pushpin.GeoCoordinate = new GeoCoordinate(coord2.Latitude, coord2.Longitude);
+
+                                            //var uriString = @"Assets/" + itemLandMark.type + ".png";
+                                            //pushpin.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriString, UriKind.Relative)) };
+                                            //pushpin.Width = 40;
+                                            //pushpin.Height = 31;
+                                            //MapOverlay overlay = new MapOverlay();
+                                            //overlay.Content = pushpin;
+                                            //overlay.GeoCoordinate = new GeoCoordinate(coord2.Latitude, coord2.Longitude);
+                                            //layer.Add(overlay);
                                         }
                                     }
                                     catch (Exception ex)

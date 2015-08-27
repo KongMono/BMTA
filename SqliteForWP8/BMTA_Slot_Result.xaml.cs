@@ -28,6 +28,7 @@ namespace BMTA
 
     public partial class BMTA_Slot_Result : PhoneApplicationPage
     {
+        ImageBrush background;
         public String lang = (Application.Current as App).Language;
         public String result;
         public SlotItem item = new SlotItem();
@@ -40,17 +41,22 @@ namespace BMTA
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
-
+            background = new ImageBrush();
             if (lang.Equals("th"))
             {
                 titleName.Text = "กิจกรรม";
                 headfortune.Text = "ตัวเลขของคุณคือ";
+                background.ImageSource = new BitmapImage(new Uri("/Assets/BMTA_slotresult_reset.png", UriKind.Relative));
+                btn_tryagain.Background = background;
             }
             else
             {
                 titleName.Text = "Events";
                 headfortune.Text = "Your ticket No. is";
+                background.ImageSource = new BitmapImage(new Uri("/Assets/BMTA_slotresult_reset_en.png", UriKind.Relative));
+                btn_tryagain.Background = background;
             }
+
 
             result = this.NavigationContext.QueryString["parameter"];
 

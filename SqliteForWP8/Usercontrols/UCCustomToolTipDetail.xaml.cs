@@ -7,6 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace BMTA.Usercontrols
 {
@@ -14,6 +16,7 @@ namespace BMTA.Usercontrols
     {
         private string _description;
         private string _busline;
+        private string _imgPath;
 
         public string Description
         {
@@ -27,6 +30,12 @@ namespace BMTA.Usercontrols
             set { _busline = value; }
         }
 
+        public string ImagePath
+        {
+            get { return _imgPath; }
+            set { _imgPath = value; }
+        }
+
         public UCCustomToolTipDetail()
         {
             InitializeComponent();
@@ -36,10 +45,11 @@ namespace BMTA.Usercontrols
         void UCCustomToolTipDetail_Loaded(object sender, RoutedEventArgs e)
         {
             Lbltext.Text = Description;
-        }
-        public void FillDescription()
-        {
-            Lbltext.Text = Description;
+            if (_imgPath != null)
+            {
+                BitmapImage licoriceImage = new BitmapImage(new Uri("/Assets/" + ImagePath + ".png", UriKind.Relative));
+                imgmarker.Source = licoriceImage;
+            }
         }
 
         private void imgmarker_Tap(object sender, System.Windows.Input.GestureEventArgs e)

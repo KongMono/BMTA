@@ -144,7 +144,7 @@ namespace BMTA
             MapOverlay myLocationOverlay = new MapOverlay();
             myLocationOverlay.Content = myCircle;
             myLocationOverlay.GeoCoordinate = myGeoCoordinate;
-         
+
             // Create a MapLayer to contain the MapOverlay.
             mymapLayer.Add(myLocationOverlay);
 
@@ -159,7 +159,7 @@ namespace BMTA
 
         }
 
-        private async void Pushpin(searchfindRoutingItem_data bus_stop)
+        private void Pushpin(searchfindRoutingItem_data bus_stop)
         {
             // Map clear
             map.Layers.Clear();
@@ -169,24 +169,6 @@ namespace BMTA
             {
                 layer = new MapLayer();
 
-                foreach (var busstop in item.busstop)
-                {
-                    if (currStatus != busstop.status)
-                    {
-                        Pushpin pushpin = new Pushpin();
-                        pushpin.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(busstop.latitude), Convert.ToDouble(busstop.longitude));
-                        var uriString = @"Assets/btn_bus.png";
-                        pushpin.Background = new ImageBrush { ImageSource = new BitmapImage(new Uri(uriString, UriKind.Relative)) };
-                        pushpin.Width = 35;
-                        pushpin.Height = 31;
-                        MapOverlay overlay = new MapOverlay();
-                        overlay.Content = pushpin;
-                        overlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(busstop.latitude), Convert.ToDouble(busstop.longitude));
-                        layer.Add(overlay);
-                    }
-                    currStatus = busstop.status;
-                }
-                // Map Layer
                 map.Center = new GeoCoordinate(Convert.ToDouble(item.busstop[0].latitude), Convert.ToDouble(item.busstop[0].longitude));
                 map.Layers.Add(layer);
 
@@ -194,16 +176,57 @@ namespace BMTA
                 line.StrokeColor = Colors.Red;
                 line.StrokeThickness = 3;
 
+                int index = 0;
+                searchfindRoutingItem_routing_busstop lastbusstop = item.busstop.Last();
+                foreach (var busstop in item.busstop)
+                {
+                    if (currStatus != busstop.status)
+                    {
+                        if (index != 0 && !lastbusstop.Equals(busstop))
+                        {
+                            UCCustomToolTipTranfer _tooltip = new UCCustomToolTipTranfer();
+                            MapOverlay overlay = new MapOverlay();
+                            overlay.Content = _tooltip;
+                            overlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(busstop.latitude), Convert.ToDouble(busstop.longitude));
+                            layer.Add(overlay);
+                        }
+                    }
+
+                    if (index == 0)
+                    {
+                        UCCustomToolTipStart _tooltip = new UCCustomToolTipStart();
+                        MapOverlay overlay = new MapOverlay();
+                        overlay.Content = _tooltip;
+                        overlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(busstop.latitude), Convert.ToDouble(busstop.longitude));
+                        layer.Add(overlay);
+                        index++;
+                    }
+
+                    if (lastbusstop.Equals(busstop))
+                    {
+                        UCCustomToolTipStop _tooltip = new UCCustomToolTipStop();
+                        MapOverlay overlay = new MapOverlay();
+                        overlay.Content = _tooltip;
+                        overlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(busstop.latitude), Convert.ToDouble(busstop.longitude));
+                        layer.Add(overlay);
+                    }
+
+                    currStatus = busstop.status;
+                    index++;
+                }
+
+                index = 0;
+                String[] last = item.bus_polyline.Last();
                 foreach (String[] polyline in item.bus_polyline)
                 {
                     line.Path.Add(new GeoCoordinate(Convert.ToDouble(polyline[0]), Convert.ToDouble(polyline[1])));
                 }
-              
+
                 // Map Polyline
                 map.MapElements.Add(line);
             }
 
-            map.ZoomLevel = 12;
+            map.ZoomLevel = 14;
         }
 
         private void btback_Click(object sender, RoutedEventArgs e)

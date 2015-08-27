@@ -126,7 +126,14 @@ namespace BMTA
         /// </summary>
         public App()
         {
-            //ParseClient.Initialize("pd5bpruWPEQBEdPdPRfBRn86rhDkv6EzXlNSV0Bi", "u9UgEQqR7TqCxVnZpnPjG6lltpP8YtBLzrVSBQOe");
+            // Global handler for uncaught exceptions.
+            UnhandledException += Application_UnhandledException;
+
+            // Standard XAML initialization
+            InitializeComponent();
+
+            //ParseClient.Initialize("u3c5C2f1biiBTtbPjaxJsBJayvVArZl8ED7YfgOv", "BtLxWbgRSaZaxSKemzlSJpw9NhT1yTWRylpntjFw");
+
             //this.Startup += async (sender, args) =>
             //{
             //    // This optional line tracks statistics around app opens, including push effectiveness:
@@ -136,13 +143,6 @@ namespace BMTA
             //    // Note that we had to add "async" to the definition to use the await keyword
             //    await ParsePush.SubscribeAsync("");
             //};
-
-            //ParsePush.ToastNotificationReceived += ParsePushOnToastNotificationReceived;
-            // Global handler for uncaught exceptions.
-            UnhandledException += Application_UnhandledException;
-
-            // Standard XAML initialization
-            InitializeComponent();
             
             // Phone-specific initialization
             InitializePhoneApplication();
