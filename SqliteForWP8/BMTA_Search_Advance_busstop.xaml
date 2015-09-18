@@ -99,14 +99,14 @@
 
             <TextBlock  x:Name = "txtbusroute" Grid.Row="1" Text="เส้นทาง" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center"   FontSize="25" />
             <toolkit:ListPicker x:Name ="bustyperunning" Grid.Row="1" Width="220" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Column="1">
-                <toolkit:ListPickerItem x:Name="t1" Tag="" Foreground="Black"/>
+                <toolkit:ListPickerItem x:Name="t1" Tag="0" Foreground="Black"/>
                 <toolkit:ListPickerItem x:Name="t2" Tag="1" Foreground="Black"/>
                 <toolkit:ListPickerItem x:Name="t3" Tag="2" Foreground="Black"/>
             </toolkit:ListPicker>
 
             <TextBlock x:Name = "txtbustype" Grid.Row="2" Text="ประเภทรถ" Foreground="Black" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center"  FontSize="25" />
             <toolkit:ListPicker x:Name="busline" Grid.Row="2" Width="220" HorizontalAlignment="Center"  VerticalAlignment="Center"  Grid.Column="1">
-                <toolkit:ListPickerItem x:Name="x1" Tag="" Foreground="Black"/>
+                <toolkit:ListPickerItem x:Name="x1" Tag="0" Foreground="Black"/>
                 <toolkit:ListPickerItem x:Name="x2" Tag="1" Foreground="Black"/>
                 <toolkit:ListPickerItem x:Name="x3" Tag="2" Foreground="Black"/>
             </toolkit:ListPicker>

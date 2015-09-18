@@ -41,5 +41,24 @@ namespace BMTA.Usercontrols
         {
             Lbltext.Text = Description;
         }
+
+        private void imgmarker_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+
+            if (imgpath.Opacity == 0)
+            {
+                imgpath.Opacity = 1;
+                imgpath.Visibility = System.Windows.Visibility.Collapsed;
+                imgborderg.Opacity = 1;
+                imgborderg.Visibility = Visibility;
+            }
+            else
+            {
+                imgpath.Opacity = 0;
+                imgpath.Visibility = System.Windows.Visibility.Collapsed;
+                imgborderg.Opacity = 0;
+                imgborderg.Visibility = System.Windows.Visibility.Collapsed;
+            }
+        }
     }
 }

@@ -26,12 +26,32 @@
         </Grid.RowDefinitions>
 
         <Grid x:Name="ContentPanel" Grid.Row="1">
-            <Button x:Name="bt_1" Grid.Row="1" Width="160" Height="170" HorizontalAlignment="Left" BorderBrush="Transparent" Margin="50,300,0,0"  VerticalAlignment="Top" Click="button1_Click" Style="{StaticResource ImageButton}"/>
-            <Button x:Name="bt_2" Grid.Row="1" Width="175" Height="170" HorizontalAlignment="Right" BorderBrush="Transparent" Margin="0,300,50,0" VerticalAlignment="Top" Click="button2_Click"  Style="{StaticResource ImageButton}"/>
-            <Button x:Name="bt_3" Grid.Row="2" Width="160" Height="170" HorizontalAlignment="Left" BorderBrush="Transparent" Margin="50,450,0,0" VerticalAlignment="Top" Click="button3_Click"  Style="{StaticResource ImageButton}"/>
-            <Button x:Name="bt_4" Grid.Row="2" Width="175" Height="170" HorizontalAlignment="Right" BorderBrush="Transparent" Margin="0,450,50,0" VerticalAlignment="Top" Click="button4_Click"  Style="{StaticResource ImageButton}"/>
-            <Button x:Name="bt_5" Grid.Row="3" Width="160" Height="170" HorizontalAlignment="Left" BorderBrush="Transparent" Margin="50,600,0,0" VerticalAlignment="Top" Click="button5_Click"  Style="{StaticResource ImageButton}"/>
-            <Button x:Name="bt_6" Grid.Row="3" Width="160" Height="170" HorizontalAlignment="Right" BorderBrush="Transparent" Margin="0,600,50,0" VerticalAlignment="Top" Click="button6_Click"  Style="{StaticResource ImageButton}"/>
+            <Button x:Name="bt_1" Grid.Row="1" Width="160" Height="170" HorizontalAlignment="Left" BorderBrush="Transparent" Margin="60,260,0,0"  VerticalAlignment="Top" Click="button1_Click" Style="{StaticResource ImageButton}"/>
+            <Button x:Name="bt_2" Grid.Row="1" Width="175" Height="170" HorizontalAlignment="Right" BorderBrush="Transparent" Margin="0,260,60,0" VerticalAlignment="Top" Click="button2_Click"  Style="{StaticResource ImageButton}"/>
+            <Button x:Name="bt_3" Grid.Row="2" Width="160" Height="170" HorizontalAlignment="Left" BorderBrush="Transparent" Margin="60,410,0,0" VerticalAlignment="Top" Click="button3_Click"  Style="{StaticResource ImageButton}"/>
+            <Button x:Name="bt_4" Grid.Row="2" Width="175" Height="170" HorizontalAlignment="Right" BorderBrush="Transparent" Margin="0,410,60,0" VerticalAlignment="Top" Click="button4_Click"  Style="{StaticResource ImageButton}"/>
+            <Button x:Name="bt_5" Grid.Row="3" Width="158" Height="170" HorizontalAlignment="Left" BorderBrush="Transparent" Margin="60,560,0,0" VerticalAlignment="Top" Click="button5_Click"  Style="{StaticResource ImageButton}"/>
+            <Button x:Name="bt_6" Grid.Row="3" Width="160" Height="170" HorizontalAlignment="Right" BorderBrush="Transparent" Margin="0,560,60,0" VerticalAlignment="Top" Click="button6_Click"  Style="{StaticResource ImageButton}"/>
+
+            <Grid HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10,10,10,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="70"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="text_version" Text="version" Grid.Column="0" TextWrapping="Wrap" VerticalAlignment="Center" TextAlignment="Right"/>
+                <Button x:Name="bt_comment" Grid.Column="1" Width="70" Height="70" HorizontalAlignment="Right" BorderBrush="Transparent" VerticalAlignment="Bottom" Style="{StaticResource ImageButton}" Click="bt_comment_Click">
+                    <Button.Background>
+                        <ImageBrush Stretch="Fill" ImageSource="/Assets/icon_comment.png"/>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="bt_howto" Grid.Column="2" Width="70" Height="70" HorizontalAlignment="Right" BorderBrush="Transparent"  VerticalAlignment="Bottom" Style="{StaticResource ImageButton}" Click="bt_howto_Click">
+                    <Button.Background>
+                        <ImageBrush Stretch="Fill" ImageSource="/Assets/icon_info.png"/>
+                    </Button.Background>
+                </Button>
+            </Grid>
+          
         </Grid>
     </Grid>
 

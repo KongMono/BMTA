@@ -30,12 +30,10 @@ namespace BMTA
         private TimeSpan _previousPositionChangeTick;
         private double _kilometres;
         private GeoCoordinate previousPoint = null;
-
-        GeoCoordinate previous = new GeoCoordinate();
-        DateTime previousTime = DateTime.Now;
-        //private static DateTime EndTime { get; set; }
+        private GeoCoordinate previous = new GeoCoordinate();
+        private DateTime previousTime = DateTime.Now;
         private DateTime EndTime;
-        VibrateController vibrateController;
+        private VibrateController vibrateController;
         public BMTA_Speed_Check()
         {
             InitializeComponent();
@@ -58,7 +56,7 @@ namespace BMTA
                 titleName.Text = "Speed Check";
             }
             _watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
-            _watcher.MovementThreshold = 100;
+            _watcher.MovementThreshold = 1;
             _watcher.PositionChanged += new EventHandler<GeoPositionChangedEventArgs<GeoCoordinate>>(this.watcher_PositionChanged);
             _watcher.StatusChanged += this.watcher_StatusChanged;
         }
@@ -127,10 +125,12 @@ namespace BMTA
                     sumkm.Text = Convert.ToString(speedInKilometresPerHour);
                     if (speedInKilometresPerHour > 60)
                     {
+                        layoutAlert.Visibility = System.Windows.Visibility.Visible;
                         vibrateController.Start(TimeSpan.FromSeconds(3));
                     }
                     else
                     {
+                        layoutAlert.Visibility = System.Windows.Visibility.Collapsed;
                         vibrateController.Stop();
                     }
                 }
@@ -146,17 +146,6 @@ namespace BMTA
                 sumkm.Text = Convert.ToString(speedInKilometresPerHour);
 
             }
-
-            //if (Double.IsNaN(e.Position.Location.Speed))
-            //{
-            //    sumkm.Text = "0";
-            //}
-            //else
-            //{
-            //    sumkm.Text = e.Position.Location.Speed.ToString();
-            //}
-
-
         }
 
         public double Distance(double Latitude1, double Longitude1, double Latitude2, double Longitude2, DistanceType type)

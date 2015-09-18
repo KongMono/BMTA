@@ -66,7 +66,7 @@
 			Width="18"
             Opacity="0"
             HorizontalAlignment="Center" x:Name="imgpath" Visibility="Collapsed"  />
-        <Image Source="/Assets/pin_bus_start.png" Width="43"  Height="54" Grid.Row="1" Grid.RowSpan="2" Stretch="Fill" x:Name="imgmarker" Tag="{Binding id}"  HorizontalAlignment="Center" />
+        <Image Source="/Assets/map_pin_icon_start.png" Width="40"  Height="50" Grid.Row="1" Grid.RowSpan="2" Stretch="Fill" x:Name="imgmarker" Tag="{Binding id}"  HorizontalAlignment="Center" Tap="imgmarker_Tap" />
     </Grid>
 
 </UserControl>

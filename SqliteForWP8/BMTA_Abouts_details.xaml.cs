@@ -110,6 +110,8 @@ namespace BMTA
                 foreach (var v in o.Descendants("item"))
                 {
                     items.description = v.Element("description").Value;
+                    descriptionLabel.NavigateToString(items.description);
+                    return;
 
                 }
             }
@@ -118,7 +120,7 @@ namespace BMTA
                 MessageBox.Show("limited connectivity or invalid data.\nplease try again");
             }
 
-            descriptionLabel.NavigateToString(items.description);
+            
            
         }
 

@@ -53,19 +53,15 @@
         </Grid>
 
         <Grid  Grid.Row="4" Background="#EDEDED">
-            <Button x:Name="btn_share" HorizontalAlignment="Center" Margin="0,0,180,50" Grid.Row="1" VerticalAlignment="Bottom" Click="btn_share_Click" Width="190" Height="85" Style="{StaticResource ImageButton}">
-                <Button.Template>
-                    <ControlTemplate>
-                        <Image Margin="0,0" Source="/Assets/BMTA_slotresult_share.png" />
-                    </ControlTemplate>
-                </Button.Template>
+            <Button x:Name="btn_share" HorizontalAlignment="Center" Margin="0,0,165,50" Grid.Row="1" VerticalAlignment="Bottom" Click="btn_share_Click" Width="190" Height="85" Style="{StaticResource ImageButton}">
+                <Button.Background>
+                    <ImageBrush Stretch="Fill" ImageSource="/Assets/BMTA_slotresult_share.png"/>
+                </Button.Background>
             </Button>
-            <Button x:Name="btn_tryagain" HorizontalAlignment="Center" Margin="180,0,0,50" Grid.Row="1" VerticalAlignment="Bottom"  Click="Button_Click" Width="190" Height="85" Style="{StaticResource ImageButton}">
-                <Button.Template>
-                    <ControlTemplate>
-                        <Image Margin="0,0" Source="/Assets/BMTA_slotresult_reset.png" />
-                    </ControlTemplate>
-                </Button.Template>
+            <Button x:Name="btn_tryagain" HorizontalAlignment="Center" Margin="165,0,0,50" Grid.Row="1" VerticalAlignment="Bottom"  Click="Button_Click" Width="190" Height="85" Style="{StaticResource ImageButton}">
+                <Button.Background>
+                    <ImageBrush Stretch="Fill" ImageSource="/Assets/BMTA_slotresult_reset_en.png"/>
+                </Button.Background>
             </Button>
             <TextBlock x:Name="lblDetail" HorizontalAlignment="Center" TextWrapping="Wrap"  VerticalAlignment="Top" Width="440" Height="80" Foreground="#FF0C0B0B" FontSize="30" TextAlignment="Center" Margin="0,50,0,0"/>
         </Grid>

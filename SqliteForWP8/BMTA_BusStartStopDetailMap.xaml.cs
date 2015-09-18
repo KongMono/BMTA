@@ -49,7 +49,6 @@ namespace BMTA
         UCCostomPushpin _Pushpin = new UCCostomPushpin();
         private MapPolyline line;
         MapLayer layer;
-        string currStatus;
         MapLayer mymapLayer = new MapLayer();
         List<GeoCoordinate> MyCoordinates = new List<GeoCoordinate>();
 
@@ -58,17 +57,35 @@ namespace BMTA
             InitializeComponent();
             ShowMyLocationOnTheMap();
 
-            searchfindRoutingItem_data data = (Application.Current as App).RountingDataStartStop;
+            new_searchfindRoutingItem_data data = (Application.Current as App).RountingDataStartStop;
 
-            if (lang.Equals("th"))
+            var d = Convert.ToDouble(data.distance);
+            if (d < 1000)
             {
-                titleName.Text = "ต้นทางปลายทาง";
-                textRoute.Text = data.total.total_distance + " ม.";
+                if (lang.Equals("th"))
+                {
+                    titleName.Text = "ต้นทางปลายทาง";
+                    textRoute.Text = Convert.ToString(Math.Round(d, 2)) + " ม.";
+                }
+                else
+                {
+                    titleName.Text = "Start - End";
+                    textRoute.Text = Convert.ToString(Math.Round(d, 2)) + " m.";
+                }
             }
             else
             {
-                titleName.Text = "Start - End";
-                textRoute.Text = data.total.total_distance + " m.";
+                d = d / 1000;
+                if (lang.Equals("th"))
+                {
+                    titleName.Text = "ต้นทางปลายทาง";
+                    textRoute.Text = Convert.ToString(Math.Round(d, 2)) + " กม.";
+                }
+                else
+                {
+                    titleName.Text = "Start - End";
+                    textRoute.Text = Convert.ToString(Math.Round(d, 2)) + " km.";
+                }
             }
 
             UCStartStopBusLine UCStartStopBusLine = new UCStartStopBusLine();
@@ -76,9 +93,9 @@ namespace BMTA
             UCStartStopBusLine.DataContext = data;
 
 
-            if (data.routing.Count == 1)
+            if (data.list.Count == 1)
             {
-                UCStartStopBusLine.text_route1.Text = data.routing[0].bus_line;
+                UCStartStopBusLine.text_route1.Text = getNameBustype(data.list[0].busline, data.list[0].bustype);
                 UCStartStopBusLine.img_route2.Visibility = System.Windows.Visibility.Collapsed;
                 UCStartStopBusLine.img_route3.Visibility = System.Windows.Visibility.Collapsed;
                 UCStartStopBusLine.img_route4.Visibility = System.Windows.Visibility.Collapsed;
@@ -93,10 +110,10 @@ namespace BMTA
 
 
             }
-            else if (data.routing.Count == 2)
+            else if (data.list.Count == 2)
             {
-                UCStartStopBusLine.text_route1.Text = data.routing[0].bus_line;
-                UCStartStopBusLine.text_route2.Text = data.routing[1].bus_line;
+                UCStartStopBusLine.text_route1.Text = getNameBustype(data.list[0].busline, data.list[0].bustype);
+                UCStartStopBusLine.text_route2.Text = getNameBustype(data.list[1].busline, data.list[1].bustype);
 
                 UCStartStopBusLine.img_route3.Visibility = System.Windows.Visibility.Collapsed;
                 UCStartStopBusLine.img_route4.Visibility = System.Windows.Visibility.Collapsed;
@@ -108,11 +125,11 @@ namespace BMTA
                 UCStartStopBusLine.text_route4.Visibility = System.Windows.Visibility.Collapsed;
 
             }
-            else if (data.routing.Count == 3)
+            else if (data.list.Count == 3)
             {
-                UCStartStopBusLine.text_route1.Text = data.routing[0].bus_line;
-                UCStartStopBusLine.text_route2.Text = data.routing[1].bus_line;
-                UCStartStopBusLine.text_route3.Text = data.routing[2].bus_line;
+                UCStartStopBusLine.text_route1.Text = getNameBustype(data.list[0].busline, data.list[0].bustype);
+                UCStartStopBusLine.text_route2.Text = getNameBustype(data.list[1].busline, data.list[1].bustype);
+                UCStartStopBusLine.text_route3.Text = getNameBustype(data.list[2].busline, data.list[2].bustype);
 
                 UCStartStopBusLine.img_route4.Visibility = System.Windows.Visibility.Collapsed;
                 UCStartStopBusLine.img_cen4.Visibility = System.Windows.Visibility.Collapsed;
@@ -123,35 +140,63 @@ namespace BMTA
 
             this.Pushpin(data);
         }
+        public String getNameBustype(string busline, string bustype)
+        {
+            string value = "";
 
+            if (bustype == "2")
+            {
+                if (lang.Equals("th"))
+                {
+                    value = busline + " ปอ.";
+                }
+                else
+                {
+                    value = busline + " air";
+                }
+            }
+            else
+            {
+                value = busline;
+            }
+
+            return value;
+        }
         private async void ShowMyLocationOnTheMap()
         {
-            // Get my current location.
-            Geolocator myGeolocator = new Geolocator();
-            Geoposition myGeoposition = await myGeolocator.GetGeopositionAsync(TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(5));
-            Geocoordinate myGeocoordinate = myGeoposition.Coordinate;
-            GeoCoordinate myGeoCoordinate = CoordinateConverter.ConvertGeocoordinate(myGeocoordinate);
+            try
+            {
+                // Get my current location.
+                Geolocator myGeolocator = new Geolocator();
+                Geoposition myGeoposition = await myGeolocator.GetGeopositionAsync(TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(5));
+                Geocoordinate myGeocoordinate = myGeoposition.Coordinate;
+                GeoCoordinate myGeoCoordinate = CoordinateConverter.ConvertGeocoordinate(myGeocoordinate);
 
-            this.map.ZoomLevel = 13;
+                this.map.ZoomLevel = 13;
 
-            // Create a small circle to mark the current location.
-            Ellipse myCircle = new Ellipse();
-            myCircle.Fill = new SolidColorBrush(Colors.Blue);
-            myCircle.Height = 20;
-            myCircle.Width = 20;
-            myCircle.Opacity = 50;
+                // Create a small circle to mark the current location.
+                Ellipse myCircle = new Ellipse();
+                myCircle.Fill = new SolidColorBrush(Colors.Blue);
+                myCircle.Height = 20;
+                myCircle.Width = 20;
+                myCircle.Opacity = 50;
 
-            // Create a MapOverlay to contain the circle.
-            MapOverlay myLocationOverlay = new MapOverlay();
-            myLocationOverlay.Content = myCircle;
-            myLocationOverlay.GeoCoordinate = myGeoCoordinate;
-         
-            // Create a MapLayer to contain the MapOverlay.
-            mymapLayer.Add(myLocationOverlay);
+                // Create a MapOverlay to contain the circle.
+                MapOverlay myLocationOverlay = new MapOverlay();
+                myLocationOverlay.Content = myCircle;
+                myLocationOverlay.GeoCoordinate = myGeoCoordinate;
 
-            // Add the MapLayer to the Map.
-            this.map.Layers.Add(mymapLayer);
-            map.CartographicMode = MapCartographicMode.Road;
+                // Create a MapLayer to contain the MapOverlay.
+                mymapLayer.Add(myLocationOverlay);
+
+                // Add the MapLayer to the Map.
+                this.map.Layers.Add(mymapLayer);
+                map.CartographicMode = MapCartographicMode.Road;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
@@ -160,74 +205,107 @@ namespace BMTA
             busStartStopTo_search.Text = this.NavigationContext.QueryString["TextTo"];
         }
 
-        private void Pushpin(searchfindRoutingItem_data bus_stop)
+        private void Pushpin(new_searchfindRoutingItem_data bus_stop)
         {
             // Map clear
             map.Layers.Clear();
             map.MapElements.Clear();
-
-            foreach (var item in bus_stop.routing)
+            map.Center = new GeoCoordinate(Convert.ToDouble(bus_stop.route[0].busstop.latitude), Convert.ToDouble(bus_stop.route[0].busstop.longitude));
+            foreach (var item in bus_stop.route)
             {
                 layer = new MapLayer();
                 // Map Layer
-               
-                map.Layers.Add(layer);
 
+                map.Layers.Add(layer);
                 line = new MapPolyline();
                 line.StrokeColor = Colors.Red;
                 line.StrokeThickness = 3;
 
-                int index = 0;
-                searchfindRoutingItem_routing_busstop lastbusstop = item.busstop.Last();
-                foreach (var busstop in item.busstop)
+                if (item == bus_stop.route.First())
                 {
-                    if (currStatus != busstop.status)
+                    UCCustomToolTipStart _tooltip = new UCCustomToolTipStart();
+                    if (lang.Equals("th"))
                     {
-                        if (index != 0 && !lastbusstop.Equals(busstop))
-                        {
-                            UCCustomToolTipTranfer _tooltip = new UCCustomToolTipTranfer();
-                            MapOverlay overlay = new MapOverlay();
-                            overlay.Content = _tooltip;
-                            overlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(busstop.latitude), Convert.ToDouble(busstop.longitude));
-                            layer.Add(overlay);
-                        }
+                        _tooltip.Description = item.busstop.name;
+                    }
+                    else
+                    {
+                        _tooltip.Description = item.busstop.name_en;
                     }
 
-                    if (index == 0)
-                    {
-                        UCCustomToolTipStart _tooltip = new UCCustomToolTipStart();
-                        MapOverlay overlay = new MapOverlay();
-                        overlay.Content = _tooltip;
-                        overlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(busstop.latitude), Convert.ToDouble(busstop.longitude));
-                        layer.Add(overlay);
-                        map.Center = new GeoCoordinate(Convert.ToDouble(item.busstop[0].latitude), Convert.ToDouble(item.busstop[0].longitude));
-                        index++;
-                    }
+                    _tooltip.DataContext = item;
 
-                    if (lastbusstop.Equals(busstop))
-                    {
-                        UCCustomToolTipStop _tooltip = new UCCustomToolTipStop();
-                        MapOverlay overlay = new MapOverlay();
-                        overlay.Content = _tooltip;
-                        overlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(busstop.latitude), Convert.ToDouble(busstop.longitude));
-                        layer.Add(overlay);
-                    }
-
-                    currStatus = busstop.status;
-                    index++;
+                    MapOverlay overlay = new MapOverlay();
+                    overlay.Content = _tooltip;
+                    overlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(item.busstop.latitude), Convert.ToDouble(item.busstop.longitude));
+                    layer.Add(overlay);
                 }
-
-
-                index = 0;
-                String[] last = item.bus_polyline.Last();
-                foreach (String[] polyline in item.bus_polyline)
+                else if (item == bus_stop.route.Last() || item.step == "6")
                 {
-                    line.Path.Add(new GeoCoordinate(Convert.ToDouble(polyline[0]), Convert.ToDouble(polyline[1])));
-                }
+                    UCCustomToolTipStop _tooltip = new UCCustomToolTipStop();
+                    if (lang.Equals("th"))
+                    {
+                        _tooltip.Description = item.busstop.name;
+                    }
+                    else
+                    {
+                        _tooltip.Description = item.busstop.name_en;
+                    }
 
-                // Map Polyline
-                map.MapElements.Add(line);
+                    _tooltip.DataContext = item;
+
+                    MapOverlay overlay = new MapOverlay();
+                    overlay.Content = _tooltip;
+                    overlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(item.busstop.latitude), Convert.ToDouble(item.busstop.longitude));
+                    layer.Add(overlay);
+                }
+                else if (item.step == "4")
+                {
+                    UCCustomToolTipWalkTranfer _tooltip = new UCCustomToolTipWalkTranfer();
+                    if (lang.Equals("th"))
+                    {
+                        _tooltip.Description = item.busstop.name;
+                    }
+                    else
+                    {
+                        _tooltip.Description = item.busstop.name_en;
+                    }
+
+                    _tooltip.DataContext = item;
+
+                    MapOverlay overlay = new MapOverlay();
+                    overlay.Content = _tooltip;
+                    overlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(item.busstop.latitude), Convert.ToDouble(item.busstop.longitude));
+                    layer.Add(overlay);
+                }
+                else
+                {
+                    UCCustomToolTipTranfer _tooltip = new UCCustomToolTipTranfer();
+                    if (lang.Equals("th"))
+                    {
+                        _tooltip.Description = item.busstop.name;
+                    }
+                    else
+                    {
+                        _tooltip.Description = item.busstop.name_en;
+                    }
+
+                    _tooltip.DataContext = item;
+
+                    MapOverlay overlay = new MapOverlay();
+                    overlay.Content = _tooltip;
+                    overlay.GeoCoordinate = new GeoCoordinate(Convert.ToDouble(item.busstop.latitude), Convert.ToDouble(item.busstop.longitude));
+                    layer.Add(overlay);
+                }
             }
+
+            foreach (String[] polyline in bus_stop.polyline)
+            {
+                line.Path.Add(new GeoCoordinate(Convert.ToDouble(polyline[0]), Convert.ToDouble(polyline[1])));
+            }
+
+            // Map Polyline
+            map.MapElements.Add(line);
 
             map.ZoomLevel = 14;
         }

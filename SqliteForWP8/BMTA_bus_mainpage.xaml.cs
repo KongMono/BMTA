@@ -213,7 +213,6 @@ namespace BMTA
                     NavigationService.Navigate(new Uri("/BMTA_BusStop_Map.xaml", UriKind.Relative));
                 }
             }
-
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -249,6 +248,8 @@ namespace BMTA
             try
             {
                 Geolocator myGeolocator = new Geolocator();
+                myGeolocator.DesiredAccuracyInMeters = 0;
+                myGeolocator.MovementThreshold = 100;
                 Geoposition myGeoposition = await myGeolocator.GetGeopositionAsync(TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(5));
                 Geocoordinate myGeocoordinate = myGeoposition.Coordinate;
                 GeoCoordinate myGeoCoordinate = CoordinateConverter.ConvertGeocoordinate(myGeocoordinate);
@@ -531,15 +532,16 @@ namespace BMTA
 
         private void busline_search_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //load data 
             List<buslineItem> retrievedTasks = new List<buslineItem>();
             if (busline_search.Text != null || busline_search.Text != "")
             {
-                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + busline_search.Text + "%' "
-                        + " AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%') "
-                        + "AND bus_polyline !='' AND (bus_direction_en = 'inbound' OR bus_direction_en = 'Left Loop')"
-                        + " AND bustype > 0 AND bus_owner > 0 AND bus_running > 0 AND bus_color > 0 AND published = '1' AND busstop_list !=''"
-                        + " ORDER BY CAST(bus_line AS INTEGER) ASC,bus_owner DESC,bustype ASC,bus_direction_en ASC");
+                //retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_line LIKE '" + busline_search.Text + "%' "
+                //        + " AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%') "
+                //        + "AND bus_polyline !='' AND (bus_direction_en = 'inbound' OR bus_direction_en = 'Left Loop')"
+                //        + " AND bustype > 0 AND bus_owner > 0 AND bus_running > 0 AND bus_color > 0 AND published = '1' AND busstop_list !=''"
+                //        + " ORDER BY CAST(bus_line AS INTEGER) ASC,bus_owner DESC,bustype ASC,bus_direction_en ASC");
+
+                 retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_name LIKE '% " + busline_search.Text + " %' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%'");
             }
             else
             {
@@ -731,7 +733,7 @@ namespace BMTA
 
             webClient = new WebClient();
             webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/searchfindRouting";
+            String url = "http://202.6.18.31:7777/searchfindRoutingv2";
             string myParameters;
             try
             {
@@ -743,6 +745,8 @@ namespace BMTA
                 {
                     myParameters = "busstop_start_id=" + itemstart.id + "&busstop_end_id=" + itemend.id + "&bus_type=&running_type=&orderby=" + "";
                 }
+
+                myParameters = "busstop_start_id=" + "3675" + "&busstop_end_id=" + "3669" + "&bus_type=&running_type=&orderby=" + "";
 
                 Debug.WriteLine("URL callServicecurrentfindRouting = " + url);
 
@@ -760,7 +764,7 @@ namespace BMTA
             HideProgressIndicator();
             busStartStoplistbox.Items.Clear();
 
-            searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
+            new_searchfindRoutingItem results = JsonConvert.DeserializeObject<new_searchfindRoutingItem>(e.Result);
             if (results == null)
             {
                 MessageBox.Show("ไม่พบข้อมูล");
@@ -776,20 +780,38 @@ namespace BMTA
             {
                 UCStartStop = new UCStartStop();
                 UCStartStop.DataContext = item;
-                if (lang.Equals("th"))
+                var d = Convert.ToDouble(item.distance);
+                if (d < 1000)
                 {
-                    UCStartStop.textKm.Text = item.total.total_distance + " กม.";
-                    UCStartStop.textPrice.Text = "ราคา " + item.total.total_price + " บ.";
+                    if (lang.Equals("th"))
+                    {
+                        UCStartStop.textKm.Text = Convert.ToString(Math.Round(d, 2)) + " ม.";
+                        UCStartStop.textPrice.Text = getPrice(item.price);
+                    }
+                    else
+                    {
+                        UCStartStop.textKm.Text = Convert.ToString(Math.Round(d, 2)) + " m.";
+                        UCStartStop.textPrice.Text = getPrice(item.price);
+                    }
                 }
                 else
                 {
-                    UCStartStop.textKm.Text = item.total.total_distance + " km.";
-                    UCStartStop.textPrice.Text = "Price " + item.total.total_price + " ฿";
+                    d = d / 1000;
+                    if (lang.Equals("th"))
+                    {
+                        UCStartStop.textKm.Text = Convert.ToString(Math.Round(d, 2)) + " กม.";
+                        UCStartStop.textPrice.Text = getPrice(item.price);
+                    }
+                    else
+                    {
+                        UCStartStop.textKm.Text = Convert.ToString(Math.Round(d, 2)) + " km.";
+                        UCStartStop.textPrice.Text = getPrice(item.price);
+                    }
                 }
 
-                if (item.routing.Count == 1)
+                if (item.list.Count == 1)
                 {
-                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
+                    UCStartStop.text_route1.Text = getNameBustype(item.list[0].busline, item.list[0].bustype);
                     UCStartStop.img_route2.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.img_route3.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
@@ -802,10 +824,10 @@ namespace BMTA
                     UCStartStop.text_route3.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
                 }
-                else if (item.routing.Count == 2)
+                else if (item.list.Count == 2)
                 {
-                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
-                    UCStartStop.text_route2.Text = item.routing[1].bus_line;
+                    UCStartStop.text_route1.Text = getNameBustype(item.list[0].busline, item.list[0].bustype);
+                    UCStartStop.text_route2.Text = getNameBustype(item.list[1].busline, item.list[1].bustype);
 
                     UCStartStop.img_route3.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
@@ -817,21 +839,65 @@ namespace BMTA
                     UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
 
                 }
-                else if (item.routing.Count == 3)
+                else if (item.list.Count == 3)
                 {
-                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
-                    UCStartStop.text_route2.Text = item.routing[1].bus_line;
-                    UCStartStop.text_route3.Text = item.routing[2].bus_line;
+                    UCStartStop.text_route1.Text = getNameBustype(item.list[0].busline, item.list[0].bustype);
+                    UCStartStop.text_route2.Text = getNameBustype(item.list[1].busline, item.list[1].bustype);
+                    UCStartStop.text_route3.Text = getNameBustype(item.list[2].busline, item.list[2].bustype);
 
                     UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.img_cen4.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
                 }
-
-
                 busStartStoplistbox.Items.Add(UCStartStop);
             }
-           
+
+        }
+
+        public String getNameBustype(string busline, string bustype)
+        {
+            string value = "";
+
+            if (bustype == "2")
+            {
+                if (lang.Equals("th"))
+                {
+                    value = busline + " ปอ.";
+                }
+                else
+                {
+                    value = busline + " air";
+                }
+            }
+            else
+            {
+                value = busline;
+            }
+
+            return value;
+        }
+
+        public String getPrice(string price)
+        {
+            string value = "";
+
+            if (price != "0")
+            {
+                if (lang.Equals("th"))
+                {
+                    value = "ราคา " + price + " บ.";
+                }
+                else
+                {
+                    value = "Price " + price + " ฿";
+                }
+            }
+            else
+            {
+                value = "";
+            }
+
+            return value;
         }
 
         public void callServicegetAutocompleteLandMark()
@@ -856,7 +922,7 @@ namespace BMTA
 
         private void callServicegetAutocomplete_Completed(object sender, DownloadStringCompletedEventArgs e)
         {
-          
+
             searchlandmarkItem results = JsonConvert.DeserializeObject<searchlandmarkItem>(e.Result);
 
             StreetsandLandmarks_search.ItemsSource = results.data;
@@ -909,7 +975,7 @@ namespace BMTA
 
             webClient = new WebClient();
             webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/placecurrentfindRouting";
+            String url = "http://202.6.18.31:7777/placecurrentfindRoutingv2";
             string myParameters;
             try
             {
@@ -937,7 +1003,7 @@ namespace BMTA
             webClient = new WebClient();
             webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
 
-            String url = "http://202.6.18.31:7777/placecurrentfindRouting";
+            String url = "http://202.6.18.31:7777/placecurrentfindRoutingv2";
             string myParameters;
             try
             {
@@ -956,7 +1022,7 @@ namespace BMTA
         private void callplacecurrentfindRouting_Memo_Completed(object sender, UploadStringCompletedEventArgs e)
         {
             HideProgressIndicator();
-            searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
+            new_searchfindRoutingItem results = JsonConvert.DeserializeObject<new_searchfindRoutingItem>(e.Result);
             if (results == null)
             {
                 MessageBox.Show("ไม่พบข้อมูล");
@@ -978,7 +1044,7 @@ namespace BMTA
 
         private void callplacecurrentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
         {
-            searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
+            new_searchfindRoutingItem results = JsonConvert.DeserializeObject<new_searchfindRoutingItem>(e.Result);
             if (results == null)
             {
                 MessageBox.Show("ไม่พบข้อมูล");
@@ -1057,7 +1123,7 @@ namespace BMTA
         {
             webClient = new WebClient();
             webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/currentfindRouting";
+            String url = "http://202.6.18.31:7777/currentfindRoutingv2";
             string myParameters;
             try
             {
@@ -1085,7 +1151,7 @@ namespace BMTA
         {
             HideProgressIndicator();
 
-            searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
+            new_searchfindRoutingItem results = JsonConvert.DeserializeObject<new_searchfindRoutingItem>(e.Result);
             if (results == null)
             {
                 MessageBox.Show("ไม่พบข้อมูล");
@@ -1123,7 +1189,7 @@ namespace BMTA
             if (busStartStoplistbox.SelectedIndex != -1)
             {
                 UCStartStop item = (sender as ListBox).SelectedItem as UCStartStop;
-                (Application.Current as App).RountingDataStartStop = (searchfindRoutingItem_data)item.DataContext;
+                (Application.Current as App).RountingDataStartStop = (new_searchfindRoutingItem_data)item.DataContext;
 
                 this.NavigationService.Navigate(new Uri("/BMTA_BusStartStopDetailMap.xaml?TextFrom=" + busStartStopFrom_search.Text + "&TextTo=" + busStartStopTo_search.Text, UriKind.Relative));
             }

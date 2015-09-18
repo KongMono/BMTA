@@ -56,11 +56,10 @@ namespace BMTA
             InitializeComponent();
         }
 
-
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
 
-            searchfindRoutingItem_data data = (Application.Current as App).RountingDataBusStop;
+            new_searchfindRoutingItem_data data = (Application.Current as App).RountingDataBusStop;
 
 
             if (lang.Equals("th"))
@@ -77,235 +76,288 @@ namespace BMTA
             UCRoutingList UCRoutingList = new UCRoutingList();
 
             UCRoutingList.DataContext = data;
-            foreach (var item in data.routing)
+
+
+            for (int i = 0; i < data.route.Count; i++)
             {
-                foreach (var busstop in item.busstop)
+                UCRoutingList = new UCRoutingList();
+
+                if (data.route[i].step == "1" || data.route[i].step == "3")
                 {
-                    if (busstop.status != "0")
+
+                    UCRoutingList.textbusline_name.Text = getBuslinebyUnit(data.route[i].busline, data.route[i].bustype);
+                    if (lang.Equals("th"))
                     {
-                        UCRoutingList = new UCRoutingList();
+                        UCRoutingList.textstop_name.Text = data.route[i].busstop.name;
 
-                        if (busstop.status != "2")
+                        if (data.route[i].distance == "nan")
                         {
-                            isExist = false;
-                            UCRoutingList = new UCRoutingList();
-                            UCRoutingList.textbusline_name.Text = item.busline_name;
-                            if (lang.Equals("th"))
-                            {
-                                UCRoutingList.textstop_name.Text = busstop.stop_name;
-
-                                if (item.distance == "nan")
-                                {
-                                    UCRoutingList.textRoute.Text = "0.00 กม.";
-                                }
-                                else
-                                {
-                                    UCRoutingList.textRoute.Text = item.distance + " กม.";
-                                }
-                            }
-                            else
-                            {
-                                UCRoutingList.textstop_name.Text = busstop.stop_name_en;
-
-                                if (item.distance == "nan")
-                                {
-                                    UCRoutingList.textRoute.Text = "0.00 km.";
-                                }
-                                else
-                                {
-                                    UCRoutingList.textRoute.Text = item.distance + " km.";
-                                }
-                              
-                            }
-
-
-                            if (busstop.status == "4")
-                            {
-                               
-
-                                if (lang.Equals("th"))
-                                {
-                                    UCRoutingList.textstop_name.Text = busstop.stop_name;
-                                    UCRoutingList.textbusline_name.Text = "เดินไปยัง";
-                                }
-                                else
-                                {
-                                    UCRoutingList.textstop_name.Text = busstop.stop_name_en;
-                                    UCRoutingList.textbusline_name.Text = "walk to";
-                                }
-
-                                UCRoutingList.textRoute.Text = busstop.stop_name;
-                            }
-
-                            UCRoutingList.status = busstop.status;
-
-                            busStoplistbox.Items.Add(UCRoutingList);
-
-                            countExist = 0;
+                            UCRoutingList.textRoute.Text = "";
                         }
                         else
                         {
-                            if (busstop.status == "2" && isFirstStatus2)
+                            if (data.route[i].step == "3" && data.route[i] == data.route.Last())
                             {
-                                isFirstStatus2 = false;
-                                isExist = true;
-                                UCRoutingList = new UCRoutingList();
-                               
-                                if (lang.Equals("th"))
-                                {
-                                    UCRoutingList.textbusline_name.Text = item.busline_name;
-
-                                    UCRoutingList.textstop_name.Text = busstop.stop_name;
-
-                                    if (item.distance == "nan")
-                                    {
-                                        UCRoutingList.textRoute.Text = "0.00 กม.";
-                                    }
-                                    else
-                                    {
-                                        UCRoutingList.textRoute.Text = item.distance + " กม.";
-                                    }
-                                }
-                                else
-                                {
-                                    UCRoutingList.textbusline_name.Text = item.busline_name;
-
-                                    UCRoutingList.textstop_name.Text = busstop.stop_name_en;
-
-                                    if (item.distance == "nan")
-                                    {
-                                        UCRoutingList.textRoute.Text = "0.00 km.";
-                                    }
-                                    else
-                                    {
-                                        UCRoutingList.textRoute.Text = item.distance + " km.";
-                                    }
-                                }
-                                UCRoutingList.status = busstop.status;
-                                busStoplistbox.Items.Add(UCRoutingList);
+                                UCRoutingList.textRoute.Text = "";
                             }
                             else
                             {
-                                if (!isExist)
-                                {
-                                    UCRoutingList = new UCRoutingList();
-                                    UCRoutingList.textbusline_name.Text = item.busline_name;
-                                    if (lang.Equals("th"))
-                                    {
-                                        UCRoutingList.textstop_name.Text = busstop.stop_name;
-                                        if (item.distance == "nan")
-                                        {
-                                            UCRoutingList.textRoute.Text = "0.00 กม.";
-                                        }
-                                        else
-                                        {
-                                            UCRoutingList.textRoute.Text = item.distance + " กม.";
-                                        }
-                                    }
-                                    else
-                                    {
-                                        UCRoutingList.textstop_name.Text = busstop.stop_name_en;
-                                        if (item.distance == "nan")
-                                        {
-                                            UCRoutingList.textRoute.Text = "0.00 km.";
-                                        }
-                                        else
-                                        {
-                                            UCRoutingList.textRoute.Text = item.distance + " km.";
-                                        }
-                                    }
-                                    UCRoutingList.status = busstop.status;
-                                    busStoplistbox.Items.Add(UCRoutingList);
-                                }
-                                else
-                                {
-                                    UCRoutingList = new UCRoutingList();
-                                   
-                                    if (lang.Equals("th"))
-                                    {
-                                        UCRoutingList.textbusline_name.Text = item.busline_name;
-
-                                        UCRoutingList.textstop_name.Text = busstop.stop_name;
-                                        if (item.distance == "nan")
-                                        {
-                                            UCRoutingList.textRoute.Text = "0.00 กม.";
-                                        }
-                                        else
-                                        {
-                                            UCRoutingList.textRoute.Text = item.distance + " กม.";
-                                        }
-                                    }
-                                    else
-                                    {
-                                        UCRoutingList.textbusline_name.Text = item.busline_name;
-
-                                        UCRoutingList.textstop_name.Text = busstop.stop_name_en;
-                                        if (item.distance == "nan")
-                                        {
-                                            UCRoutingList.textRoute.Text = "0.00 km.";
-                                        }
-                                        else
-                                        {
-                                            UCRoutingList.textRoute.Text = item.distance + " km.";
-                                        }
-                                    }
-                                    UCRoutingList.status = busstop.status;
-                                    dataExistStatus2.Add(UCRoutingList);
-                                }
+                                UCRoutingList.textRoute.Text = getRoutebyUnit(data.route[i].distance);
                             }
-                            countExist++;
+                        }
+                    }
+                    else
+                    {
+                        UCRoutingList.textstop_name.Text = data.route[i].busstop.name_en;
+
+                        if (data.route[i].distance == "nan")
+                        {
+                            UCRoutingList.textRoute.Text = "";
+                        }
+                        else
+                        {
+                            if (data.route[i].step == "3" && data.route[i] == data.route.Last())
+                            {
+                                UCRoutingList.textRoute.Text = "";
+                            }
+                            else
+                            {
+                                UCRoutingList.textRoute.Text = getRoutebyUnit(data.route[i].distance);
+                            }
                         }
                     }
                 }
-            }
-
-            if (dataExistStatus2.Count > 0)
-            {
-                for (int i = 0; i < busStoplistbox.Items.Count; i++)
+                else if (data.route[i].step == "2")
                 {
-                    UCRoutingList routingList = (UCRoutingList)busStoplistbox.Items[i];
-                    if (routingList.status == "2")
-                    {
-                        routingList.btn_collapsed.Click += btn_collapsed_Click;
+                    UCRoutingList.textbusline_name.Text = getBuslinebyUnit(data.route[i].busline, data.route[i].bustype);
 
-                        routingList.hide = false;
-                        routingList.listpopup = dataExistStatus2;
+                    if (lang.Equals("th"))
+                    {
+                        UCRoutingList.textstop_name.Text = data.route[i].busstop.name;
+
+                        if (data.route[i].distance == "nan")
+                        {
+                            UCRoutingList.textRoute.Text = "";
+                        }
+                        else
+                        {
+                            UCRoutingList.textRoute.Text = getRoutebyUnit(data.route[i].distance);
+                        }
                     }
+                    else
+                    {
+                        UCRoutingList.textstop_name.Text = data.route[i].busstop.name_en;
+
+                        if (data.route[i].distance == "nan")
+                        {
+                            UCRoutingList.textRoute.Text = "";
+                        }
+                        else
+                        {
+                            UCRoutingList.textRoute.Text = getRoutebyUnit(data.route[i].distance);
+                        }
+                    }
+                    //loop change
+                    dataExistStatus2 = new List<UCRoutingList>();
+                    for (int x = 0; x < data.route[i].change.Count; x++)
+                    {
+                        UCRoutingList UCRoutingListDetail = new UCRoutingList();
+                        UCRoutingListDetail.textbusline_name.Text = "";
+                        if (lang.Equals("th"))
+                        {
+                            UCRoutingListDetail.textstop_name.Text = data.route[i].change[x].name;
+                            if (data.route[i].distance == "nan")
+                            {
+                                UCRoutingListDetail.textRoute.Text = "";
+                            }
+                            else
+                            {
+                                UCRoutingListDetail.textRoute.Text = getRoutebyUnit(data.route[i].distance);
+                            }
+                        }
+                        else
+                        {
+                            UCRoutingListDetail.textstop_name.Text = data.route[i].change[x].name_en;
+                            if (data.route[i].distance == "nan")
+                            {
+                                UCRoutingListDetail.textRoute.Text = "";
+                            }
+                            else
+                            {
+                                UCRoutingListDetail.textRoute.Text = getRoutebyUnit(data.route[i].distance);
+                            }
+                        }
+
+                        UCRoutingListDetail.step = data.route[i].step;
+                        dataExistStatus2.Add(UCRoutingListDetail);
+                    }
+
+                    //check detail
+                    if (dataExistStatus2.Count > 0)
+                    {
+                        UCRoutingList.btn_collapsed.Click += btn_collapsed_Click;
+                        UCRoutingList.hide = false;
+                        UCRoutingList.listpopup = dataExistStatus2;
+                    }
+                    else
+                    {
+                        UCRoutingList.hide = true;
+                    }
+                }
+                else if (data.route[i].step == "4" || data.route[i].step == "5")
+                {
+                    if (lang.Equals("th"))
+                    {
+                        UCRoutingList.textstop_name.Text = data.route[i].busstop.name;
+                        UCRoutingList.textbusline_name.Text = "เดินไปยัง";
+                        UCRoutingList.textRoute.Text = data.route[i + 1].busstop.name;
+                    }
+                    else
+                    {
+                        UCRoutingList.textstop_name.Text = data.route[i].busstop.name_en;
+                        UCRoutingList.textbusline_name.Text = "walk to";
+                        UCRoutingList.textRoute.Text = data.route[i + 1].busstop.name_en;
+                    }
+                }
+                else if (data.route[i].step == "6")
+                {
+                    if (lang.Equals("th"))
+                    {
+                        UCRoutingList.textstop_name.Text = data.route[i].busstop.name;
+                        UCRoutingList.textbusline_name.Text = "";
+                        UCRoutingList.textRoute.Text = "";
+                    }
+                    else
+                    {
+                        UCRoutingList.textstop_name.Text = data.route[i].busstop.name_en;
+                        UCRoutingList.textbusline_name.Text = "";
+                        UCRoutingList.textRoute.Text = "";
+                    }
+                }
+
+                UCRoutingList.step = data.route[i].step;
+                busStoplistbox.Items.Add(UCRoutingList);
+            }
+        }
+
+        private String getRoutebyUnit(string distance)
+        {
+            string value = null;
+            var d = Convert.ToDouble(distance);
+
+            if (d < 1000)
+            {
+                if (lang.Equals("th"))
+                {
+                    value = "ระยะทาง " + Convert.ToString(Math.Round(d, 2)) + " ม.";
+                }
+                else
+                {
+                    value = "Distance " + Convert.ToString(Math.Round(d, 2)) + " m.";
                 }
             }
             else
             {
-                for (int i = 0; i < busStoplistbox.Items.Count; i++)
+                d = d / 1000;
+                if (lang.Equals("th"))
                 {
-                    UCRoutingList routingList = (UCRoutingList)busStoplistbox.Items[i];
-                    if (routingList.status == "2")
-                    {
-                        routingList.hide = true;
-                    }
+                    value = "ระยะทาง " + Convert.ToString(Math.Round(d, 2)) + " กม.";
+                }
+                else
+                {
+                    value = "Distance " + Convert.ToString(Math.Round(d, 2)) + " km.";
                 }
             }
+
+            return value;
+        }
+
+        private String getBuslinebyUnit(string busline, string bustype)
+        {
+            string value = null;
+
+            if (lang.Equals("th"))
+            {
+
+                if (bustype == "1")
+                {
+                    value = "สาย-" + busline + " รถธรรมดา";
+                }
+                else
+                {
+                    value = "สาย-" + busline + " รถปรับอากาศ";
+                }
+
+            }
+            else
+            {
+                if (bustype == "1")
+                {
+                    value = "line-" + busline + "";
+                }
+                else
+                {
+                    value = "line-" + busline + " air";
+                }
+            }
+
+            return value;
         }
 
         private void btn_collapsed_Click(object sender, RoutedEventArgs e)
         {
-            if (listpopup.Items.Count < 1)
+            var btn = sender as Button;
+            if (btn != null)
             {
-                popup = new Popup();
-                popup.Height = 780;
-                popup.Width = 480;
-                popup.VerticalOffset = 78;
-                listpopup.Height = 780;
-                foreach (var itemRoutingList in dataExistStatus2)
+                List<UCRoutingList> d = (List<UCRoutingList>)btn.DataContext;
+                if (d.Count > 0)
                 {
-                    itemRoutingList.hide = true;
-                    listpopup.Items.Add(itemRoutingList);
+                    try
+                    {
+                        if (listpopup.Items.Count < 1)
+                        {
+
+                            for (int i = 0; i < d.Count; i++)
+                            {
+                                if (d[i].hide == false)
+                                {
+                                    d[i].hide = true;
+                                }
+                                listpopup.Items.Add(d[i]);
+                            }
+
+                            popup = new Popup();
+                            popup.Height = 780;
+                            popup.Width = 480;
+                            popup.VerticalOffset = 78;
+                            listpopup.Height = 780;
+                            popup.Child = listpopup;
+                            popup.IsOpen = true;
+                            busStartStopLayout.Visibility = System.Windows.Visibility.Collapsed;
+                        }
+                        else
+                        {
+                            listpopup.Items.Clear();
+
+                            for (int i = 0; i < d.Count; i++)
+                            {
+                                if (d[i].hide == false)
+                                {
+                                    d[i].hide = true;
+                                }
+                                listpopup.Items.Add(d[i]);
+                            }
+                            popup.Child = listpopup;
+                            popup.IsOpen = true;
+                            busStartStopLayout.Visibility = System.Windows.Visibility.Collapsed;
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
                 }
-                popup.Child = listpopup;
-                popup.IsOpen = true;
-            }
-            else
-            {
-                popup.IsOpen = true;
             }
         }
 
@@ -317,6 +369,7 @@ namespace BMTA
                 {
                     e.Cancel = true;
                     popup.IsOpen = false;
+                    busStartStopLayout.Visibility = System.Windows.Visibility.Visible;
                 }
             }
         }
@@ -326,6 +379,7 @@ namespace BMTA
             if (popup.IsOpen)
             {
                 popup.IsOpen = false;
+                busStartStopLayout.Visibility = System.Windows.Visibility.Visible;
             }
             else
             {

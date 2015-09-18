@@ -49,7 +49,7 @@ namespace BMTA
         ProgressIndicator progressIndicator = new ProgressIndicator();
         private searchlandmarkAndBusstopdetailItem itemLandMark;
         UCStartStop UCStartStop = new UCStartStop();
-        List<searchfindRoutingItem_data> mylist;
+        List<new_searchfindRoutingItem_data> mylist;
         public BMTA_BusLandMarkDetailBus()
         {
             InitializeComponent();
@@ -58,26 +58,44 @@ namespace BMTA
 
             mylist = (Application.Current as App).DataLandMark.data;
 
-            mylist = mylist.OrderBy(o => Double.Parse(o.total.total_distance)).ToList();
+            mylist = mylist.OrderBy(o => Double.Parse(o.distance)).ToList();
 
             foreach (var item in mylist)
             {
                 UCStartStop = new UCStartStop();
                 UCStartStop.DataContext = item;
-                if (lang.Equals("th"))
+                var d = Convert.ToDouble(item.distance);
+                if (d < 1000)
                 {
-                    UCStartStop.textKm.Text = item.total.total_distance + " กม.";
-                    UCStartStop.textPrice.Text = "ราคา " + item.total.total_price + " บ.";
+                    if (lang.Equals("th"))
+                    {
+                        UCStartStop.textKm.Text = Convert.ToString(Math.Round(d, 2)) + " ม.";
+                        UCStartStop.textPrice.Text = getPrice(item.price);
+                    }
+                    else
+                    {
+                        UCStartStop.textKm.Text = Convert.ToString(Math.Round(d, 2)) + " m.";
+                        UCStartStop.textPrice.Text = getPrice(item.price);
+                    }
                 }
                 else
                 {
-                    UCStartStop.textKm.Text = item.total.total_distance + " km.";
-                    UCStartStop.textPrice.Text = "Price " + item.total.total_price + " ฿";
+                    d = d / 1000;
+                    if (lang.Equals("th"))
+                    {
+                        UCStartStop.textKm.Text = Convert.ToString(Math.Round(d, 2)) + " กม.";
+                        UCStartStop.textPrice.Text = getPrice(item.price);
+                    }
+                    else
+                    {
+                        UCStartStop.textKm.Text = Convert.ToString(Math.Round(d, 2)) + " km.";
+                        UCStartStop.textPrice.Text = getPrice(item.price);
+                    }
                 }
 
-                if (item.routing.Count == 1)
+                if (item.list.Count == 1)
                 {
-                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
+                    UCStartStop.text_route1.Text = getNameBustype(item.list[0].busline, item.list[0].bustype);
                     UCStartStop.img_route2.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.img_route3.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
@@ -90,10 +108,10 @@ namespace BMTA
                     UCStartStop.text_route3.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
                 }
-                else if (item.routing.Count == 2)
+                else if (item.list.Count == 2)
                 {
-                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
-                    UCStartStop.text_route2.Text = item.routing[1].bus_line;
+                    UCStartStop.text_route1.Text = getNameBustype(item.list[0].busline, item.list[0].bustype);
+                    UCStartStop.text_route2.Text = getNameBustype(item.list[1].busline, item.list[1].bustype);
 
                     UCStartStop.img_route3.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
@@ -105,20 +123,66 @@ namespace BMTA
                     UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
 
                 }
-                else if (item.routing.Count == 3)
+                else if (item.list.Count == 3)
                 {
-                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
-                    UCStartStop.text_route2.Text = item.routing[1].bus_line;
-                    UCStartStop.text_route3.Text = item.routing[2].bus_line;
+                    UCStartStop.text_route1.Text = getNameBustype(item.list[0].busline, item.list[0].bustype);
+                    UCStartStop.text_route2.Text = getNameBustype(item.list[1].busline, item.list[1].bustype);
+                    UCStartStop.text_route3.Text = getNameBustype(item.list[2].busline, item.list[2].bustype);
 
                     UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.img_cen4.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
                 }
-
                 landMarklistbox.Items.Add(UCStartStop);
             }
         }
+
+        public String getNameBustype(string busline, string bustype)
+        {
+            string value = "";
+
+            if (bustype == "2")
+            {
+                if (lang.Equals("th"))
+                {
+                    value = busline + " ปอ.";
+                }
+                else
+                {
+                    value = busline + " air";
+                }
+            }
+            else
+            {
+                value = busline;
+            }
+
+            return value;
+        }
+
+        public String getPrice(string price)
+        {
+            string value = "";
+
+            if (price != "0")
+            {
+                if (lang.Equals("th"))
+                {
+                    value = "ราคา " + price + " บ.";
+                }
+                else
+                {
+                    value = "Price " + price + " ฿";
+                }
+            }
+            else
+            {
+                value = "";
+            }
+
+            return value;
+        }
+
         private void landMark_search_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             searchlandmarkAndBusstopdetailItem item = (sender as AutoCompleteBox).SelectedItem as searchlandmarkAndBusstopdetailItem;
@@ -162,7 +226,7 @@ namespace BMTA
             if (landMarklistbox.SelectedIndex != -1)
             {
                 UCStartStop item = (sender as ListBox).SelectedItem as UCStartStop;
-                (Application.Current as App).RountingDataLandMark = (searchfindRoutingItem_data)item.DataContext;
+                (Application.Current as App).RountingDataLandMark = (new_searchfindRoutingItem_data)item.DataContext;
 
                 this.NavigationService.Navigate(new Uri("/BMTA_BusLandMarkDetailMap.xaml?TextFrom=" + landMark_search.Text, UriKind.Relative));
             }
@@ -191,16 +255,17 @@ namespace BMTA
 
         public void callServicegetAutocompleteLandMark()
         {
+            ShowProgressIndicator("Loading..");
+
             webClient = new WebClient();
-            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/getAutocomplete";
+            String url = "http://128.199.232.94/webservice/keyword.php";
             string myParameters;
             try
             {
-                myParameters = "type=" + "place" + "&keyword=" + landMark_search.Text + "&lang=" + lang;
-                Debug.WriteLine("URL callServicegetAutocompleteLandMark = " + url);
-                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetAutocompleteBusStop_Completed);
-                webClient.UploadStringAsync(new Uri(url), myParameters);
+                myParameters = url + "?type=" + "place" + "&q=" + landMark_search.Text + "&lang=" + lang;
+                Debug.WriteLine("URL callServicegetAutocompleteLandMark = " + myParameters);
+                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(callServicegetAutocompleteBusStop_Completed);
+                webClient.DownloadStringAsync(new Uri(myParameters));
             }
             catch (WebException ex)
             {
@@ -208,7 +273,7 @@ namespace BMTA
             }
         }
 
-        private void callServicegetAutocompleteBusStop_Completed(object sender, UploadStringCompletedEventArgs e)
+        private void callServicegetAutocompleteBusStop_Completed(object sender, DownloadStringCompletedEventArgs e)
         {
             searchbusstopItem results = JsonConvert.DeserializeObject<searchbusstopItem>(e.Result);
 
@@ -249,7 +314,7 @@ namespace BMTA
         {
             webClient = new WebClient();
             webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/placecurrentfindRouting";
+            String url = "http://202.6.18.31:7777/placecurrentfindRoutingv2";
             string myParameters;
             try
             {
@@ -272,27 +337,73 @@ namespace BMTA
             }
         }
 
-        private void setData(List<searchfindRoutingItem_data> data)
+        private void setData(List<new_searchfindRoutingItem_data> data)
         {
             landMarklistbox.Items.Clear();
             foreach (var item in data)
             {
                 UCStartStop = new UCStartStop();
                 UCStartStop.DataContext = item;
-                if (lang.Equals("th"))
+                var d = Convert.ToDouble(item.distance);
+                if (d < 1000)
                 {
-                    UCStartStop.textKm.Text = item.total.total_distance + " กม.";
-                    UCStartStop.textPrice.Text = "ราคา " + item.total.total_price + " บ.";
+                    if (lang.Equals("th"))
+                    {
+                        UCStartStop.textKm.Text = Convert.ToString(Math.Round(d, 2)) + " ม.";
+                        if (item.price.Equals("0"))
+                        {
+                            UCStartStop.textPrice.Text = "";
+                        }
+                        else
+                        {
+                            UCStartStop.textPrice.Text = "ราคา " + item.price + " บ.";
+                        }
+                    }
+                    else
+                    {
+                        UCStartStop.textKm.Text = Convert.ToString(Math.Round(d, 2)) + " m.";
+                        if (item.price.Equals("0"))
+                        {
+                            UCStartStop.textPrice.Text = "";
+                        }
+                        else
+                        {
+                            UCStartStop.textPrice.Text = "Price " + item.price + " ฿";
+                        }
+                    }
                 }
                 else
                 {
-                    UCStartStop.textKm.Text = item.total.total_distance + " km.";
-                    UCStartStop.textPrice.Text = "Price " + item.total.total_price + " ฿";
+                    d = d / 1000;
+                    if (lang.Equals("th"))
+                    {
+                        UCStartStop.textKm.Text = Convert.ToString(Math.Round(d, 2)) + " กม.";
+                        if (item.price.Equals("0"))
+                        {
+                            UCStartStop.textPrice.Text = "";
+                        }
+                        else
+                        {
+                            UCStartStop.textPrice.Text = "ราคา " + item.price + " บ.";
+                        }
+                    }
+                    else
+                    {
+                        UCStartStop.textKm.Text = Convert.ToString(Math.Round(d, 2)) + " km.";
+                        if (item.price.Equals("0"))
+                        {
+                            UCStartStop.textPrice.Text = "";
+                        }
+                        else
+                        {
+                            UCStartStop.textPrice.Text = "Price " + item.price + " ฿";
+                        }
+                    }
                 }
 
-                if (item.routing.Count == 1)
+                if (item.list.Count == 1)
                 {
-                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
+                    UCStartStop.text_route1.Text = item.list[0].busline;
                     UCStartStop.img_route2.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.img_route3.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
@@ -305,10 +416,10 @@ namespace BMTA
                     UCStartStop.text_route3.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
                 }
-                else if (item.routing.Count == 2)
+                else if (item.list.Count == 2)
                 {
-                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
-                    UCStartStop.text_route2.Text = item.routing[1].bus_line;
+                    UCStartStop.text_route1.Text = item.list[0].busline;
+                    UCStartStop.text_route2.Text = item.list[1].busline;
 
                     UCStartStop.img_route3.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
@@ -320,11 +431,11 @@ namespace BMTA
                     UCStartStop.text_route4.Visibility = System.Windows.Visibility.Collapsed;
 
                 }
-                else if (item.routing.Count == 3)
+                else if (item.list.Count == 3)
                 {
-                    UCStartStop.text_route1.Text = item.routing[0].bus_line;
-                    UCStartStop.text_route2.Text = item.routing[1].bus_line;
-                    UCStartStop.text_route3.Text = item.routing[2].bus_line;
+                    UCStartStop.text_route1.Text = item.list[0].busline;
+                    UCStartStop.text_route2.Text = item.list[1].busline;
+                    UCStartStop.text_route3.Text = item.list[2].busline;
 
                     UCStartStop.img_route4.Visibility = System.Windows.Visibility.Collapsed;
                     UCStartStop.img_cen4.Visibility = System.Windows.Visibility.Collapsed;
@@ -337,7 +448,7 @@ namespace BMTA
 
         private void callplacecurrentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
         {
-            searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
+            new_searchfindRoutingItem results = JsonConvert.DeserializeObject<new_searchfindRoutingItem>(e.Result);
             if (results == null)
             {
                 MessageBox.Show("ไม่พบข้อมูล");
@@ -351,10 +462,10 @@ namespace BMTA
 
             mylist = results.data;
 
-            mylist = mylist.OrderBy(o => Double.Parse(o.total.total_distance)).ToList();
+            mylist = mylist.OrderBy(o => Double.Parse(o.distance)).ToList();
 
             setData(mylist);
-          
+
         }
 
         private void busFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -365,17 +476,17 @@ namespace BMTA
             {
                 if (lpi.Content.Equals("ระยะทางใกล้ที่สุด") || lpi.Content.Equals("Sort By Distance"))
                 {
-                    mylist = mylist.OrderBy(o => Double.Parse(o.total.total_distance)).ToList();
+                    mylist = mylist.OrderBy(o => Double.Parse(o.distance)).ToList();
                     setData(mylist);
                 }
                 else if (lpi.Content.Equals("ราคาถูกที่สุด") || lpi.Content.Equals("Sort By Price"))
                 {
-                    mylist = mylist.OrderBy(o => Double.Parse(o.total.total_price)).ToList();
+                    mylist = mylist.OrderBy(o => Double.Parse(o.price)).ToList();
                     setData(mylist);
                 }
                 else
                 {
-                    mylist = mylist.OrderBy(o => o.routing.Count).ToList();
+                    mylist = mylist.OrderBy(o => o.list.Count).ToList();
                     setData(mylist);
                 }
             }

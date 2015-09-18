@@ -56,9 +56,9 @@ namespace BMTA
                 x2.Content = "รถธรรมดา";
                 x3.Content = "รถปรับอากาศ";
 
-                z1.Content = "เรียงตามระยะทาง";
-                z2.Content = "เรียงตามราคา";
-                z3.Content = "ต่อรถน้อยที่สุด";
+                z1.Content = "ต่อรถน้อยที่สุด";
+                z2.Content = "ระยะทางใกล้ที่สุด";
+                z3.Content = "ราคาถูกที่สุด";
             }
             else
             {
@@ -113,7 +113,7 @@ namespace BMTA
 
             webClient = new WebClient();
             webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/placecurrentfindRouting";
+            String url = "http://202.6.18.31:7777/placecurrentfindRoutingv2";
             string myParameters;
             try
             {
@@ -140,7 +140,7 @@ namespace BMTA
         private void callplacecurrentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
         {
             HideProgressIndicator();
-            searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
+            new_searchfindRoutingItem results = JsonConvert.DeserializeObject<new_searchfindRoutingItem>(e.Result);
             if (results == null)
             {
                 MessageBox.Show("ไม่พบข้อมูล");

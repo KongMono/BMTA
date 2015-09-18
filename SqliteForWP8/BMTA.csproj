@@ -110,12 +110,6 @@
     <Compile Include="BMTA_BusStartStop.xaml.cs">
       <DependentUpon>BMTA_BusStartStop.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BMTA_BusStartStop_en.xaml.cs">
-      <DependentUpon>BMTA_BusStartStop_en.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BMTA_BusStop_not.xaml.cs">
-      <DependentUpon>BMTA_BusStop_not.xaml</DependentUpon>
-    </Compile>
     <Compile Include="BMTA_BusStop_Map.xaml.cs">
       <DependentUpon>BMTA_BusStop_Map.xaml</DependentUpon>
     </Compile>
@@ -206,8 +200,21 @@
     <Compile Include="BMTA_Search_busline_page.xaml.cs">
       <DependentUpon>BMTA_Search_busline_page.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BMTA_Howto.xaml.cs">
+      <DependentUpon>BMTA_Howto.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BMTA_Comment.xaml.cs">
+      <DependentUpon>BMTA_Comment.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Item\Article.cs" />
     <Compile Include="Item\buslineItem.cs" />
+    <Compile Include="Item\commentItem.cs" />
+    <Compile Include="Item\new_searchfindRoutingItem_data_list.cs" />
+    <Compile Include="Item\new_searchfindRoutingItem_routing_change.cs" />
+    <Compile Include="Item\new_searchfindRoutingItem_routing_busstop.cs" />
+    <Compile Include="Item\new_searchfindRoutingItem_routing.cs" />
+    <Compile Include="Item\new_searchfindRoutingItem_data.cs" />
+    <Compile Include="Item\new_searchfindRoutingItem.cs" />
     <Compile Include="Item\insert_landmark_detailItem.cs" />
     <Compile Include="Item\insert_landmarkItem.cs" />
     <Compile Include="Item\insert_busstop_detailItem.cs" />
@@ -240,6 +247,9 @@
     <Compile Include="SoapFormatter.cs" />
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteAsync.cs" />
+    <Compile Include="Usercontrols\UCCustomToolTipWalkTranfer.xaml.cs">
+      <DependentUpon>UCCustomToolTipWalkTranfer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Usercontrols\UCCustomToolTipTranfer.xaml.cs">
       <DependentUpon>UCCustomToolTipTranfer.xaml</DependentUpon>
     </Compile>
@@ -338,14 +348,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="BMTA_BusStartStop.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BMTA_BusStartStop_en.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BMTA_BusStop_not.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -473,10 +475,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="BMTA_Howto.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BMTA_Comment.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Style\OverrideStyle.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Style\CustomStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Usercontrols\UCCustomToolTipWalkTranfer.xaml">
+      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Usercontrols\UCCustomToolTipTranfer.xaml">
@@ -602,13 +616,59 @@
     <Content Include="Assets\bus_down.png" />
     <Content Include="Assets\bus_up.png" />
     <Content Include="Assets\change.png" />
+    <Content Include="Assets\comment_cancel_eng.png" />
+    <Content Include="Assets\comment_cancel_th.png" />
+    <Content Include="Assets\comment_send_eng.png" />
+    <Content Include="Assets\comment_send_th.png" />
     <Content Include="Assets\down-arrow-icon.png" />
     <Content Include="Assets\down.png" />
     <Content Include="Assets\header_search_tab.jpg" />
+    <Content Include="Assets\html_howtobmta\howtobmta.html" />
+    <Content Include="Assets\html_howtobmta\howtolayout.css" />
+    <Content Include="Assets\html_howtobmta\images\01howto.png" />
+    <Content Include="Assets\html_howtobmta\images\01pagebg.jpg" />
+    <Content Include="Assets\html_howtobmta\images\02howto.png" />
+    <Content Include="Assets\html_howtobmta\images\02pagebg.jpg" />
+    <Content Include="Assets\html_howtobmta\images\03howto.png" />
+    <Content Include="Assets\html_howtobmta\images\03howto01.png" />
+    <Content Include="Assets\html_howtobmta\images\03howto02.png" />
+    <Content Include="Assets\html_howtobmta\images\03howto03.png" />
+    <Content Include="Assets\html_howtobmta\images\03pagebg.jpg" />
+    <Content Include="Assets\html_howtobmta\images\04howto.png" />
+    <Content Include="Assets\html_howtobmta\images\04howto01.png" />
+    <Content Include="Assets\html_howtobmta\images\04howto02.png" />
+    <Content Include="Assets\html_howtobmta\images\04howto03.png" />
+    <Content Include="Assets\html_howtobmta\images\04pagebg.jpg" />
+    <Content Include="Assets\html_howtobmta\images\05howto.png" />
+    <Content Include="Assets\html_howtobmta\images\05pagebg - Copy.jpg" />
+    <Content Include="Assets\html_howtobmta\images\05pagebg.jpg" />
+    <Content Include="Assets\html_howtobmta\images\06howto.png" />
+    <Content Include="Assets\html_howtobmta\images\06howto01.png" />
+    <Content Include="Assets\html_howtobmta\images\06howto02.png" />
+    <Content Include="Assets\html_howtobmta\images\06pagebg.jpg" />
+    <Content Include="Assets\html_howtobmta\images\07howto.png" />
+    <Content Include="Assets\html_howtobmta\images\07howto01.png" />
+    <Content Include="Assets\html_howtobmta\images\07howto02.png" />
+    <Content Include="Assets\html_howtobmta\images\07pagebg.jpg" />
+    <Content Include="Assets\html_howtobmta\images\08howto.png" />
+    <Content Include="Assets\html_howtobmta\images\08howto01.png" />
+    <Content Include="Assets\html_howtobmta\images\08howto02.png" />
+    <Content Include="Assets\html_howtobmta\images\08pagebg.jpg" />
+    <Content Include="Assets\html_howtobmta\images\09howto.png" />
+    <Content Include="Assets\html_howtobmta\images\09howto01.png" />
+    <Content Include="Assets\html_howtobmta\images\09howto02.png" />
+    <Content Include="Assets\html_howtobmta\images\09pagebg.jpg" />
+    <Resource Include="Assets\html_howtobmta\images\bx_loader.gif" />
+    <Content Include="Assets\html_howtobmta\images\controls.png" />
+    <Content Include="Assets\html_howtobmta\jquery.min.js" />
+    <Content Include="Assets\html_howtobmta\swiper.css" />
+    <Content Include="Assets\html_howtobmta\swiper.min.js" />
     <Content Include="Assets\icon_arrow_close.png" />
     <Content Include="Assets\icon_bmta.png" />
     <Content Include="Assets\icon_bus.png" />
+    <Content Include="Assets\icon_comment.png" />
     <Content Include="Assets\icon_home.png" />
+    <Content Include="Assets\icon_info.png" />
     <Content Include="Assets\icon_stat.png" />
     <Content Include="Assets\languagepage.jpg" />
     <Content Include="Assets\left_infobox.png" />
@@ -626,6 +686,10 @@
     <Content Include="Assets\main\menu\btn_4th_off.png" />
     <Content Include="Assets\main\menu\btn_5en_off.png" />
     <Content Include="Assets\main\menu\btn_5th_off.png" />
+    <Content Include="Assets\map_pin_icon_bus.png" />
+    <Content Include="Assets\map_pin_icon_start.png" />
+    <Content Include="Assets\map_pin_icon_stop.png" />
+    <Content Include="Assets\map_pin_icon_walk.png" />
     <Content Include="Assets\mrt_icon.png" />
     <Content Include="Assets\new01.png" />
     <Content Include="Assets\new02.png" />
@@ -635,6 +699,7 @@
     <Content Include="Assets\pin_bus_stop.png" />
     <Content Include="Assets\slot_bg.png" />
     <Content Include="Assets\slot_bg_t.png" />
+    <Content Include="Assets\stop.png" />
     <Content Include="Assets\up.png" />
     <Content Include="Assets\walk.png" />
     <None Include="bmtadatabase.sqlite">

@@ -17,7 +17,7 @@ namespace BMTA.Usercontrols
     public partial class UCRoutingList : UserControl
     {
         public String lang = (Application.Current as App).Language;
-        public string status { get; set; }
+        public string step { get; set; }
         public Boolean hide { get; set; }
         public List<UCRoutingList> listpopup { get; set; }
 
@@ -29,34 +29,40 @@ namespace BMTA.Usercontrols
 
         private void UCRoutingList_Loaded(object sender, RoutedEventArgs e)
         {
-            if (status == "1")
+            if (step == "1")
             {
                 img_route.Source = new BitmapImage(new Uri("/Assets/up.png", UriKind.Relative));
             }
-            else if (status == "2")
+            else if (step == "2")
             {
                 if (hide)
                 {
                     btn_collapsed.Visibility = System.Windows.Visibility.Collapsed;
+                    btn_collapsed.DataContext = listpopup;
                 }
                 else
                 {
                     btn_collapsed.Visibility = System.Windows.Visibility.Visible;
+                    btn_collapsed.DataContext = listpopup;
                 }
                 img_route.Source = new BitmapImage(new Uri("/Assets/change.png", UriKind.Relative));
             }
-            else if (status == "3")
+            else if (step == "3")
             {
-
                 img_route.Source = new BitmapImage(new Uri("/Assets/down.png", UriKind.Relative));
             }
-            else if (status == "4")
+            else if (step == "4")
             {
-
                 img_route.Source = new BitmapImage(new Uri("/Assets/walk.png", UriKind.Relative));
             }
+            else if (step == "5")
+            {
+                img_route.Source = new BitmapImage(new Uri("/Assets/walk.png", UriKind.Relative));
+            }
+            else if (step == "6")
+            {
+                img_route.Source = new BitmapImage(new Uri("/Assets/stop.png", UriKind.Relative));
+            }
         }
-
-     
     }
 }

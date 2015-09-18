@@ -117,24 +117,24 @@ namespace BMTA
             string myParameters;
             try
             {
-                myParameters = "modify_date=" + date + "&page=" + Convert.ToString(page);
+                myParameters = "datenow=" + date + "&page=" + Convert.ToString(page);
                 Debug.WriteLine("URL callServicegetupdateAllBusline = " + url);
                 webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetupdateAllBusline_Completed);
                 webClient.UploadStringAsync(new Uri(url), myParameters);
             }
             catch (WebException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
             }
         }
 
         private void callServicegetupdateAllBusline_Completed(object sender, UploadStringCompletedEventArgs e)
         {
-            ShowProgressIndicator("syncDataBusline..");
+            ShowProgressIndicator("syncData..");
 
             if (e.Error != null)
             {
-                MessageBox.Show(e.Error.Message);
+                MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
                 countpage = 0;
                 countpage++;
                 callServicegetupdateAllBusstop(lastupdate, countpage);
@@ -147,7 +147,7 @@ namespace BMTA
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
                 }
 
                 if (buslineResults.status == 1)
@@ -167,7 +167,7 @@ namespace BMTA
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show(ex.Message);
+                                MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
                             }
                             if (db != null)
                             {
@@ -200,7 +200,7 @@ namespace BMTA
                                 }
                                 catch (Exception ex)
                                 {
-                                    MessageBox.Show(ex.Message);
+                                    MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
                                 }
                             }
                             else
@@ -236,7 +236,7 @@ namespace BMTA
                                 }
                                 catch (Exception ex)
                                 {
-                                    MessageBox.Show(ex.Message);
+                                    MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
                                 }
                             }
                         }
@@ -256,7 +256,7 @@ namespace BMTA
                                 }
                                 catch (Exception ex)
                                 {
-                                    MessageBox.Show(ex.Message);
+                                    MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
                                 }
                             }
                         }
@@ -285,24 +285,24 @@ namespace BMTA
             string myParameters;
             try
             {
-                myParameters = "modify_date=" + date + "&page=" + Convert.ToString(page);
+                myParameters = "datenow=" + date + "&page=" + Convert.ToString(page);
                 Debug.WriteLine("URL callServicegetupdateAllBusstop = " + url);
                 webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetupdateAllBusstop_Completed);
                 webClient.UploadStringAsync(new Uri(url), myParameters);
             }
             catch (WebException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
             }
         }
 
         private void callServicegetupdateAllBusstop_Completed(object sender, UploadStringCompletedEventArgs e)
         {
-            ShowProgressIndicator("syncDataBusstop..");
+            ShowProgressIndicator("syncData..");
 
             if (e.Error != null)
             {
-                MessageBox.Show(e.Error.Message);
+                MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
                 countpage = 0;
                 countpage++;
                 callServicegetupdateAllLandmark(lastupdate, countpage);
@@ -315,7 +315,7 @@ namespace BMTA
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
                 }
 
                 if (busstopResults.status == 1)
@@ -349,7 +349,7 @@ namespace BMTA
                                     }
                                     catch (Exception ex)
                                     {
-                                        MessageBox.Show(ex.Message);
+                                        MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
                                     }
                                 }
                                 else
@@ -373,13 +373,13 @@ namespace BMTA
                                     }
                                     catch (Exception ex)
                                     {
-                                        MessageBox.Show(ex.Message);
+                                        MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
                                     }
                                 }
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show(ex.Message);
+                                MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
                             }
 
 
@@ -399,7 +399,7 @@ namespace BMTA
                                 }
                                 catch (Exception ex)
                                 {
-                                    MessageBox.Show(ex.Message);
+                                    MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
                                 }
                             }
                         }
@@ -426,23 +426,23 @@ namespace BMTA
             string myParameters;
             try
             {
-                myParameters = "modify_date=" + date + "&page=" + Convert.ToString(page);
+                myParameters = "datenow=" + date + "&page=" + Convert.ToString(page);
                 Debug.WriteLine("URL callServicegetupdateAllBusstop = " + url);
                 webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callServicegetupdateAllLandmark_Completed);
                 webClient.UploadStringAsync(new Uri(url), myParameters);
             }
             catch (WebException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
             }
         }
 
         private void callServicegetupdateAllLandmark_Completed(object sender, UploadStringCompletedEventArgs e)
         {
-            ShowProgressIndicator("syncDataLandmark..");
+            ShowProgressIndicator("syncData..");
             if (e.Error != null)
             {
-                MessageBox.Show(e.Error.Message);
+                MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
                 ShowProgressIndicator("success..");
                 DateTime today = DateTime.Today;
                 (Application.Current as App).lastUpdate = today.ToString("yyyy-MM-dd");
@@ -466,7 +466,7 @@ namespace BMTA
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
             }
 
             if (landmarkResults.status == 1)
@@ -498,7 +498,7 @@ namespace BMTA
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show(ex.Message);
+                                MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
                             }
                         }
                         else
@@ -522,7 +522,7 @@ namespace BMTA
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show(ex.Message);
+                                MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
                             }
                         }
                     }
@@ -541,7 +541,7 @@ namespace BMTA
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show(ex.Message);
+                                MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
                             }
                         }
                     }
@@ -582,8 +582,6 @@ namespace BMTA
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-
-            // Check if ExtendedSplashscreen.xaml is on the backstack  and remove 
             if (NavigationService.BackStack.Count() == 1)
             {
                 NavigationService.RemoveBackEntry();

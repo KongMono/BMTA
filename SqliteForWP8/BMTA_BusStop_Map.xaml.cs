@@ -73,7 +73,7 @@ namespace BMTA
             return false;
         }
 
-        private async void GetCoordinates()
+        private void GetCoordinates()
         {
             // Get the phone's current location.
             Geolocator MyGeolocator = new Geolocator();
@@ -274,7 +274,7 @@ namespace BMTA
         {
             webClient = new WebClient();
             webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            String url = "http://202.6.18.31:7777/currentfindRouting";
+            String url = "http://202.6.18.31:7777/currentfindRoutingv2";
             string myParameters;
             try
             {
@@ -285,7 +285,6 @@ namespace BMTA
                 else
                 {
                     myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&busstop_end_id=" + itemBusStop.id + "&bus_type=&running_type=&orderby=" + "";
-                    //myParameters = "lat=" + "13.741709" + "&long=" + "100.420125" + "&busstop_end_id=" + "4101" + "&bus_type=&running_type=&orderby=" + "";
                 }
 
                 Debug.WriteLine("URL callService_busstop_currentfindRouting = " + url);
@@ -301,7 +300,7 @@ namespace BMTA
 
         private void callService_busstop_currentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
         {
-            searchfindRoutingItem results = JsonConvert.DeserializeObject<searchfindRoutingItem>(e.Result);
+            new_searchfindRoutingItem results = JsonConvert.DeserializeObject<new_searchfindRoutingItem>(e.Result);
             if (results == null)
             {
                 MessageBox.Show("ไม่พบข้อมูล");

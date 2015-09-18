@@ -12,6 +12,7 @@ using System.Windows.Threading;
 using Microsoft.Phone.Net.NetworkInformation;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Reflection;
 
 namespace BMTA
 {
@@ -26,6 +27,11 @@ namespace BMTA
             InitializeComponent();
 
             progressIndicator = new ProgressIndicator();
+
+            var nameHelper = new AssemblyName(Assembly.GetExecutingAssembly().FullName);
+
+            var version = nameHelper.Version;
+            text_version.Text = "version " + version;
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
@@ -43,7 +49,6 @@ namespace BMTA
             {
                 NavigationService.Navigate(new Uri("/BMTA_bus_mainpage.xaml?busCate=2", UriKind.Relative));
             }
-
         }
         private void button3_Click(object sender, RoutedEventArgs e)
         {
@@ -245,10 +250,24 @@ namespace BMTA
                     bt_6.Background = background;
                 }
             }
-
-           
             HideProgressIndicator();
+        }
 
+        private void bt_comment_Click(object sender, RoutedEventArgs e)
+        {
+            if (!HasNetwork() || !HasInternet())
+            {
+                MessageBox.Show("No internet connection is available. Try again later.");
+            }
+            else
+            {
+                NavigationService.Navigate(new Uri("/BMTA_Comment.xaml", UriKind.Relative));
+            }
+        }
+
+        private void bt_howto_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/BMTA_Howto.xaml", UriKind.Relative));
         }
     }
 }

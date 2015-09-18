@@ -70,6 +70,13 @@
             <TextBlock x:Name="sumdistanct" HorizontalAlignment="Left" Grid.Column="1" FontSize="25" TextWrapping="Wrap" Text="0.00 km." VerticalAlignment="Center" Width="120"/>
             <c4f:TimeSpanPicker x:Name="timeSpan" HorizontalAlignment="Left" Value="0"  Grid.Column="4" FontSize="40" Foreground="White" VerticalAlignment="Center" Background="{x:Null}"  BorderBrush="{x:Null}" />
         </Grid>
+
+        <Grid Grid.Row="2" x:Name="layoutAlert" Background="#00A54E" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Image VerticalAlignment="Center" Width="300" Height="150" Grid.Column="0" Source="/Assets/alert.png" />
+        </Grid>
         <Grid Grid.Row="3" x:Name="layoutResult3" Background="#18359C"  Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>

@@ -121,7 +121,9 @@
             </TextBlock>
             <TextBlock  x:Name="textStart" Grid.Row="1" Grid.Column="1" Text="Start>" FontSize="30" Foreground="#1B6BC2" VerticalAlignment="Bottom" Tap="textStart_Tap" HorizontalAlignment="Right" Padding="0,0,20,20">
             </TextBlock>
-            <ListBox x:Name="busStartStoplistbox" Grid.Row="1"/>
+            <ScrollViewer  Grid.Row="1" HorizontalScrollBarVisibility="Hidden" >
+                <ListBox x:Name="busStartStoplistbox"/>
+            </ScrollViewer>
         </Grid>
     </Grid>
 

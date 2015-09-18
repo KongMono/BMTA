@@ -17,6 +17,7 @@ using BMTA.Item;
 using System.Collections.ObjectModel;
 using Parse;
 using SQLite;
+using Microsoft.Phone.Net.NetworkInformation;
 
 namespace BMTA
 {
@@ -34,12 +35,12 @@ namespace BMTA
         public List<buslineItem> DataSearchList = new List<buslineItem>();
         public List<buslineItem> DataBuslinehList = new List<buslineItem>();
         public dataNearBusStopItem DataBusstopDetail = new dataNearBusStopItem();
-        public searchfindRoutingItem DataLandMark = new searchfindRoutingItem();
-        public searchfindRoutingItem DataStop = new searchfindRoutingItem();
-        public searchfindRoutingItem DataStartStop = new searchfindRoutingItem();
-        public searchfindRoutingItem_data RountingDataLandMark = new searchfindRoutingItem_data();
-        public searchfindRoutingItem_data RountingDataBusStop = new searchfindRoutingItem_data();
-        public searchfindRoutingItem_data RountingDataStartStop = new searchfindRoutingItem_data();
+        public new_searchfindRoutingItem DataLandMark = new new_searchfindRoutingItem();
+        public new_searchfindRoutingItem DataStop = new new_searchfindRoutingItem();
+        public new_searchfindRoutingItem DataStartStop = new new_searchfindRoutingItem();
+        public new_searchfindRoutingItem_data RountingDataLandMark = new new_searchfindRoutingItem_data();
+        public new_searchfindRoutingItem_data RountingDataBusStop = new new_searchfindRoutingItem_data();
+        public new_searchfindRoutingItem_data RountingDataStartStop = new new_searchfindRoutingItem_data();
         public static string DB_PATH = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "bmtadatabase.sqlite");
         public static SQLiteAsyncConnection connection;
         public static bool isDatabaseExisting;
@@ -132,18 +133,20 @@ namespace BMTA
             // Standard XAML initialization
             InitializeComponent();
 
-            //ParseClient.Initialize("u3c5C2f1biiBTtbPjaxJsBJayvVArZl8ED7YfgOv", "BtLxWbgRSaZaxSKemzlSJpw9NhT1yTWRylpntjFw");
+            if (DeviceNetworkInformation.IsNetworkAvailable || NetworkInterface.GetIsNetworkAvailable())
+            {
+                ParseClient.Initialize("u3c5C2f1biiBTtbPjaxJsBJayvVArZl8ED7YfgOv", "BtLxWbgRSaZaxSKemzlSJpw9NhT1yTWRylpntjFw");
 
-            //this.Startup += async (sender, args) =>
-            //{
-            //    // This optional line tracks statistics around app opens, including push effectiveness:
-            //    ParseAnalytics.TrackAppOpens(RootFrame);
+                this.Startup += async (sender, args) =>
+                {
+                    // This optional line tracks statistics around app opens, including push effectiveness:
+                    ParseAnalytics.TrackAppOpens(RootFrame);
 
-            //    // By convention, the empty string is considered a "Broadcast" channel
-            //    // Note that we had to add "async" to the definition to use the await keyword
-            //    await ParsePush.SubscribeAsync("");
-            //};
-            
+                    // By convention, the empty string is considered a "Broadcast" channel
+                    // Note that we had to add "async" to the definition to use the await keyword
+                    await ParsePush.SubscribeAsync("");
+                };
+            }           
             // Phone-specific initialization
             InitializePhoneApplication();
             //SubscribeToParse();
