@@ -47,11 +47,26 @@
                 <RowDefinition Height="80"/>
                 <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" x:Name="header1" Foreground="Black" Text="คำแนะนำ" Margin="10,5,5,5" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" x:Name="header1" Foreground="Black" Text="คำแนะนำ" Margin="10,5,5,5" FontSize="30"/>
+                <TextBlock Grid.Column="1" Foreground="Red" Text="*" Margin="10,5,5,5" FontSize="30" />
+            </Grid>
             <TextBox Grid.Row="1" x:Name="textBox1" TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="500" />
             <TextBlock Grid.Row="2" x:Name="header2" Foreground="Black" Text="คำแนะนำ" Margin="10,5,5,5" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Left"/>
             <TextBox Grid.Row="3" x:Name="textBox2" TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="500" />
-            <TextBlock Grid.Row="4" x:Name="header3" Foreground="Black" Text="คำแนะนำ" Margin="10,5,5,5" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" x:Name="header3" Foreground="Black" Text="คำแนะนำ" Margin="10,5,5,5" FontSize="30"/>
+                <TextBlock Grid.Column="1" Foreground="Red" Text="*" Margin="10,5,5,5" FontSize="30" />
+            </Grid>
+
             <TextBox Grid.Row="5" x:Name="textBox3" InputScope="TelephoneNumber" MaxLength="10" TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="500" KeyDown="textBox3_KeyDown" />
             <Grid  Grid.Row="6" Background="Transparent"  Margin="0,0,0,0">
                 <Grid.ColumnDefinitions>

@@ -29,6 +29,9 @@ namespace BMTA.Usercontrols
             
         }
 
-     
+        private void Grid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+
+        }
     }
 }

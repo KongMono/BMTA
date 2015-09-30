@@ -31,12 +31,11 @@ namespace BMTA
             var nameHelper = new AssemblyName(Assembly.GetExecutingAssembly().FullName);
 
             var version = nameHelper.Version;
-            text_version.Text = "version " + version;
+            text_version.Text = "version " + version + " beta";
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-
             NavigationService.Navigate(new Uri("/BMTA_bus_mainpage.xaml?busCate=1", UriKind.Relative));
         }
         private void button2_Click(object sender, RoutedEventArgs e)

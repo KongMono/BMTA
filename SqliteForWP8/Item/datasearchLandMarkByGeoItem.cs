@@ -10,6 +10,8 @@ namespace BMTA
     public class datasearchLandMarkByGeoItem
     {
         public string keyword { get; set; }
+        public string lat { get; set; }
+        public string lon { get; set; }
         public new_searchfindRoutingItem data { get; set; }
     }
 }

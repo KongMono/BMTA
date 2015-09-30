@@ -50,6 +50,7 @@ namespace BMTA
         Boolean alreadyBusStop = false;
         Boolean alreadyLandMark = false;
         String currentBtn = "btn1";
+        private string lat_search, lon_search, text_landmark_list;
         private searchStartStopDetailItem itemstart, itemend;
         private searchlandmarkAndBusstopdetailItem itemLandMark, itemBusStop;
         public String CurrentGroup = "1";
@@ -311,12 +312,26 @@ namespace BMTA
             try
             {
                 List<datasearchLandMarkByGeoItem> listHistory = (Application.Current as App).MemLandMarkList;
+                LandmarksHistorylistbox.Items.Clear();
 
-                foreach (datasearchLandMarkByGeoItem item in listHistory)
+                if (listHistory.Count > 3)
                 {
-                    UCLandMarkItem i = new UCLandMarkItem();
-                    i.TextLandMark.Text = item.keyword;
-                    LandmarksHistorylistbox.Items.Add(item);
+                    listHistory.RemoveAt(0);
+                }
+
+                for (var i = 0; i <= 2; i++)
+                {
+                    try
+                    {
+                        if (listHistory[i] != null)
+                        {
+                            UCLandMarkItem item = new UCLandMarkItem();
+                            item.TextLandMark.Text = listHistory[i].keyword;
+                            item.DataContext = listHistory[i];
+                            LandmarksHistorylistbox.Items.Add(item);
+                        }
+                    }
+                    catch (Exception ex){}
                 }
 
                 if (lang.Equals("th"))
@@ -541,7 +556,7 @@ namespace BMTA
                 //        + " AND bustype > 0 AND bus_owner > 0 AND bus_running > 0 AND bus_color > 0 AND published = '1' AND busstop_list !=''"
                 //        + " ORDER BY CAST(bus_line AS INTEGER) ASC,bus_owner DESC,bustype ASC,bus_direction_en ASC");
 
-                 retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_name LIKE '% " + busline_search.Text + " %' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%'");
+                retrievedTasks = dbConn.Query<buslineItem>("SELECT * FROM busline WHERE bus_name LIKE '% " + busline_search.Text + " %' AND (bus_direction LIKE '%เข้าเมือง%' OR bus_direction LIKE '%วนซ้าย%'");
             }
             else
             {
@@ -745,9 +760,6 @@ namespace BMTA
                 {
                     myParameters = "busstop_start_id=" + itemstart.id + "&busstop_end_id=" + itemend.id + "&bus_type=&running_type=&orderby=" + "";
                 }
-
-                myParameters = "busstop_start_id=" + "3675" + "&busstop_end_id=" + "3669" + "&bus_type=&running_type=&orderby=" + "";
-
                 Debug.WriteLine("URL callServicecurrentfindRouting = " + url);
 
                 webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callService_startstop_searchfindRouting_Completed);
@@ -1002,7 +1014,8 @@ namespace BMTA
         {
             webClient = new WebClient();
             webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-
+            lat_search = lat;
+            lon_search = lon;
             String url = "http://202.6.18.31:7777/placecurrentfindRoutingv2";
             string myParameters;
             try
@@ -1035,11 +1048,16 @@ namespace BMTA
             }
             datasearchLandMarkByGeoItem dataSearchDialog = new datasearchLandMarkByGeoItem();
             dataSearchDialog.keyword = dialog.Textbox1.Text;
+            dataSearchDialog.lat = lat_search;
+            dataSearchDialog.lon = lon_search;
             dataSearchDialog.data = results;
             (Application.Current as App).MemLandMarkList.Add(dataSearchDialog);
             (Application.Current as App).DataLandMark = results;
 
-            this.NavigationService.Navigate(new Uri("/BMTA_BusLandMarkDetailBus.xaml?TextFrom=" + StreetsandLandmarks_search.Text, UriKind.Relative));
+            List<datasearchLandMarkByGeoItem> listHistory = (Application.Current as App).MemLandMarkList;
+         
+
+            this.NavigationService.Navigate(new Uri("/BMTA_BusLandMarkDetailBus.xaml?TextFrom=" + dialog.Textbox1.Text, UriKind.Relative));
         }
 
         private void callplacecurrentfindRouting_Completed(object sender, UploadStringCompletedEventArgs e)
@@ -1289,6 +1307,59 @@ namespace BMTA
         private void btn_findcurrent_Click(object sender, RoutedEventArgs e)
         {
             map.Center = new GeoCoordinate(Double.Parse((Application.Current as App).lat_current), Double.Parse((Application.Current as App).lon_current));
+        }
+
+        private void LandmarksHistorylistbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (LandmarksHistorylistbox.SelectedIndex != -1)
+            {
+                UCLandMarkItem item = (sender as ListBox).SelectedItem as UCLandMarkItem;
+                datasearchLandMarkByGeoItem i = (datasearchLandMarkByGeoItem)item.DataContext;
+                text_landmark_list = i.keyword;
+                callplacecurrentfindRouting_List(i.lat, i.lon);
+            }
+            LandmarksHistorylistbox.SelectedIndex = -1;
+        }
+
+        public void callplacecurrentfindRouting_List(String lat, String lon)
+        {
+            webClient = new WebClient();
+            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            lat_search = lat;
+            lon_search = lon;
+            String url = "http://202.6.18.31:7777/placecurrentfindRoutingv2";
+            string myParameters;
+            try
+            {
+                myParameters = "lat=" + (Application.Current as App).lat_current + "&long=" + (Application.Current as App).lon_current + "&elatlong=" + lat + "-" + lon + "&bus_type=" + "" + "&running_type=" + "" + "&orderby=" + "";
+
+                Debug.WriteLine("URL callplacecurrentfindRouting_Memo = " + url);
+                webClient.UploadStringCompleted += new UploadStringCompletedEventHandler(callplacecurrentfindRouting_List_Completed);
+                webClient.UploadStringAsync(new Uri(url), myParameters);
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void callplacecurrentfindRouting_List_Completed(object sender, UploadStringCompletedEventArgs e)
+        {
+            HideProgressIndicator();
+            new_searchfindRoutingItem results = JsonConvert.DeserializeObject<new_searchfindRoutingItem>(e.Result);
+            if (results == null)
+            {
+                MessageBox.Show("ไม่พบข้อมูล");
+                return;
+            }
+            if (results.status == "0")
+            {
+                MessageBox.Show("ไม่พบข้อมูล");
+                return;
+            }
+            (Application.Current as App).DataLandMark = results;
+
+            this.NavigationService.Navigate(new Uri("/BMTA_BusLandMarkDetailBus.xaml?TextFrom=" + text_landmark_list, UriKind.Relative));
         }
     }
 }

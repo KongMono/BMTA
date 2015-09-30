@@ -41,6 +41,7 @@ namespace BMTA
         public new_searchfindRoutingItem_data RountingDataLandMark = new new_searchfindRoutingItem_data();
         public new_searchfindRoutingItem_data RountingDataBusStop = new new_searchfindRoutingItem_data();
         public new_searchfindRoutingItem_data RountingDataStartStop = new new_searchfindRoutingItem_data();
+        public List<FeedItemDescription> DataPushFromAPI = new List<FeedItemDescription>();
         public static string DB_PATH = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "bmtadatabase.sqlite");
         public static SQLiteAsyncConnection connection;
         public static bool isDatabaseExisting;
@@ -52,6 +53,7 @@ namespace BMTA
 
         public void SavePersistantData()
         {
+            //MemLandMarkList
             if (IsolatedStorageSettings.ApplicationSettings.Contains("MemLandMarkList"))
             {
                 IsolatedStorageSettings.ApplicationSettings["MemLandMarkList"] = MemLandMarkList;
@@ -60,8 +62,8 @@ namespace BMTA
             {
                 IsolatedStorageSettings.ApplicationSettings.Add("MemLandMarkList", MemLandMarkList);
             }
-            // make sure data is saved immediatelly
 
+            //MemSlotList
             if (IsolatedStorageSettings.ApplicationSettings.Contains("MemSlotList"))
             {
                 IsolatedStorageSettings.ApplicationSettings["MemSlotList"] = MemSlotList;
@@ -71,6 +73,7 @@ namespace BMTA
                 IsolatedStorageSettings.ApplicationSettings.Add("MemSlotList", MemSlotList);
             }
 
+            //CheckSpeedList
             if (IsolatedStorageSettings.ApplicationSettings.Contains("CheckSpeedList"))
             {
                 IsolatedStorageSettings.ApplicationSettings["CheckSpeedList"] = CheckSpeedList;
@@ -80,6 +83,7 @@ namespace BMTA
                 IsolatedStorageSettings.ApplicationSettings.Add("CheckSpeedList", CheckSpeedList);
             }
 
+            //lastUpdate
             if (IsolatedStorageSettings.ApplicationSettings.Contains("lastUpdate"))
             {
                 IsolatedStorageSettings.ApplicationSettings["lastUpdate"] = lastUpdate;
@@ -87,6 +91,16 @@ namespace BMTA
             else
             {
                 IsolatedStorageSettings.ApplicationSettings.Add("lastUpdate", lastUpdate);
+            }
+
+            //DataPushFromAPI
+            if (IsolatedStorageSettings.ApplicationSettings.Contains("DataPushFromAPI"))
+            {
+                IsolatedStorageSettings.ApplicationSettings["DataPushFromAPI"] = DataPushFromAPI;
+            }
+            else
+            {
+                IsolatedStorageSettings.ApplicationSettings.Add("DataPushFromAPI", DataPushFromAPI);
             }
 
             IsolatedStorageSettings.ApplicationSettings.Save();
@@ -112,6 +126,11 @@ namespace BMTA
             if (IsolatedStorageSettings.ApplicationSettings.Contains("lastUpdate"))
             {
                 lastUpdate = IsolatedStorageSettings.ApplicationSettings["lastUpdate"] as string;
+            }
+
+            if (IsolatedStorageSettings.ApplicationSettings.Contains("DataPushFromAPI"))
+            {
+                DataPushFromAPI = (List<FeedItemDescription>)IsolatedStorageSettings.ApplicationSettings["DataPushFromAPI"];
             }
         }
         /// <summary>
@@ -145,8 +164,10 @@ namespace BMTA
                     // By convention, the empty string is considered a "Broadcast" channel
                     // Note that we had to add "async" to the definition to use the await keyword
                     await ParsePush.SubscribeAsync("");
+
+                    ParsePush.ParsePushNotificationReceived += ParsePush_ParsePushNotificationReceived;
                 };
-            }           
+            }
             // Phone-specific initialization
             InitializePhoneApplication();
             //SubscribeToParse();
@@ -174,12 +195,10 @@ namespace BMTA
             }
         }
 
-        //private void ParsePushOnToastNotificationReceived(object sender, Microsoft.Phone.Notification.NotificationEventArgs e)
-        //{
-           
-        //}
-        //public void SubscribeToParse() { ParsePush.SubscribeAsync(""); }
-       
+        void ParsePush_ParsePushNotificationReceived(object sender, ParsePushNotificationEventArgs e)
+        {
+
+        }
 
         // Code to execute when the application is launching (eg, from Start)
         // This code will not execute when the application is reactivated
@@ -232,7 +251,7 @@ namespace BMTA
                 StorageFile storageFile = await ApplicationData.Current.LocalFolder.GetFileAsync("bmtadatabase.sqlite");
                 isDatabaseExisting = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 isDatabaseExisting = false;
             }

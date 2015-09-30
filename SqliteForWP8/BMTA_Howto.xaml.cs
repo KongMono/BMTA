@@ -21,38 +21,27 @@ namespace BMTA
     {
         public String lang = (Application.Current as App).Language;
         UCFeedText text = new UCFeedText();
+
         public BMTA_Howto()
         {
             InitializeComponent();
             loadData();
         }
+
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
-
-            if (lang.Equals("th"))
-            {
-                titleName.Text = "คู่มือ";
-            }
-            else
-            {
-                titleName.Text = "HOW TO";
-            }
+          
         }
 
         private void loadData()
         {
-            web.Source = new Uri("/Assets/html_howtobmta/howtobmta.html",UriKind.Relative);
-        }
-
-        private void btback_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.GoBack();
+            web.Source = new Uri("/Assets/html_howtobmta/howtobmta.html", UriKind.Relative);
         }
 
         private void web_Navigated(object sender, NavigationEventArgs e)
         {
 
         }
-       
+
     }
 }

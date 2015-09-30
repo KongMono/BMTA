@@ -55,10 +55,7 @@ namespace BMTA
             {
                 titleName.Text = "Speed Check";
             }
-            _watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
-            _watcher.MovementThreshold = 1;
-            _watcher.PositionChanged += new EventHandler<GeoPositionChangedEventArgs<GeoCoordinate>>(this.watcher_PositionChanged);
-            _watcher.StatusChanged += this.watcher_StatusChanged;
+
         }
 
         public void watcher_StatusChanged(object sender, GeoPositionStatusChangedEventArgs e)
@@ -120,9 +117,12 @@ namespace BMTA
                 {
                     sumkm.Text = "0";
                 }
+                else if (Double.IsInfinity(speedInKilometresPerHour))
+                {
+                }
                 else
                 {
-                    sumkm.Text = Convert.ToString(speedInKilometresPerHour);
+                    sumkm.Text = Convert.ToString(Math.Round(speedInKilometresPerHour, 2));
                     if (speedInKilometresPerHour > 60)
                     {
                         layoutAlert.Visibility = System.Windows.Visibility.Visible;
@@ -144,7 +144,6 @@ namespace BMTA
                 double speedInKilometresPerHour = distanceInKilometres / timeInHours;
 
                 sumkm.Text = Convert.ToString(speedInKilometresPerHour);
-
             }
         }
 
@@ -174,6 +173,11 @@ namespace BMTA
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
+            _watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
+            _watcher.MovementThreshold = 1;
+            _watcher.PositionChanged += new EventHandler<GeoPositionChangedEventArgs<GeoCoordinate>>(this.watcher_PositionChanged);
+            _watcher.StatusChanged += this.watcher_StatusChanged;
+
             layoutCheck1.Visibility = System.Windows.Visibility.Collapsed;
             layoutCheck2.Visibility = System.Windows.Visibility.Collapsed;
             layoutCheck3.Visibility = System.Windows.Visibility.Collapsed;

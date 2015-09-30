@@ -49,7 +49,6 @@ namespace BMTA
                 headslotdetail.Text = "What is the last number of your ticket no.summation?";
                 headslotshake.Text = "Please input your ticket number!";
             }
-
         }
 
         // Set the data context of the TextBlock to the answer.
@@ -58,9 +57,11 @@ namespace BMTA
             // Use BeginInvoke to write to the UI thread.
             txtnumber.Dispatcher.BeginInvoke(() =>
             {
+                // stop shake detection
+                ShakeGesturesHelper.Instance.Active = false;
+
                 if (txtnumber.Text.Length == 6 || txtnumber.Text.Length == 7)
                 {
-
                     int len = txtnumber.Text.Length;
                     int sum = 0;
                     string pasteText = txtnumber.Text;
@@ -85,10 +86,14 @@ namespace BMTA
                     }
 
                     txtnumber.Focus();
+                    // stop shake detection
+                    ShakeGesturesHelper.Instance.Active = true;
                     return;
                 }
-            });
 
+                // stop shake detection
+                ShakeGesturesHelper.Instance.Active = true;
+            });
         }
 
         private void txtnumber_TextChanged(object sender, TextChangedEventArgs e)

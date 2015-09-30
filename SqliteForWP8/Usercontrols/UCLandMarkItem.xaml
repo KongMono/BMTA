@@ -8,20 +8,17 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    d:DesignWidth="480" d:DesignHeight="90">
-    <UserControl.Resources>
+    d:DesignWidth="480" d:DesignHeight="80">
 
-    </UserControl.Resources>
-
-    <Grid>
+    <Grid Tap="Grid_Tap">
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="380"/>
         </Grid.ColumnDefinitions>
-        <Image x:Name="pin" HorizontalAlignment="Left" Width="auto" Height="auto" VerticalAlignment="Center"  Source="/Assets/bt_pin.png" Stretch="Fill" Margin="10,0,0,0" />
-        <TextBlock x:Name="TextLandMark" Grid.Row="0" Grid.Column="1" Text="สถานที่" Foreground="Black" TextTrimming="WordEllipsis" TextWrapping="Wrap"  Padding="10,10,10,10" FontSize="35" VerticalAlignment="Center"  HorizontalAlignment="Center"/>
+        <Image x:Name="pin" HorizontalAlignment="Center" Width="30" Height="40" VerticalAlignment="Center"  Source="/Assets/pin_blue.png" Stretch="Fill" />
+        <TextBlock x:Name="TextLandMark" Grid.Column="1" Text="สถานที่" Foreground="Black" VerticalAlignment="Center"  HorizontalAlignment="Left"/>
     </Grid>
 </UserControl>

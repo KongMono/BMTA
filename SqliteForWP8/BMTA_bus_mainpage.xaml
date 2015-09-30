@@ -116,7 +116,7 @@
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            
+
 
             <Grid x:Name="busstopSeacrch" Grid.Row="0" Width="auto" Background="#FF18359B">
                 <toolkit:AutoCompleteBox x:Name="busstop_search" Grid.RowSpan="2" VerticalAlignment="Center" TextChanged="busstop_search_TextChanged" FilterMode="None" ValueMemberBinding="{Binding ref_name}" SelectionChanged="busstop_search_SelectionChanged" KeyUp="busstop_search_KeyUp">
@@ -141,7 +141,7 @@
                         <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/mylocation.png"/>
                     </Button.Background>
                 </Button>
-              
+
             </Grid>
         </Grid>
 
@@ -253,23 +253,19 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-
                 <Grid Grid.Row="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="270"/>
                     </Grid.RowDefinitions>
-                    <Grid  Grid.Row="0" Background="#D9D4D4D4">
+                    <Grid Grid.Row="0" Background="#D9D4D4D4">
                         <TextBlock x:Name="textHeaderLandMark" Text="ผลการค้นหาล่าสุด" TextWrapping="Wrap" Foreground="Black" VerticalAlignment="Center" Margin="20,0,0,0"/>
                     </Grid>
-                    <Grid  Grid.Row="1">
-                        <ListBox x:Name="LandmarksHistorylistbox" Grid.Row="1"/>
-                        <!--<ProgressBar IsIndeterminate="true" Foreground="Green" x:Name="progressBar_landmark" Visibility="Collapsed"/>-->
-                    </Grid>
+                    <ListBox x:Name="LandmarksHistorylistbox" Grid.Row="1" SelectionChanged="LandmarksHistorylistbox_SelectionChanged" />
                 </Grid>
             </Grid>
         </Grid>
-        
+
         <Grid x:Name="HeaderCate" Grid.Row="2" Width="auto" VerticalAlignment="Bottom">
             <Grid.Background>
                 <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/BMTA_bg_footer.png"/>

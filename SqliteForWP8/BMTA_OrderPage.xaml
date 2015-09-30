@@ -39,7 +39,7 @@
                     <ColumnDefinition Width="70"/>
                     <ColumnDefinition Width="70"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Name="text_version" Text="version" Grid.Column="0" TextWrapping="Wrap" VerticalAlignment="Center" TextAlignment="Right"/>
+                <TextBlock x:Name="text_version" Text="version" Grid.Column="0" TextWrapping="Wrap" VerticalAlignment="Center" TextAlignment="Center"/>
                 <Button x:Name="bt_comment" Grid.Column="1" Width="70" Height="70" HorizontalAlignment="Right" BorderBrush="Transparent" VerticalAlignment="Bottom" Style="{StaticResource ImageButton}" Click="bt_comment_Click">
                     <Button.Background>
                         <ImageBrush Stretch="Fill" ImageSource="/Assets/icon_comment.png"/>
