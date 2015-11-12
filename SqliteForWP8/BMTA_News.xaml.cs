@@ -12,7 +12,6 @@ using System.Windows.Threading;
 using Microsoft.Phone.Net.NetworkInformation;
 using System.Windows.Media;
 
-//using XML_Parsing.Resources;
 using System.Windows.Resources;
 using System.Xml.Linq;
 using SQLite;
@@ -34,16 +33,27 @@ namespace BMTA
         public List<FeedItemDescription> desclist = new List<FeedItemDescription>();
         static WebClient webClient;
         UCFeedList ls = new UCFeedList();
+        private SQLiteConnection dbConn;
+
         public BMTA_News()
         {
             InitializeComponent();
+
+            dbConn = new SQLiteConnection(App.DB_PATH);
 
             loadData();
         }
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-
             base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            if (dbConn != null)
+            {
+                dbConn.Close();
+            }
         }
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
@@ -59,24 +69,48 @@ namespace BMTA
         }
         private void loadData()
         {
-
             webClient = new WebClient();
             String url;
             try
             {
-                if (lang.Equals("th"))
+                if (!HasNetwork() || !HasInternet())
                 {
-                    url = "http://www.bmta.co.th/?q=th/feed/news";
+                    if (lang.Equals("th"))
+                    {
+                        url = "http://www.bmta.co.th/?q=th/feed/news";
+                    }
+                    else
+                    {
+                        url = "http://www.bmta.co.th/?q=en/feed/news";
+                    }
+
+                    Debug.WriteLine("URL url_TopChannel = " + url);
+                    webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(FeedData_DownloadStringCompleted);
+                    webClient.DownloadStringAsync(new Uri(url));
                 }
                 else
                 {
-                    url = "http://www.bmta.co.th/?q=en/feed/news";
+                    List<news> retrievedTasks = new List<news>();
+
+                    retrievedTasks = dbConn.Query<news>("SELECT * FROM news");
+
+                    foreach (var v in retrievedTasks.AsEnumerable().Reverse())
+                    {
+                        ls = new UCFeedList();
+
+                        ls.path_img = v.image;
+                        ls.texttitle_name.Text = HtmlRemoval.StripTagsRegexCompiled(v.title);
+                        ls.textDescription.Text = HtmlRemoval.StripTagsRegexCompiled(v.description);
+
+                        ls.texttitle_name.Text = ls.texttitle_name.Text.Replace("&quot;", "");
+                        ls.textDescription.Text = ls.textDescription.Text.Replace("&quot;", "");
+
+                        ls.texttitle_name.Text = ls.texttitle_name.Text.Replace("&nbsp;", "");
+                        ls.textDescription.Text = ls.textDescription.Text.Replace("&nbsp;", "");
+
+                        feedlistbox.Items.Add(ls);
+                    }
                 }
-
-                Debug.WriteLine("URL url_TopChannel = " + url);
-                webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(FeedData_DownloadStringCompleted);
-                webClient.DownloadStringAsync(new Uri(url));
-
             }
             catch (WebException ex)
             {
@@ -135,6 +169,26 @@ namespace BMTA
             }
         }
 
+        private bool HasInternet()
+        {
+            if (!NetworkInterface.GetIsNetworkAvailable())
+            {
+                MessageBox.Show("No internet connection is available. Try again later.");
+                return false;
+            }
+            return true;
+        }
+
+        private bool HasNetwork()
+        {
+            if (!DeviceNetworkInformation.IsNetworkAvailable)
+            {
+                MessageBox.Show("No network is available. Try again later.");
+                return false;
+            }
+            return true;
+        }
+
         private void btback_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
@@ -149,7 +203,5 @@ namespace BMTA
             }
             feedlistbox.SelectedIndex = -1;
         }
-
-
     }
 }

@@ -21,7 +21,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0"  Background="#FFFFFFFF" >
+        <Grid Grid.Row="0" Background="#FFFFFFFF" >
             <phone:WebBrowser x:Name="web" IsScriptEnabled="True" Navigated="web_Navigated"/>
         </Grid>
     </Grid>

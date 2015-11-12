@@ -167,7 +167,7 @@ namespace BMTA
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
+                                //MessageBox.Show("ไม่พบข้อมูล สอบถามข้อมูลเพิ่มเติมได้ที่ 1348" + Environment.NewLine + "No Data , BMTA Call Center Tel. 1348");
                             }
                             if (db != null)
                             {

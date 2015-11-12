@@ -20,7 +20,7 @@ namespace BMTA
         public BMTA_EventNew()
         {
             InitializeComponent();
-     
+
         }
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
@@ -28,16 +28,16 @@ namespace BMTA
             if (lang.Equals("th"))
             {
                 titleName.Text = "ข่าวสาร และกิจกรรม";
-                name1.Text = "ข่าวสาร";
-                name2.Text = "กิจกรรม";
-                name3.Text = "เกี่ยวกับ ขสมก.";
+                name1.Text = "เกี่ยวกับ ขสมก.";
+                name2.Text = "ข่าวสาร";
+                name3.Text = "ตั๋วทำนายดวง";
             }
             else
             {
                 titleName.Text = "News & Events";
-                name1.Text = "News";
-                name2.Text = "Events";
-                name3.Text = "About BMTA";
+                name1.Text = "About BMTA";
+                name2.Text = "News";
+                name3.Text = "Horo Ticket";
             }
         }
 
@@ -46,31 +46,30 @@ namespace BMTA
             NavigationService.GoBack();
         }
 
-      
+
         private void close_Click(object sender, RoutedEventArgs e)
         {
-           
+
         }
 
         private void btTopMenu_Click(object sender, RoutedEventArgs e)
         {
-           
+
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/BMTA_News.xaml", UriKind.Relative));
-
+            NavigationService.Navigate(new Uri("/BMTA_Abouts.xaml", UriKind.Relative));
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/BMTA_Slot.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/BMTA_News.xaml", UriKind.Relative));
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/BMTA_Abouts.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/BMTA_Slot.xaml", UriKind.Relative));
         }
     }
 }
